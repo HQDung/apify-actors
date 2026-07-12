@@ -1,0 +1,74 @@
+{
+    "title": "{{ACTOR_TITLE}} Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "{{SEARCH_LOCATION_INPUT_FIELD}}": {
+            "title": "{{SEARCH_LOCATION_INPUT_TITLE}}",
+            "type": "string",
+            "description": "{{SEARCH_LOCATION_INPUT_DESCRIPTION}}",
+            "editor": "textfield",
+            "default": "{{DEFAULT_LOCATION}}"
+        },
+        "{{SEARCH_TYPE_INPUT_FIELD}}": {
+            "title": "{{SEARCH_TYPE_INPUT_TITLE}}",
+{{#MULTI_SEARCH}}
+            "type": "array",
+            "description": "{{SEARCH_TYPE_INPUT_DESCRIPTION}}",
+            "editor": "stringList",
+            "default": {{DEFAULT_SEARCH_TYPES_JSON}},
+            "prefill": {{PREFILL_SEARCH_TYPES_JSON}}
+{{/MULTI_SEARCH}}
+{{^MULTI_SEARCH}}
+            "type": "string",
+            "description": "{{SEARCH_TYPE_INPUT_DESCRIPTION}}",
+            "editor": "textfield",
+            "default": "{{DEFAULT_KEYWORD}}"
+{{/MULTI_SEARCH}}
+        },
+        "{{MAX_RESULTS_INPUT_FIELD}}": {
+            "title": "{{MAX_RESULTS_INPUT_TITLE}}",
+            "type": "integer",
+            "description": "{{MAX_RESULTS_INPUT_DESCRIPTION}}",
+            "editor": "number",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100
+        },
+        "batchSize": {
+            "title": "Batch size",
+            "type": "integer",
+            "description": "Number of business detail pages processed in parallel.",
+            "editor": "number",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 20
+        },
+        "extractEmails": {
+            "title": "Extract emails",
+            "type": "boolean",
+            "description": "Whether to extract email addresses from business websites.",
+            "editor": "checkbox",
+            "default": true
+        },
+{{#MULTI_SEARCH}}
+        "useProxy": {
+            "title": "Use Apify Proxy",
+            "type": "boolean",
+            "description": "Whether to use Apify Proxy for browser requests.",
+            "editor": "checkbox",
+            "default": false
+        }
+{{/MULTI_SEARCH}}
+{{^MULTI_SEARCH}}
+        "useApifyProxy": {
+            "title": "Use Apify Proxy",
+            "type": "boolean",
+            "description": "Whether to use Apify Proxy for browser requests.",
+            "editor": "checkbox",
+            "default": false
+        }
+{{/MULTI_SEARCH}}
+    },
+    "required": ["{{SEARCH_LOCATION_INPUT_FIELD}}"{{^MULTI_SEARCH}}, "{{SEARCH_TYPE_INPUT_FIELD}}"{{/MULTI_SEARCH}}]
+}

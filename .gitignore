@@ -1,0 +1,25 @@
+# Dependencies
+**/node_modules/
+
+# Apify local runtime output
+**/storage/datasets/
+**/storage/request_queues/
+**/storage/key_value_stores/default/*.json
+!**/storage/key_value_stores/default/INPUT.json
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs, coverage, and build output
+*.log
+coverage/
+dist/
+
+# macOS and editor files
+.DS_Store
+.idea/
+.vscode/

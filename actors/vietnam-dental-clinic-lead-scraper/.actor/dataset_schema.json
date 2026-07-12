@@ -1,0 +1,48 @@
+{
+    "actorDatasetSchemaVersion": 1,
+    "title": "Vietnam Dental Clinic Lead Scraper with Emails Dataset",
+    "views": {
+        "overview": {
+            "title": "dental clinics",
+            "transformation": {
+                "fields": [
+                    "keyword",
+                    "location",
+                    "name",
+                    "rating",
+                    "category",
+                    "address",
+                    "website",
+                    "phone",
+                    "email",
+                    "emails",
+                    "hasEmail",
+                    "leadScore",
+                    "leadQuality",
+                    "googleMapsUrl",
+                    "error"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "keyword": { "label": "Keyword", "format": "text" },
+                    "location": { "label": "Location", "format": "text" },
+                    "name": { "label": "Name", "format": "text" },
+                    "rating": { "label": "Rating", "format": "text" },
+                    "category": { "label": "Category", "format": "text" },
+                    "address": { "label": "Address", "format": "text" },
+                    "website": { "label": "Website", "format": "link" },
+                    "phone": { "label": "Phone", "format": "text" },
+                    "email": { "label": "Email", "format": "text" },
+                    "emails": { "label": "Emails", "format": "array" },
+                    "hasEmail": { "label": "Has email", "format": "boolean" },
+                    "leadScore": { "label": "Lead score", "format": "number" },
+                    "leadQuality": { "label": "Lead quality", "format": "text" },
+                    "googleMapsUrl": { "label": "Google Maps URL", "format": "link" },
+                    "error": { "label": "Error", "format": "text" }
+                }
+            }
+        }
+    }
+}

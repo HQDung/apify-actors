@@ -1,0 +1,14 @@
+{
+    "actorSpecification": 1,
+    "name": "{{ACTOR_NAME}}",
+    "title": "{{ACTOR_TITLE}}",
+    "description": "{{SHORT_DESCRIPTION}}",
+    "version": "0.0",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "dockerfile": "../Dockerfile",
+    "meta": {
+        "generatedBy": "Codex with GPT-5"
+    }
+}

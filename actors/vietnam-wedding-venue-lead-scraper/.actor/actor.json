@@ -1,0 +1,14 @@
+{
+    "actorSpecification": 1,
+    "name": "vietnam-wedding-venue-lead-scraper",
+    "title": "Vietnam Wedding Venue Lead Scraper with Emails",
+    "description": "Scrape wedding venue and event venue leads from Google Maps in Vietnam and extract emails when available.",
+    "version": "0.0",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "dockerfile": "../Dockerfile",
+    "meta": {
+        "generatedBy": "Codex with GPT-5"
+    }
+}

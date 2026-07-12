@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Vietnam Dental Clinic Lead Scraper with Emails Output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Vietnam Dental Clinic Lead Scraper with Emails dataset",
+            "template": "{{datasetUrl}}"
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "actorName": "vietnam-restaurant-lead-scraper",
+  "actorTitle": "Vietnam Restaurant Lead Scraper with Emails",
+  "niche": "restaurant",
+  "nichePlural": "restaurants, cafes, and food businesses",
+  "defaultKeyword": "restaurant",
+  "defaultLocation": "Ho Chi Minh",
+  "shortDescription": "Scrape restaurant and cafe leads from Google Maps in Vietnam and extract emails when available.",
+  "longDescription": "This Actor searches Google Maps for restaurants, cafes, and food businesses in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for food suppliers, delivery platforms, POS vendors, B2B sales teams, and marketing agencies."
+}

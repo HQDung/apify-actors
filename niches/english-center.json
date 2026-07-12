@@ -1,0 +1,10 @@
+{
+  "actorName": "vietnam-english-center-lead-scraper",
+  "actorTitle": "Vietnam English Center Lead Scraper with Emails",
+  "niche": "English center",
+  "nichePlural": "English centers and language schools",
+  "defaultKeyword": "English center",
+  "defaultLocation": "Ho Chi Minh",
+  "shortDescription": "Scrape English center and language school leads from Google Maps in Vietnam and extract emails when available.",
+  "longDescription": "This Actor searches Google Maps for English centers and language schools in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for education service providers, EdTech companies, B2B sales teams, and marketing agencies."
+}

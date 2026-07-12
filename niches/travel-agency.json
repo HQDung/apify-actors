@@ -1,0 +1,10 @@
+{
+  "actorName": "vietnam-travel-agency-lead-scraper",
+  "actorTitle": "Vietnam Travel Agency Lead Scraper with Emails",
+  "niche": "travel agency",
+  "nichePlural": "travel agencies and tour operators",
+  "defaultKeyword": "travel agency",
+  "defaultLocation": "Ho Chi Minh",
+  "shortDescription": "Scrape travel agency and tour operator leads from Google Maps in Vietnam and extract emails when available.",
+  "longDescription": "This Actor searches Google Maps for travel agencies and tour operators in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for tourism platforms, hotel partners, B2B sales teams, and travel service providers."
+}

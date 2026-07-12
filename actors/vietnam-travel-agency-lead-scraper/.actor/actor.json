@@ -1,0 +1,14 @@
+{
+    "actorSpecification": 1,
+    "name": "vietnam-travel-agency-lead-scraper",
+    "title": "Vietnam Travel Agency Lead Scraper with Emails",
+    "description": "Scrape travel agency and tour operator leads from Google Maps in Vietnam and extract emails when available.",
+    "version": "0.0",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "dockerfile": "../Dockerfile",
+    "meta": {
+        "generatedBy": "Codex with GPT-5"
+    }
+}

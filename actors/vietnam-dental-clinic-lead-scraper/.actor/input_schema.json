@@ -1,0 +1,60 @@
+{
+    "title": "Vietnam Dental Clinic Lead Scraper with Emails Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "location": {
+            "title": "Location",
+            "type": "string",
+            "description": "Target city or area.",
+            "editor": "textfield",
+            "default": "Ho Chi Minh"
+        },
+        "keyword": {
+            "title": "Keyword",
+
+
+            "type": "string",
+            "description": "Search keyword for dental clinics.",
+            "editor": "textfield",
+            "default": "dental clinic"
+
+        },
+        "maxResults": {
+            "title": "Max results",
+            "type": "integer",
+            "description": "Maximum number of Google Maps results to scrape.",
+            "editor": "number",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100
+        },
+        "batchSize": {
+            "title": "Batch size",
+            "type": "integer",
+            "description": "Number of business detail pages processed in parallel.",
+            "editor": "number",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 20
+        },
+        "extractEmails": {
+            "title": "Extract emails",
+            "type": "boolean",
+            "description": "Whether to extract email addresses from business websites.",
+            "editor": "checkbox",
+            "default": true
+        },
+
+
+        "useApifyProxy": {
+            "title": "Use Apify Proxy",
+            "type": "boolean",
+            "description": "Whether to use Apify Proxy for browser requests.",
+            "editor": "checkbox",
+            "default": false
+        }
+
+    },
+    "required": ["location", "keyword"]
+}

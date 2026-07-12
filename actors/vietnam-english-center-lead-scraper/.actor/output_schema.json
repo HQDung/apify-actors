@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Vietnam English Center Lead Scraper with Emails Output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Vietnam English Center Lead Scraper with Emails dataset",
+            "template": "{{datasetUrl}}"
+        }
+    }
+}

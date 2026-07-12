@@ -1,0 +1,8 @@
+{
+    "city": "Da Nang",
+    "hotelTypes": ["hotel"],
+    "maxResultsPerType": 1,
+    "batchSize": 1,
+    "extractEmails": false,
+    "useProxy": false
+}

@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Vietnam Hotel Lead Scraper with Emails Output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Hotel leads dataset",
+            "template": "{{datasetUrl}}"
+        }
+    }
+}

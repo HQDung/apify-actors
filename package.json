@@ -1,0 +1,9 @@
+{
+    "name": "apify-actor-generator",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "generate": "node scripts/generate-actor.js",
+        "test:factory": "node --test test/factory.test.js"
+    }
+}

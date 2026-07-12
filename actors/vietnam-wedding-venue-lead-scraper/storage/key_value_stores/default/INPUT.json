@@ -1,0 +1,8 @@
+{
+  "keyword": "wedding venue",
+  "location": "Ho Chi Minh",
+  "maxResults": 3,
+  "batchSize": 3,
+  "extractEmails": false,
+  "useApifyProxy": false
+}
