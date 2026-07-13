@@ -1,8 +1,12 @@
 {
-    "city": "Da Nang",
-    "hotelTypes": ["hotel"],
-    "maxResultsPerType": 1,
-    "batchSize": 1,
-    "extractEmails": false,
-    "useProxy": false
+  "city": "Da Nang",
+  "hotelTypes": [
+    "hotel",
+    "resort",
+    "homestay"
+  ],
+  "maxResultsPerType": 20,
+  "batchSize": 5,
+  "extractEmails": true,
+  "useProxy": false
 }

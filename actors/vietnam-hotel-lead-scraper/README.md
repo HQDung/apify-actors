@@ -2,24 +2,93 @@
 
 Scrape hotel, resort, homestay, hostel, villa and apartment hotel leads from Google Maps in Vietnam, including emails when available.
 
-This Actor searches multiple accommodation types in a selected Vietnamese city, extracts business details, deduplicates repeated Google Maps results, and scores each lead by contact completeness.
+This Actor extracts business information such as name, category, rating, address, phone number, website, email, and Google Maps URL.
+
+## Positioning
+
+- **Target user:** Hotel suppliers, hospitality technology companies, travel platforms, B2B sales teams, and tourism service providers.
+- **Buyer pain point:** Finding and qualifying accommodation businesses across multiple property types requires repetitive searches and manual website checks.
+- **Differentiation:** Accommodation-specific multi-search across hotel types, with optional public website email extraction and lead-quality scoring.
+
+## Benchmark inputs
+
+Use these labeled profiles for repeatable local and performance checks. All profiles keep Apify Proxy disabled by default.
+
+Benchmark inputs and results are tracked in the repository [BENCHMARKS.md](../../BENCHMARKS.md).
+
+```json
+[
+  {
+    "label": "smoke",
+    "input": {
+      "city": "Da Nang",
+      "hotelTypes": [
+        "hotel",
+        "resort",
+        "homestay"
+      ],
+      "maxResultsPerType": 1,
+      "batchSize": 1,
+      "extractEmails": false,
+      "useProxy": false
+    }
+  },
+  {
+    "label": "email-baseline",
+    "input": {
+      "city": "Da Nang",
+      "hotelTypes": [
+        "hotel",
+        "resort",
+        "homestay"
+      ],
+      "maxResultsPerType": 5,
+      "batchSize": 5,
+      "extractEmails": true,
+      "useProxy": false
+    }
+  },
+  {
+    "label": "broader-search",
+    "input": {
+      "city": "Da Nang",
+      "hotelTypes": [
+        "hotel",
+        "resort",
+        "homestay"
+      ],
+      "maxResultsPerType": 10,
+      "batchSize": 5,
+      "extractEmails": false,
+      "useProxy": false
+    }
+  }
+]
+```
 
 ## Features
 
-- Search multiple accommodation types per city
-- Extract business name, category, rating, address, phone, website and Google Maps URL
-- Extract emails from public business websites
-- Add `hotelType` and `city` to each result
+- Scrape Google Maps business search results
+- Extract business name, category, rating, address, phone number and website
+- Extract emails from business websites
+- Deduplicate repeated Google Maps results
 - Add `hasEmail`, `leadScore` and `leadQuality`
-- Deduplicate by Google Maps URL, with name and address fallback
-- Support parallel detail-page processing
+
+- Search multiple hotel types per city
+
+
+- Support parallel processing
 
 ## Input
 
 ```json
 {
   "city": "Da Nang",
-  "hotelTypes": ["hotel", "resort", "homestay"],
+  "hotelTypes": [
+    "hotel",
+    "resort",
+    "homestay"
+  ],
   "maxResultsPerType": 20,
   "batchSize": 5,
   "extractEmails": true,
@@ -31,24 +100,30 @@ This Actor searches multiple accommodation types in a selected Vietnamese city, 
 
 | Field | Type | Description |
 |---|---|---|
-| `city` | string | Vietnam city to search, for example `Da Nang`, `Ho Chi Minh`, `Ha Noi` |
-| `hotelTypes` | string[] | Accommodation types to search in the selected city |
-| `maxResultsPerType` | integer | Maximum Google Maps results to collect for each hotel type |
+
+| `city` | string | Vietnam city to search for accommodation leads. |
+| `hotelTypes` | string[] | Accommodation types to search in the selected city. |
+| `maxResultsPerType` | integer | Maximum number of Google Maps results to collect for each hotel type. |
+
+
 | `batchSize` | integer | Number of business detail pages processed in parallel |
 | `extractEmails` | boolean | Whether to extract email addresses from business websites |
+
 | `useProxy` | boolean | Whether to use Apify Proxy for browser requests |
 
 Legacy `keyword`, `location`, `maxResults` and `useApifyProxy` inputs are still accepted for backward compatibility.
+
+
 
 ## Output
 
 ```json
 {
-  "hotelType": "resort",
+  "hotelType": "hotel",
   "city": "Da Nang",
-  "name": "Example Resort",
+  "name": "Example hotel",
   "rating": "4.5",
-  "category": "Resort hotel",
+  "category": "hotel",
   "address": "Da Nang, Vietnam",
   "website": "https://example.com",
   "phone": "+84 123 456 789",
@@ -65,7 +140,7 @@ Legacy `keyword`, `location`, `maxResults` and `useApifyProxy` inputs are still 
 
 | Field | Type | Description |
 |---|---|---|
-| `hotelType` | string | Accommodation type used to find the lead |
+| `hotelType` | string | Hotel type used to find the lead |
 | `city` | string | City used in the search |
 | `name` | string | Business name |
 | `rating` | string or null | Google Maps rating |
@@ -79,14 +154,7 @@ Legacy `keyword`, `location`, `maxResults` and `useApifyProxy` inputs are still 
 | `leadScore` | integer | Contact completeness score from 0 to 100 |
 | `leadQuality` | string | `high`, `medium` or `low` based on lead score |
 | `googleMapsUrl` | string | Google Maps business URL |
-
-## Recommended use cases
-
-- Hotel marketing lead generation
-- Travel agency outreach
-- OTA partnership research
-- Hospitality supplier prospecting
-- Local SEO agency prospecting
+| `error` | string | Error details when a lead or search item cannot be processed |
 
 ## Notes
 
@@ -94,4 +162,26 @@ Email extraction depends on whether the business website publicly displays an em
 
 Some businesses may not have a website or may block automated browser access.
 
-Runtime and cost depend on the number of hotel types, result limits, website loading speed, and whether email extraction is enabled.
+Runtime and cost depend on result limits, website loading speed, and whether email extraction is enabled.
+
+## Recommended use cases
+
+- Lead generation
+- Local business research
+- Sales prospecting
+- Market research
+- Building contact lists
+- Finding businesses with websites and public contact emails
+
+## Example search
+
+```json
+{
+
+  "city": "Da Nang",
+  "hotelTypes": ["hotel","resort","homestay"],
+  "maxResultsPerType": 20
+
+
+}
+```

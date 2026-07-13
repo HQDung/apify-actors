@@ -4,6 +4,22 @@
 
 This Actor extracts business information such as name, category, rating, address, phone number, website, email, and Google Maps URL.
 
+## Positioning
+
+- **Target user:** {{TARGET_USER}}
+- **Buyer pain point:** {{BUYER_PAIN_POINT}}
+- **Differentiation:** {{DIFFERENTIATION}}
+
+## Benchmark inputs
+
+Use these labeled profiles for repeatable local and performance checks. All profiles keep Apify Proxy disabled by default.
+
+{{BENCHMARKS_NOTE}}
+
+```json
+{{BENCHMARK_INPUTS_JSON}}
+```
+
 ## Features
 
 - Scrape Google Maps business search results
@@ -22,24 +38,7 @@ This Actor extracts business information such as name, category, rating, address
 ## Input
 
 ```json
-{
-{{#MULTI_SEARCH}}
-  "{{SEARCH_LOCATION_INPUT_FIELD}}": "{{DEFAULT_LOCATION}}",
-  "{{SEARCH_TYPE_INPUT_FIELD}}": {{DEFAULT_SEARCH_TYPES_JSON}},
-  "{{MAX_RESULTS_INPUT_FIELD}}": 20,
-  "batchSize": 5,
-  "extractEmails": true,
-  "useProxy": false
-{{/MULTI_SEARCH}}
-{{^MULTI_SEARCH}}
-  "keyword": "{{DEFAULT_KEYWORD}}",
-  "location": "{{DEFAULT_LOCATION}}",
-  "maxResults": 20,
-  "batchSize": 5,
-  "extractEmails": true,
-  "useApifyProxy": false
-{{/MULTI_SEARCH}}
-}
+{{SAMPLE_INPUT_JSON}}
 ```
 
 ## Input fields
@@ -106,6 +105,7 @@ Legacy `keyword`, `location`, `maxResults` and `useApifyProxy` inputs are still 
 | `leadScore` | integer | Contact completeness score from 0 to 100 |
 | `leadQuality` | string | `high`, `medium` or `low` based on lead score |
 | `googleMapsUrl` | string | Google Maps business URL |
+| `error` | string | Error details when a lead or search item cannot be processed |
 
 ## Notes
 

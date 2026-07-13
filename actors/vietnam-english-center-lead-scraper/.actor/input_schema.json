@@ -12,6 +12,8 @@
         },
         "keyword": {
             "title": "Keyword",
+
+
             "type": "string",
             "description": "Search keyword for English centers and language schools.",
             "editor": "textfield",

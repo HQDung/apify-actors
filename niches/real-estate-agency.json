@@ -6,5 +6,14 @@
   "defaultKeyword": "real estate agency",
   "defaultLocation": "Ho Chi Minh",
   "shortDescription": "Scrape real estate agency leads from Google Maps in Vietnam and extract emails when available.",
-  "longDescription": "This Actor searches Google Maps for real estate agencies in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for B2B sales, property technology companies, marketing agencies, and real estate service providers."
+  "longDescription": "This Actor searches Google Maps for real estate agencies in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for B2B sales, property technology companies, marketing agencies, and real estate service providers.",
+  "targetUser": "B2B sales teams, property technology companies, marketing agencies, and real estate service providers.",
+  "buyerPainPoint": "Property businesses need fresh agency prospects but often spend hours collecting and checking contact details manually.",
+  "differentiation": "Real-estate-agency-specific Google Maps discovery with optional website email extraction and lead-quality scoring.",
+  "sampleInput": { "keyword": "real estate agency", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": true, "useApifyProxy": false },
+  "benchmarkInputs": [
+    { "label": "smoke", "input": { "keyword": "real estate agency", "location": "Ho Chi Minh", "maxResults": 1, "batchSize": 1, "extractEmails": false, "useApifyProxy": false } },
+    { "label": "email-baseline", "input": { "keyword": "real estate agency", "location": "Ho Chi Minh", "maxResults": 10, "batchSize": 5, "extractEmails": true, "useApifyProxy": false } },
+    { "label": "broader-search", "input": { "keyword": "real estate agency", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": false, "useApifyProxy": false } }
+  ]
 }

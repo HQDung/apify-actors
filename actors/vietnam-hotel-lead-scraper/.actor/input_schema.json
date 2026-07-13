@@ -12,18 +12,14 @@
         },
         "hotelTypes": {
             "title": "Hotel types",
+
             "type": "array",
             "description": "Accommodation types to search in the selected city.",
             "editor": "stringList",
-            "default": ["hotel", "resort", "homestay"],
-            "prefill": [
-                "hotel",
-                "resort",
-                "homestay",
-                "hostel",
-                "villa",
-                "apartment hotel"
-            ]
+            "default": ["hotel","resort","homestay"],
+            "prefill": ["hotel","resort","homestay","hostel","villa","apartment hotel"]
+
+
         },
         "maxResultsPerType": {
             "title": "Max results per hotel type",
@@ -50,6 +46,7 @@
             "editor": "checkbox",
             "default": true
         },
+
         "useProxy": {
             "title": "Use Apify Proxy",
             "type": "boolean",
@@ -57,6 +54,8 @@
             "editor": "checkbox",
             "default": false
         }
+
+
     },
     "required": ["city"]
 }

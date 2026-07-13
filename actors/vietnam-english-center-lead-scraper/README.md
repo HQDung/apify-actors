@@ -4,6 +4,56 @@ This Actor searches Google Maps for English centers and language schools in Viet
 
 This Actor extracts business information such as name, category, rating, address, phone number, website, email, and Google Maps URL.
 
+## Positioning
+
+- **Target user:** Education service providers, EdTech companies, B2B sales teams, and marketing agencies.
+- **Buyer pain point:** Building a reliable list of language-school prospects and public contact emails takes repetitive manual research.
+- **Differentiation:** Language-school-specific Google Maps discovery with optional website email extraction and lead-quality scoring.
+
+## Benchmark inputs
+
+Use these labeled profiles for repeatable local and performance checks. All profiles keep Apify Proxy disabled by default.
+
+Benchmark inputs and results are tracked in the repository [BENCHMARKS.md](../../BENCHMARKS.md).
+
+```json
+[
+  {
+    "label": "smoke",
+    "input": {
+      "keyword": "English center",
+      "location": "Ho Chi Minh",
+      "maxResults": 1,
+      "batchSize": 1,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "email-baseline",
+    "input": {
+      "keyword": "English center",
+      "location": "Ho Chi Minh",
+      "maxResults": 10,
+      "batchSize": 5,
+      "extractEmails": true,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "broader-search",
+    "input": {
+      "keyword": "English center",
+      "location": "Ho Chi Minh",
+      "maxResults": 20,
+      "batchSize": 5,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  }
+]
+```
+
 ## Features
 
 - Scrape Google Maps business search results
@@ -21,15 +71,12 @@ This Actor extracts business information such as name, category, rating, address
 
 ```json
 {
-
-
   "keyword": "English center",
   "location": "Ho Chi Minh",
   "maxResults": 20,
   "batchSize": 5,
   "extractEmails": true,
   "useApifyProxy": false
-
 }
 ```
 
@@ -89,6 +136,7 @@ This Actor extracts business information such as name, category, rating, address
 | `leadScore` | integer | Contact completeness score from 0 to 100 |
 | `leadQuality` | string | `high`, `medium` or `low` based on lead score |
 | `googleMapsUrl` | string | Google Maps business URL |
+| `error` | string | Error details when a lead or search item cannot be processed |
 
 ## Notes
 

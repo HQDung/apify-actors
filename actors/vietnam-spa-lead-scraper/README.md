@@ -4,6 +4,56 @@ This Actor searches Google Maps for spas and beauty clinics in Vietnam, extracts
 
 This Actor extracts business information such as name, category, rating, address, phone number, website, email, and Google Maps URL.
 
+## Positioning
+
+- **Target user:** Beauty product suppliers, wellness platforms, B2B sales teams, and marketing agencies.
+- **Buyer pain point:** Finding qualified spa prospects and public contact emails across a city takes repetitive manual search and verification.
+- **Differentiation:** Spa and beauty-clinic-specific Google Maps discovery with optional website email extraction and lead-quality scoring.
+
+## Benchmark inputs
+
+Use these labeled profiles for repeatable local and performance checks. All profiles keep Apify Proxy disabled by default.
+
+Benchmark inputs and results are tracked in the repository [BENCHMARKS.md](../../BENCHMARKS.md).
+
+```json
+[
+  {
+    "label": "smoke",
+    "input": {
+      "keyword": "spa",
+      "location": "Ho Chi Minh",
+      "maxResults": 1,
+      "batchSize": 1,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "email-baseline",
+    "input": {
+      "keyword": "spa",
+      "location": "Ho Chi Minh",
+      "maxResults": 10,
+      "batchSize": 5,
+      "extractEmails": true,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "broader-search",
+    "input": {
+      "keyword": "spa",
+      "location": "Ho Chi Minh",
+      "maxResults": 20,
+      "batchSize": 5,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  }
+]
+```
+
 ## Features
 
 - Scrape Google Maps business search results
@@ -11,7 +61,10 @@ This Actor extracts business information such as name, category, rating, address
 - Extract emails from business websites
 - Deduplicate repeated Google Maps results
 - Add `hasEmail`, `leadScore` and `leadQuality`
+
+
 - Support custom keyword and location
+
 - Support parallel processing
 
 ## Input
@@ -31,12 +84,18 @@ This Actor extracts business information such as name, category, rating, address
 
 | Field | Type | Description |
 |---|---|---|
-| `keyword` | string | Search keyword for spas, beauty clinics, massage spas, nail salons, or wellness businesses. |
-| `location` | string | Target city, district, or area in Vietnam, for example `Ho Chi Minh`, `Da Nang`, `Hanoi`, or `Nha Trang`. |
-| `maxResults` | integer | Maximum number of Google Maps results to scrape. |
-| `extractEmails` | boolean | Whether to visit business websites and extract publicly available email addresses. |
-| `batchSize` | integer | Number of business detail pages processed in parallel. Lower this if runs become unstable. |
-| `useApifyProxy` | boolean | Whether to use Apify Proxy for browser requests. |
+
+
+| `keyword` | string | Search keyword for spas and beauty clinics |
+| `location` | string | Target city or area, for example `Ho Chi Minh` or `Ho Chi Minh` |
+| `maxResults` | integer | Maximum number of businesses to scrape |
+
+| `batchSize` | integer | Number of business detail pages processed in parallel |
+| `extractEmails` | boolean | Whether to extract email addresses from business websites |
+
+
+| `useApifyProxy` | boolean | Whether to use Apify Proxy for browser requests |
+
 
 ## Output
 
@@ -77,6 +136,7 @@ This Actor extracts business information such as name, category, rating, address
 | `leadScore` | integer | Contact completeness score from 0 to 100 |
 | `leadQuality` | string | `high`, `medium` or `low` based on lead score |
 | `googleMapsUrl` | string | Google Maps business URL |
+| `error` | string | Error details when a lead or search item cannot be processed |
 
 ## Notes
 
@@ -88,19 +148,22 @@ Runtime and cost depend on result limits, website loading speed, and whether ema
 
 ## Recommended use cases
 
-- Spa and beauty clinic lead generation
-- Prospecting for cosmetic suppliers
-- Finding potential customers for booking software
-- Local beauty market research
-- Building B2B contact lists for wellness businesses
-- Finding spas and beauty clinics with websites and public contact emails
+- Lead generation
+- Local business research
+- Sales prospecting
+- Market research
+- Building contact lists
+- Finding businesses with websites and public contact emails
 
 ## Example search
 
 ```json
 {
+
+
   "keyword": "spa",
   "location": "Ho Chi Minh",
   "maxResults": 20
+
 }
 ```

@@ -7,6 +7,15 @@
     "defaultLocation": "Da Nang",
     "shortDescription": "Scrape hotel leads from Google Maps in Vietnam and extract emails when available.",
     "longDescription": "Scrape hotel, resort, homestay, hostel, villa and apartment hotel leads from Google Maps in Vietnam, including emails when available.",
+    "targetUser": "Hotel suppliers, hospitality technology companies, travel platforms, B2B sales teams, and tourism service providers.",
+    "buyerPainPoint": "Finding and qualifying accommodation businesses across multiple property types requires repetitive searches and manual website checks.",
+    "differentiation": "Accommodation-specific multi-search across hotel types, with optional public website email extraction and lead-quality scoring.",
+    "sampleInput": { "city": "Da Nang", "hotelTypes": ["hotel", "resort", "homestay"], "maxResultsPerType": 20, "batchSize": 5, "extractEmails": true, "useProxy": false },
+    "benchmarkInputs": [
+        { "label": "smoke", "input": { "city": "Da Nang", "hotelTypes": ["hotel", "resort", "homestay"], "maxResultsPerType": 1, "batchSize": 1, "extractEmails": false, "useProxy": false } },
+        { "label": "email-baseline", "input": { "city": "Da Nang", "hotelTypes": ["hotel", "resort", "homestay"], "maxResultsPerType": 5, "batchSize": 5, "extractEmails": true, "useProxy": false } },
+        { "label": "broader-search", "input": { "city": "Da Nang", "hotelTypes": ["hotel", "resort", "homestay"], "maxResultsPerType": 10, "batchSize": 5, "extractEmails": false, "useProxy": false } }
+    ],
     "multiSearch": {
         "locationInputField": "city",
         "locationOutputField": "city",

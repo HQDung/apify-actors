@@ -4,7 +4,7 @@
     "properties": {
         "dataset": {
             "type": "string",
-            "title": "Hotel leads dataset",
+            "title": "Vietnam Hotel Lead Scraper with Emails dataset",
             "template": "{{datasetUrl}}"
         }
     }

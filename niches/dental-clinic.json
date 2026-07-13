@@ -6,5 +6,14 @@
   "defaultKeyword": "dental clinic",
   "defaultLocation": "Ho Chi Minh",
   "shortDescription": "Scrape dental clinic leads from Google Maps in Vietnam and extract emails when available.",
-  "longDescription": "This Actor searches Google Maps for dental clinics in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for dental suppliers, clinic software companies, B2B sales teams, and marketing agencies."
+  "longDescription": "This Actor searches Google Maps for dental clinics in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for dental suppliers, clinic software companies, B2B sales teams, and marketing agencies.",
+  "targetUser": "Dental suppliers, clinic software companies, B2B sales teams, and marketing agencies.",
+  "buyerPainPoint": "Finding current clinic contacts and public email addresses without manually checking many map listings and websites.",
+  "differentiation": "Dental-clinic-specific Google Maps search with optional website email extraction and lead-quality scoring.",
+  "sampleInput": { "keyword": "dental clinic", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": true, "useApifyProxy": false },
+  "benchmarkInputs": [
+    { "label": "smoke", "input": { "keyword": "dental clinic", "location": "Ho Chi Minh", "maxResults": 1, "batchSize": 1, "extractEmails": false, "useApifyProxy": false } },
+    { "label": "email-baseline", "input": { "keyword": "dental clinic", "location": "Ho Chi Minh", "maxResults": 10, "batchSize": 5, "extractEmails": true, "useApifyProxy": false } },
+    { "label": "broader-search", "input": { "keyword": "dental clinic", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": false, "useApifyProxy": false } }
+  ]
 }

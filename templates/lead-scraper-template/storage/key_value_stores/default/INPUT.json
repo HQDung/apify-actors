@@ -1,18 +1,1 @@
-{
-{{#MULTI_SEARCH}}
-  "{{SEARCH_LOCATION_INPUT_FIELD}}": "{{DEFAULT_LOCATION}}",
-  "{{SEARCH_TYPE_INPUT_FIELD}}": {{DEFAULT_SEARCH_TYPES_JSON}},
-  "{{MAX_RESULTS_INPUT_FIELD}}": 1,
-  "batchSize": 1,
-  "extractEmails": false,
-  "useProxy": false
-{{/MULTI_SEARCH}}
-{{^MULTI_SEARCH}}
-  "keyword": "{{DEFAULT_KEYWORD}}",
-  "location": "{{DEFAULT_LOCATION}}",
-  "maxResults": 1,
-  "batchSize": 1,
-  "extractEmails": false,
-  "useApifyProxy": false
-{{/MULTI_SEARCH}}
-}
+{{SAMPLE_INPUT_JSON}}

@@ -4,6 +4,56 @@ This Actor searches Google Maps for real estate agencies in Vietnam, extracts bu
 
 This Actor extracts business information such as name, category, rating, address, phone number, website, email, and Google Maps URL.
 
+## Positioning
+
+- **Target user:** B2B sales teams, property technology companies, marketing agencies, and real estate service providers.
+- **Buyer pain point:** Property businesses need fresh agency prospects but often spend hours collecting and checking contact details manually.
+- **Differentiation:** Real-estate-agency-specific Google Maps discovery with optional website email extraction and lead-quality scoring.
+
+## Benchmark inputs
+
+Use these labeled profiles for repeatable local and performance checks. All profiles keep Apify Proxy disabled by default.
+
+Benchmark inputs and results are tracked in the repository [BENCHMARKS.md](../../BENCHMARKS.md).
+
+```json
+[
+  {
+    "label": "smoke",
+    "input": {
+      "keyword": "real estate agency",
+      "location": "Ho Chi Minh",
+      "maxResults": 1,
+      "batchSize": 1,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "email-baseline",
+    "input": {
+      "keyword": "real estate agency",
+      "location": "Ho Chi Minh",
+      "maxResults": 10,
+      "batchSize": 5,
+      "extractEmails": true,
+      "useApifyProxy": false
+    }
+  },
+  {
+    "label": "broader-search",
+    "input": {
+      "keyword": "real estate agency",
+      "location": "Ho Chi Minh",
+      "maxResults": 20,
+      "batchSize": 5,
+      "extractEmails": false,
+      "useApifyProxy": false
+    }
+  }
+]
+```
+
 ## Features
 
 - Scrape Google Maps business search results
@@ -21,15 +71,12 @@ This Actor extracts business information such as name, category, rating, address
 
 ```json
 {
-
-
   "keyword": "real estate agency",
   "location": "Ho Chi Minh",
   "maxResults": 20,
   "batchSize": 5,
   "extractEmails": true,
   "useApifyProxy": false
-
 }
 ```
 
@@ -89,6 +136,7 @@ This Actor extracts business information such as name, category, rating, address
 | `leadScore` | integer | Contact completeness score from 0 to 100 |
 | `leadQuality` | string | `high`, `medium` or `low` based on lead score |
 | `googleMapsUrl` | string | Google Maps business URL |
+| `error` | string | Error details when a lead or search item cannot be processed |
 
 ## Notes
 

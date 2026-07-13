@@ -3,19 +3,22 @@
     "type": "object",
     "schemaVersion": 1,
     "properties": {
+        "location": {
+            "title": "Location",
+            "type": "string",
+            "description": "Target city or area.",
+            "editor": "textfield",
+            "default": "Ho Chi Minh"
+        },
         "keyword": {
             "title": "Keyword",
+
+
             "type": "string",
             "description": "Search keyword for spas and beauty clinics.",
             "editor": "textfield",
             "default": "spa"
-        },
-        "location": {
-            "title": "Location",
-            "type": "string",
-            "description": "City, district, or area in Vietnam, for example Ho Chi Minh, Da Nang, Hanoi, or Nha Trang.",
-            "editor": "textfield",
-            "default": "Ho Chi Minh"
+
         },
         "maxResults": {
             "title": "Max results",
@@ -26,13 +29,6 @@
             "minimum": 1,
             "maximum": 100
         },
-        "extractEmails": {
-            "title": "Extract emails",
-            "type": "boolean",
-            "description": "Whether to extract email addresses from business websites.",
-            "editor": "checkbox",
-            "default": true
-        },
         "batchSize": {
             "title": "Batch size",
             "type": "integer",
@@ -42,6 +38,15 @@
             "minimum": 1,
             "maximum": 20
         },
+        "extractEmails": {
+            "title": "Extract emails",
+            "type": "boolean",
+            "description": "Whether to extract email addresses from business websites.",
+            "editor": "checkbox",
+            "default": true
+        },
+
+
         "useApifyProxy": {
             "title": "Use Apify Proxy",
             "type": "boolean",
@@ -49,6 +54,7 @@
             "editor": "checkbox",
             "default": false
         }
+
     },
     "required": ["location", "keyword"]
 }

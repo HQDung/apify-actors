@@ -6,5 +6,14 @@
     "defaultKeyword": "spa",
     "defaultLocation": "Ho Chi Minh",
     "shortDescription": "Scrape spa and beauty clinic leads from Google Maps in Vietnam and extract emails when available.",
-    "longDescription": "This Actor searches Google Maps for spas and beauty clinics in Vietnam, extracts business details, and attempts to find email addresses from available websites."
+    "longDescription": "This Actor searches Google Maps for spas and beauty clinics in Vietnam, extracts business details, and attempts to find email addresses from available websites.",
+    "targetUser": "Beauty product suppliers, wellness platforms, B2B sales teams, and marketing agencies.",
+    "buyerPainPoint": "Finding qualified spa prospects and public contact emails across a city takes repetitive manual search and verification.",
+    "differentiation": "Spa and beauty-clinic-specific Google Maps discovery with optional website email extraction and lead-quality scoring.",
+    "sampleInput": { "keyword": "spa", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": true, "useApifyProxy": false },
+    "benchmarkInputs": [
+        { "label": "smoke", "input": { "keyword": "spa", "location": "Ho Chi Minh", "maxResults": 1, "batchSize": 1, "extractEmails": false, "useApifyProxy": false } },
+        { "label": "email-baseline", "input": { "keyword": "spa", "location": "Ho Chi Minh", "maxResults": 10, "batchSize": 5, "extractEmails": true, "useApifyProxy": false } },
+        { "label": "broader-search", "input": { "keyword": "spa", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": false, "useApifyProxy": false } }
+    ]
 }

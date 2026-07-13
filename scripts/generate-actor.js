@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ignoredNames = new Set(['node_modules', '.git']);
+const ignoredNames = new Set(['node_modules', '.git', 'generated-actor']);
 const textExtensions = new Set(['.js', '.mjs', '.cjs', '.ts', '.json', '.md', '.txt', '.yml', '.yaml', '.env']);
 const requiredNicheFields = [
     'actorName',
@@ -14,6 +14,8 @@ const requiredNicheFields = [
     'shortDescription',
     'longDescription',
 ];
+const requiredMetadataFields = ['targetUser', 'buyerPainPoint', 'differentiation'];
+const requiredBenchmarkLabels = ['smoke', 'email-baseline', 'broader-search'];
 const actorNamePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const identifierPattern = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
@@ -31,6 +33,22 @@ const isPathInside = (childPath, parentPath) => {
     return relativePath === '' || (!relativePath.startsWith(`..${path.sep}`) && relativePath !== '..' && !path.isAbsolute(relativePath));
 };
 
+const realpathOfExistingParent = async (targetPath) => {
+    let candidate = path.dirname(targetPath);
+
+    while (true) {
+        try {
+            if ((await fs.stat(candidate)).isDirectory()) return fs.realpath(candidate);
+        } catch (error) {
+            if (error.code !== 'ENOENT') throw error;
+        }
+
+        const parent = path.dirname(candidate);
+        if (parent === candidate) return fs.realpath(candidate);
+        candidate = parent;
+    }
+};
+
 const validateNiche = (niche) => {
     if (!niche || typeof niche !== 'object' || Array.isArray(niche)) {
         throw new Error('Niche config must be a JSON object.');
@@ -44,6 +62,21 @@ const validateNiche = (niche) => {
 
     if (niche.actorName.length > 63 || !actorNamePattern.test(niche.actorName)) {
         throw new Error('Niche config field "actorName" must use lowercase letters, numbers, and single hyphens only.');
+    }
+
+    for (const field of requiredMetadataFields) {
+        if (typeof niche[field] !== 'string' || !niche[field].trim()) {
+            throw new Error(`Niche config field "${field}" must be a non-empty string.`);
+        }
+    }
+
+    if (!niche.sampleInput || typeof niche.sampleInput !== 'object' || Array.isArray(niche.sampleInput)) {
+        throw new Error('Niche config field "sampleInput" must be an object.');
+    }
+
+    if (!Array.isArray(niche.benchmarkInputs)
+        || requiredBenchmarkLabels.some((label) => !niche.benchmarkInputs.some((benchmark) => benchmark?.label === label))) {
+        throw new Error(`Niche config field "benchmarkInputs" must include ${requiredBenchmarkLabels.join(', ')} labels.`);
     }
 
     if (niche.multiSearch !== undefined && niche.multiSearch !== null
@@ -65,8 +98,9 @@ export async function generateActor({ nicheKey, nicheFile, outputDir, rootDir = 
         ? path.resolve(absoluteRootDir, nicheFile)
         : path.join(absoluteRootDir, 'niches', `${nicheKey}.json`);
 
+    let realTemplateDir;
     try {
-        await fs.access(templateDir);
+        realTemplateDir = await fs.realpath(templateDir);
     } catch {
         throw new Error(`Template folder not found: ${templateDir}`);
     }
@@ -82,6 +116,9 @@ export async function generateActor({ nicheKey, nicheFile, outputDir, rootDir = 
 
     const actorDir = path.resolve(outputDir ?? path.join(absoluteRootDir, 'actors', niche.actorName));
     if (isPathInside(actorDir, templateDir)) {
+        throw new Error(`Output directory cannot be inside the template folder: ${actorDir}`);
+    }
+    if (isPathInside(await realpathOfExistingParent(actorDir), realTemplateDir)) {
         throw new Error(`Output directory cannot be inside the template folder: ${actorDir}`);
     }
     try {
@@ -101,6 +138,12 @@ export async function generateActor({ nicheKey, nicheFile, outputDir, rootDir = 
         '{{DEFAULT_LOCATION}}': jsonStringContent(niche.defaultLocation),
         '{{SHORT_DESCRIPTION}}': jsonStringContent(niche.shortDescription),
         '{{LONG_DESCRIPTION}}': jsonStringContent(niche.longDescription),
+        '{{TARGET_USER}}': niche.targetUser,
+        '{{BUYER_PAIN_POINT}}': niche.buyerPainPoint,
+        '{{DIFFERENTIATION}}': niche.differentiation,
+        '{{BENCHMARKS_NOTE}}': 'Benchmark inputs and results are tracked in the repository [BENCHMARKS.md](../../BENCHMARKS.md).',
+        '{{SAMPLE_INPUT_JSON}}': JSON.stringify(niche.sampleInput, null, 2),
+        '{{BENCHMARK_INPUTS_JSON}}': JSON.stringify(niche.benchmarkInputs, null, 2),
         '{{MULTI_SEARCH_CONFIG_JSON}}': JSON.stringify(multiSearch),
         '{{SEARCH_LOCATION_INPUT_FIELD}}': jsonStringContent(multiSearch?.locationInputField ?? 'location'),
         '{{SEARCH_LOCATION_OUTPUT_FIELD}}': jsonStringContent(multiSearch?.locationOutputField ?? 'location'),
@@ -168,6 +211,8 @@ const printUsage = () => {
     console.error('Example: node scripts/generate-actor.js hotel');
 };
 
+const shellQuote = (value) => `'${value.replaceAll("'", "'\\''")}'`;
+
 const parseCliArgs = (args) => {
     const [nicheKey, ...flags] = args;
     if (!nicheKey || nicheKey.startsWith('--')) throw new Error('A niche name is required.');
@@ -207,7 +252,7 @@ async function main() {
     console.log(`Path: ${actorDir}`);
     console.log('');
     console.log('Next commands:');
-    console.log(`cd actors/${niche.actorName}`);
+    console.log(`cd ${options.outputDir ? shellQuote(actorDir) : path.relative(process.cwd(), actorDir)}`);
     console.log('npm install');
     console.log('apify run');
     console.log('apify push');

@@ -1,8 +1,8 @@
 {
   "keyword": "real estate agency",
   "location": "Ho Chi Minh",
-  "maxResults": 3,
-  "batchSize": 3,
-  "extractEmails": false,
+  "maxResults": 20,
+  "batchSize": 5,
+  "extractEmails": true,
   "useApifyProxy": false
 }

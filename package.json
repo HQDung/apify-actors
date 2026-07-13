@@ -4,6 +4,8 @@
     "type": "module",
     "scripts": {
         "generate": "node scripts/generate-actor.js",
-        "test:factory": "node --test test/factory.test.js"
+        "test:factory": "node --test test/factory.test.js",
+        "validate:actor": "node scripts/validate-actor-files.js",
+        "benchmark": "node scripts/run-local-benchmark.js"
     }
 }

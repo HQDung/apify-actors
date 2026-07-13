@@ -1,8 +1,8 @@
 {
-    "keyword": "spa",
-    "location": "Ho Chi Minh",
-    "maxResults": 20,
-    "batchSize": 5,
-    "extractEmails": true,
-    "useApifyProxy": false
+  "keyword": "spa",
+  "location": "Ho Chi Minh",
+  "maxResults": 20,
+  "batchSize": 5,
+  "extractEmails": true,
+  "useApifyProxy": false
 }

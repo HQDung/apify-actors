@@ -6,5 +6,14 @@
   "defaultKeyword": "wedding venue",
   "defaultLocation": "Ho Chi Minh",
   "shortDescription": "Scrape wedding venue and event venue leads from Google Maps in Vietnam and extract emails when available.",
-  "longDescription": "This Actor searches Google Maps for wedding venues and event venues in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for wedding service providers, event suppliers, B2B sales teams, and local marketing agencies."
+  "longDescription": "This Actor searches Google Maps for wedding venues and event venues in Vietnam, extracts business details, and attempts to find email addresses from available websites. It is useful for wedding service providers, event suppliers, B2B sales teams, and local marketing agencies.",
+  "targetUser": "Wedding service providers, event suppliers, B2B sales teams, and local marketing agencies.",
+  "buyerPainPoint": "Event businesses need a scalable way to discover venue prospects and public contact channels without manual venue-by-venue research.",
+  "differentiation": "Wedding and event-venue-specific Google Maps discovery with optional website email extraction and lead-quality scoring.",
+  "sampleInput": { "keyword": "wedding venue", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": true, "useApifyProxy": false },
+  "benchmarkInputs": [
+    { "label": "smoke", "input": { "keyword": "wedding venue", "location": "Ho Chi Minh", "maxResults": 1, "batchSize": 1, "extractEmails": false, "useApifyProxy": false } },
+    { "label": "email-baseline", "input": { "keyword": "wedding venue", "location": "Ho Chi Minh", "maxResults": 10, "batchSize": 5, "extractEmails": true, "useApifyProxy": false } },
+    { "label": "broader-search", "input": { "keyword": "wedding venue", "location": "Ho Chi Minh", "maxResults": 20, "batchSize": 5, "extractEmails": false, "useApifyProxy": false } }
+  ]
 }
