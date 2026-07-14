@@ -1,0 +1,8 @@
+{
+  "keyword": "coworking space",
+  "location": "Ho Chi Minh",
+  "maxResults": 20,
+  "batchSize": 5,
+  "extractEmails": true,
+  "useApifyProxy": false
+}

@@ -1,9 +1,9 @@
 {
     "actorSpecification": 1,
-    "title": "Vietnam Travel Agency Lead Scraper with Emails Dataset",
+    "title": "Vietnam Coworking Space Lead Scraper with Emails Dataset",
     "views": {
         "overview": {
-            "title": "travel agencies and tour operators",
+            "title": "coworking spaces",
             "transformation": {
                 "fields": [
                     "keyword",

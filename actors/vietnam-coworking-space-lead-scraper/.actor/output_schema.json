@@ -1,0 +1,11 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Vietnam Coworking Space Lead Scraper with Emails Output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Vietnam Coworking Space Lead Scraper with Emails dataset",
+            "template": "{{datasetUrl}}"
+        }
+    }
+}

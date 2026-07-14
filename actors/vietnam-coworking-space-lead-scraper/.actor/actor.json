@@ -1,8 +1,8 @@
 {
     "actorSpecification": 1,
-    "name": "vietnam-real-estate-agency-lead-scraper",
-    "title": "Vietnam Real Estate Agency Lead Scraper with Emails",
-    "description": "Scrape real estate agency leads from Google Maps in Vietnam and extract emails when available.",
+    "name": "vietnam-coworking-space-lead-scraper",
+    "title": "Vietnam Coworking Space Lead Scraper with Emails",
+    "description": "Scrape coworking space leads from Google Maps in Vietnam and extract emails when available.",
     "version": "0.0",
     "buildTag": "latest",
     "input": "./input_schema.json",

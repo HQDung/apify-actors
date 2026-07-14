@@ -1,5 +1,5 @@
 {
-    "actorDatasetSchemaVersion": 1,
+    "actorSpecification": 1,
     "title": "{{ACTOR_TITLE}} Dataset",
     "views": {
         "overview": {

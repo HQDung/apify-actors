@@ -29,6 +29,34 @@ test('generates a self-contained hotel niche config that passes static validatio
     assert.equal((await validateActorFiles(actorDir)).valid, true);
 });
 
+test('wires the generated dataset schema through actor metadata', async (t) => {
+    const outputDir = await createOutputDir(t);
+    const actorDir = await generateActor({ nicheKey: 'spa', outputDir });
+    const actor = JSON.parse(await readFile(path.join(actorDir, '.actor', 'actor.json'), 'utf8'));
+
+    assert.deepEqual(actor.storages, {
+        dataset: './dataset_schema.json',
+    });
+});
+
+test('renders the coworking-space niche with its standard lead inputs', async (t) => {
+    const outputDir = await createOutputDir(t);
+    const actorDir = await generateActor({ nicheKey: 'coworking-space', outputDir });
+    const sampleInput = JSON.parse(await readFile(
+        path.join(actorDir, 'storage', 'key_value_stores', 'default', 'INPUT.json'),
+        'utf8',
+    ));
+
+    assert.deepEqual(sampleInput, {
+        keyword: 'coworking space',
+        location: 'Ho Chi Minh',
+        maxResults: 20,
+        batchSize: 5,
+        extractEmails: true,
+        useApifyProxy: false,
+    });
+});
+
 test('renders the spa sample input into local storage', async (t) => {
     const outputDir = await createOutputDir(t);
     const actorDir = await generateActor({ nicheKey: 'spa', outputDir });
