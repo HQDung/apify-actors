@@ -1,0 +1,13 @@
+{
+  "actorSpecification": 1,
+  "name": "kids-activities-playground-intelligence",
+  "title": "Kids Activities & Indoor Playground Intelligence",
+  "description": "Discover and enrich kids activity venues, playgrounds, and family entertainment centers.",
+  "version": "0.1",
+  "buildTag": "latest",
+  "input": "./input_schema.json",
+  "output": "./output_schema.json",
+  "dockerfile": "../Dockerfile",
+  "storages": { "dataset": "./dataset_schema.json" },
+  "meta": { "generatedBy": "Codex with GPT-5" }
+}

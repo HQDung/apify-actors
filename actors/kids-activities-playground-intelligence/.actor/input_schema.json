@@ -1,0 +1,145 @@
+{
+  "title": "Kids Activities & Indoor Playground Intelligence",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "locations": {
+      "title": "Locations",
+      "type": "array",
+      "description": "Cities, regions, or countries to search. Include the country name when a place could be ambiguous.",
+      "editor": "stringList",
+      "default": ["London, United Kingdom"],
+      "prefill": ["London, United Kingdom", "Ho Chi Minh City, Vietnam"],
+      "items": { "type": "string" }
+    },
+    "venueTypes": {
+      "title": "Venue types",
+      "description": "Venue taxonomy IDs to search. Output types are classified separately from venue and website evidence and may differ from the search types.",
+      "type": "array",
+      "editor": "select",
+      "default": ["indoor_playground", "soft_play_center", "trampoline_park"],
+      "items": {
+        "type": "string",
+        "enum": [
+          "indoor_playground",
+          "soft_play_center",
+          "kids_activity_center",
+          "family_entertainment_center",
+          "trampoline_park",
+          "children_museum",
+          "play_cafe",
+          "birthday_party_venue",
+          "adventure_park",
+          "water_playground",
+          "role_play_center",
+          "kids_club",
+          "outdoor_playground",
+          "other"
+        ]
+      }
+    },
+    "customSearchTerms": {
+      "title": "Custom search terms",
+      "description": "Additional local-language terms to search.",
+      "type": "array",
+      "editor": "stringList",
+      "default": [],
+      "items": { "type": "string" }
+    },
+    "maxPlacesPerLocation": {
+      "title": "Maximum places per location",
+      "description": "Hard cap for discovery results per location.",
+      "type": "integer",
+      "default": 20,
+      "minimum": 1,
+      "maximum": 50
+    },
+    "includeWebsiteEnrichment": {
+      "title": "Enrich official websites",
+      "description": "Crawl selected pages on identified official websites. Keep the individual extraction options enabled to populate their corresponding output fields.",
+      "type": "boolean",
+      "default": true
+    },
+    "includeReviews": {
+      "title": "Analyze public reviews",
+      "description": "Analyze public reviews when a review source is configured. Live Google Maps review collection is not available in this MVP.",
+      "type": "boolean",
+      "default": false
+    },
+    "maxReviewsPerPlace": {
+      "title": "Maximum reviews per place",
+      "description": "Hard cap for public reviews analyzed per venue.",
+      "type": "integer",
+      "default": 10,
+      "minimum": 1,
+      "maximum": 50
+    },
+    "maxWebsitePagesPerPlace": {
+      "title": "Maximum official website pages",
+      "description": "Hard cap for official website pages crawled per venue.",
+      "type": "integer",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "extractPricing": {
+      "title": "Extract pricing",
+      "description": "Extract visible crawlable prices only when nearby text identifies child, adult, toddler, or family pricing.",
+      "type": "boolean",
+      "default": true
+    },
+    "extractAgeSuitability": {
+      "title": "Extract age suitability",
+      "description": "Extract explicitly stated venue-wide age suitability and toddler areas; ambiguous ticket-category ranges remain null.",
+      "type": "boolean",
+      "default": true
+    },
+    "extractActivities": {
+      "title": "Extract activities",
+      "description": "Extract listed activity taxonomy IDs.",
+      "type": "boolean",
+      "default": true
+    },
+    "extractAmenities": {
+      "title": "Extract amenities",
+      "description": "Extract listed venue amenities.",
+      "type": "boolean",
+      "default": true
+    },
+    "extractBookingInfo": {
+      "title": "Extract booking information",
+      "description": "Extract booking cues and URLs.",
+      "type": "boolean",
+      "default": true
+    },
+    "sourceLanguages": {
+      "title": "Source languages",
+      "description": "Expected source languages; auto detects when possible.",
+      "type": "array",
+      "editor": "select",
+      "default": ["auto"],
+      "items": { "type": "string", "enum": ["auto", "en", "vi"] }
+    },
+    "normalizedOutputLanguage": {
+      "title": "Normalized output language",
+      "description": "Canonical taxonomy label language.",
+      "type": "string",
+      "default": "en",
+      "enum": ["en"]
+    },
+    "preserveOriginalText": {
+      "title": "Preserve original text",
+      "description": "Keep selected source-language evidence fields such as original names, age text, prices, and booking cues.",
+      "type": "boolean",
+      "default": true
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "description": "Optional Apify Proxy configuration for browser requests.",
+      "type": "object",
+      "editor": "json",
+      "default": { "useApifyProxy": false }
+    }
+  },
+  "required": ["locations"]
+}

@@ -1,0 +1,17 @@
+{
+  "locations": ["London, United Kingdom", "Ho Chi Minh City, Vietnam"],
+  "venueTypes": ["indoor_playground", "soft_play_center", "trampoline_park"],
+  "maxPlacesPerLocation": 10,
+  "maxWebsitePagesPerPlace": 3,
+  "maxReviewsPerPlace": 10,
+  "includeWebsiteEnrichment": true,
+  "includeReviews": false,
+  "extractPricing": true,
+  "extractAgeSuitability": true,
+  "extractActivities": true,
+  "extractAmenities": true,
+  "extractBookingInfo": true,
+  "preserveOriginalText": true,
+  "sourceLanguages": ["auto"],
+  "normalizedOutputLanguage": "en"
+}

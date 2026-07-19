@@ -1,0 +1,32 @@
+{
+  "actorSpecification": 1,
+  "title": "Kids activities venues dataset",
+  "views": {
+    "overview": {
+      "title": "Venues",
+      "transformation": {
+        "fields": [
+          "venueId",
+          "name",
+          "location",
+          "venueTypes",
+          "contact",
+          "business",
+          "enrichment"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "venueId": { "label": "Venue ID", "format": "text" },
+          "name": { "label": "Name", "format": "text" },
+          "location": { "label": "Location", "format": "object" },
+          "venueTypes": { "label": "Venue types", "format": "array" },
+          "contact": { "label": "Contact", "format": "object" },
+          "business": { "label": "Business", "format": "object" },
+          "enrichment": { "label": "Enrichment", "format": "object" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+export const reviewTopics = [
+  "cleanliness",
+  "safety",
+  "staff",
+  "crowded",
+  "waiting_time",
+  "price",
+  "value_for_money",
+  "food",
+  "parking",
+  "toddler_area",
+  "equipment_condition",
+  "birthday_party",
+  "accessibility",
+  "temperature",
+  "noise",
+  "other",
+];
