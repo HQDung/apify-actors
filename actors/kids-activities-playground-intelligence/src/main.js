@@ -1,6 +1,7 @@
 import { Actor, log } from "apify";
 import { chromium } from "playwright";
 
+import { mapInBatches } from "./concurrency.js";
 import { deduplicateVenues, venueIdFor } from "./deduplication.js";
 import {
   discoverPlaces,
@@ -12,6 +13,8 @@ import { detectLanguage } from "./normalization/index.js";
 import { aggregateReviewInsights } from "./reviews/aggregate-review-insights.js";
 import { isVenueOutput, validateInput } from "./schemas/validators.js";
 import { classifyVenueTypes } from "./taxonomy/venue-types.js";
+
+const browserBatchSize = 4;
 
 const unknownAmenities = {
   parentCafe: null,
@@ -176,38 +179,58 @@ try {
         maxPlaces: input.maxPlacesPerLocation,
       });
       discovered += cards.length;
-      const detailed = [];
-      for (const card of cards) {
-        try {
-          detailed.push(
-            await extractPlaceDetails({ browser, createContext, place: card }),
-          );
-        } catch (error) {
-          log.warning(
-            `Place detail skipped: ${card.sourceUrl} (${error.message})`,
-          );
-        }
-      }
-      for (const place of deduplicateVenues(detailed)) {
-        const enrichment = input.includeWebsiteEnrichment
-          ? await enrichVenue({
+      log.info(
+        `Discovered ${cards.length} places in ${location.query}; loading details.`,
+      );
+      const detailed = await mapInBatches(
+        cards,
+        browserBatchSize,
+        async (card) => {
+          try {
+            return await extractPlaceDetails({
               browser,
               createContext,
-              website: place.website,
-              maximumPages: input.maxWebsitePagesPerPlace,
-              preserveOriginalText: input.preserveOriginalText,
-            })
-          : {
-              data: null,
-              status: "not_requested",
-              pagesCrawled: 0,
-              warnings: [],
-            };
-        const output = toOutput({ place, location, enrichment, input });
-        if (!isVenueOutput(output))
-          throw new Error(
-            `Output validation failed for ${place.name ?? place.sourceUrl}.`,
-          );
+              place: card,
+            });
+          } catch (error) {
+            log.warning(
+              `Place detail skipped: ${card.sourceUrl} (${error.message})`,
+            );
+            return null;
+          }
+        },
+      );
+      const places = deduplicateVenues(detailed.filter(Boolean));
+      log.info(
+        `Loaded ${places.length} place details in ${location.query}; enriching websites.`,
+      );
+      const outputs = await mapInBatches(
+        places,
+        browserBatchSize,
+        async (place) => {
+          const enrichment = input.includeWebsiteEnrichment
+            ? await enrichVenue({
+                browser,
+                createContext,
+                website: place.website,
+                maximumPages: input.maxWebsitePagesPerPlace,
+                preserveOriginalText: input.preserveOriginalText,
+              })
+            : {
+                data: null,
+                status: "not_requested",
+                pagesCrawled: 0,
+                warnings: [],
+              };
+          const output = toOutput({ place, location, enrichment, input });
+          if (!isVenueOutput(output))
+            throw new Error(
+              `Output validation failed for ${place.name ?? place.sourceUrl}.`,
+            );
+          return output;
+        },
+      );
+      for (const output of outputs) {
         await Actor.pushData(output);
         emitted++;
       }

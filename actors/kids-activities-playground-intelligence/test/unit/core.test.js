@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { mapInBatches } from "../../src/concurrency.js";
 import { deduplicateVenues } from "../../src/deduplication.js";
 import { discoverPlaces } from "../../src/discovery/discover-places.js";
 import { buildSearchTerms } from "../../src/discovery/search-terms.js";
@@ -15,6 +16,22 @@ import { validateInput } from "../../src/schemas/validators.js";
 import * as venueTypeTaxonomy from "../../src/taxonomy/venue-types.js";
 
 describe("kids activities MVP", () => {
+  it("limits concurrent browser work to the configured batch size", async () => {
+    let active = 0;
+    let maximumActive = 0;
+    const values = await mapInBatches([1, 2, 3, 4, 5], 2, async (value) => {
+      active++;
+      maximumActive = Math.max(maximumActive, active);
+      await new Promise((resolve) => {
+        setTimeout(resolve, 5);
+      });
+      active--;
+      return value * 2;
+    });
+
+    expect(maximumActive).toBe(2);
+    expect(values).toEqual([2, 4, 6, 8, 10]);
+  });
   it("builds Vietnamese and English search terms", () => {
     expect(
       buildSearchTerms({
