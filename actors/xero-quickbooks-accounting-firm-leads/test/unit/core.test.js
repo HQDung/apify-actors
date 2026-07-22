@@ -6,6 +6,11 @@ import { firmKeyFor } from "../../src/deduplication/firm-key.js";
 import { mergeFirms } from "../../src/deduplication/merge-firms.js";
 import { resolveLocation } from "../../src/location/locale-resolver.js";
 import {
+  createSourceDiagnostic,
+  sanitizeError,
+  sanitizeUrl,
+} from "../../src/logging/source-diagnostics.js";
+import {
   classifyEmail,
   normalizeEmail,
   normalizePhone,
@@ -87,6 +92,45 @@ describe("accounting firm leads Phase 1", () => {
       xeroSearchUrl: null,
       quickBooksSearchUrl: "https://proadvisor.intuit.com/app/accountant/search",
     });
+  });
+
+  it("redacts URL credentials and sensitive query values", () => {
+    expect(
+      sanitizeUrl(
+        "https://user:pass@example.test/search?token=secret&page=1&sessionId=abc",
+      ),
+    ).toBe(
+      "https://example.test/search?token=REDACTED&page=1&sessionId=REDACTED",
+    );
+  });
+
+  it("builds bounded source diagnostics without response bodies", () => {
+    expect(
+      createSourceDiagnostic({
+        source: "xero",
+        location: "London, United Kingdom",
+        stage: "search",
+        requestedUrl: "https://example.test/?token=secret",
+        status: 200,
+        contentType: "text/html",
+        responseSize: 123,
+        parsedItems: 5,
+        error: new Error("bad token=secret\n<html>"),
+      }),
+    ).toEqual({
+      source: "xero",
+      location: "London, United Kingdom",
+      stage: "search",
+      requestedUrl: "https://example.test/?token=REDACTED",
+      httpStatus: 200,
+      contentType: "text/html",
+      responseSize: 123,
+      parsedItems: 5,
+      error: "bad token=REDACTED",
+    });
+    expect(sanitizeError(new Error("cookie=secret\n<html>"))).toBe(
+      "cookie=REDACTED",
+    );
   });
 
   it("parses and normalizes public QuickBooks search and profile fixtures", async () => {
