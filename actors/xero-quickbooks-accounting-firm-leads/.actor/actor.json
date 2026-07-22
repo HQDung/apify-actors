@@ -9,5 +9,5 @@
   "output": "./output_schema.json",
   "dockerfile": "../Dockerfile",
   "storages": { "dataset": "./dataset_schema.json" },
-  "meta": { "generatedBy": "Codex with GPT-5" }
+  "meta": { "generatedBy": "Codex with GPT-5.6" }
 }

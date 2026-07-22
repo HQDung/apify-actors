@@ -4,7 +4,7 @@ Find and normalize public accounting firm and advisor profiles from Xero and Qui
 
 ## Current checkpoint
 
-Phase 1 provides the validated public contract, language-neutral models, taxonomies, conservative deduplication, completeness scoring, and a dependency-injected pipeline. The QuickBooks adapter returns normalized public US ProAdvisor search and profile records. Xero remains disabled because its current public search component did not expose a stable response during validation. Website enrichment is the next gated phase and is not implemented yet.
+The Xero and QuickBooks adapters are live public-directory implementations. London resolves to UK-specific routes: Xero parses the server-rendered advisor data and visits public profiles, while QuickBooks drives its JavaScript search UI and public GraphQL-backed results. Website enrichment remains disabled by default and is not implemented yet.
 
 ## Input
 
@@ -14,11 +14,11 @@ Use [sample-input.json](sample-input.json):
 {
   "locations": ["London, United Kingdom"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 100,
-  "enrichWebsites": true,
-  "extractContacts": true,
+  "maxResults": 10,
+  "enrichWebsites": false,
+  "extractContacts": false,
   "includeRawData": false,
-  "proxyConfiguration": { "useApifyProxy": true }
+  "proxyConfiguration": { "useApifyProxy": false }
 }
 ```
 
@@ -55,11 +55,11 @@ npm run build
 apify validate-schema
 ```
 
-QuickBooks has passed a one-result local live smoke test. Validate again before a benchmark or cloud run.
+Both sources have passed independent London live runs with directory items and profiles fetched. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, and sanitized error. They never include cookies, tokens, full HTML, or sensitive headers.
 
 ## Limitations and responsible use
 
-Directory coverage and fields vary by country. QuickBooks currently parses the first rendered result page and its US address format; pagination and other country formats remain future work. Xero and website enrichment are not implemented at this checkpoint. The Actor processes public business data only, does not bypass authentication or CAPTCHA, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
+Directory coverage and fields vary by country. Xero's UK city page currently exposes five featured advisors; its full-results link returns 404. QuickBooks currently parses the first rendered result page; cursor pagination is not implemented. The QuickBooks UK directory requires JavaScript/browser interaction, a UK region parameter, a city-only location term, and a short debounced search wait; no cookie acceptance, authentication, or CAPTCHA bypass was required. Website enrichment is not implemented. The Actor processes public business data only, does not bypass authentication or CAPTCHA, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
 
 ## Tiếng Việt
 

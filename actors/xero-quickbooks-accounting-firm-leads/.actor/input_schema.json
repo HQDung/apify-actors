@@ -34,21 +34,21 @@
       "title": "Maximum leads",
       "type": "integer",
       "description": "Maximum number of final deduplicated leads.",
-      "default": 100,
+      "default": 10,
       "minimum": 1,
       "maximum": 5000
     },
     "enrichWebsites": {
       "title": "Enrich company websites",
       "type": "boolean",
-      "description": "Visit public company websites for business contact and qualification data.",
-      "default": true
+      "description": "Visit public company websites for business contact and qualification data. Keep disabled until directory items and profiles are being returned.",
+      "default": false
     },
     "extractContacts": {
       "title": "Extract public contact people",
       "type": "boolean",
       "description": "Extract publicly listed accounting-firm contacts.",
-      "default": true
+      "default": false
     },
     "includeRawData": {
       "title": "Include raw source data",
