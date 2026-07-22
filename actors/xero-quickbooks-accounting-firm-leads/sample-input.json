@@ -1,0 +1,9 @@
+{
+  "locations": ["London, United Kingdom"],
+  "sources": ["xero", "quickbooks"],
+  "maxResults": 100,
+  "enrichWebsites": true,
+  "extractContacts": true,
+  "includeRawData": false,
+  "proxyConfiguration": { "useApifyProxy": true }
+}

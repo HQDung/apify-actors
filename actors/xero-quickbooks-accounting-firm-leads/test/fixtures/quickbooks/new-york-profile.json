@@ -1,0 +1,52 @@
+{
+  "searchCard": {
+    "id": "pooja-r-loomba-cpa",
+    "fullName": "Pooja Loomba, CPA†",
+    "firmName": "PL Accounting Solutions LLC",
+    "address": "NEW YORK, NY 10016",
+    "description": "Are your books in chaos? Need a Bookkeeper/Advisor who is available and doesn't leave you in the dark?",
+    "services": ["1099 filing", "Accounting", "Book cleanup", "Bookkeeping"],
+    "profileUrl": "https://proadvisor.intuit.com/app/accountant/search?searchId=pooja-r-loomba-cpa"
+  },
+  "profile": {
+    "id": "pooja-r-loomba-cpa",
+    "fullName": "Pooja Loomba, CPA†",
+    "firmName": "PL Accounting Solutions LLC",
+    "addressLines": ["450 Park Ave", "NEW YORK, NY 10016"],
+    "website": "www.placcountingsolutions.com",
+    "services": [
+      "1099 filing",
+      "Accounting",
+      "Book cleanup",
+      "Bookkeeping",
+      "Business budgeting and forecasting"
+    ],
+    "certifications": [
+      "QuickBooks Online (Level 2)",
+      "QuickBooks Desktop (ADVANCED)",
+      "QuickBooks Enterprise",
+      "QuickBooks Point of Sale"
+    ],
+    "description": "At PL Accounting Solutions, we specialize in QuickBooks cleanup, bookkeeping, and controller services. Email Ploomba@placcountingsolutions.com for a public consultation.",
+    "industries": [
+      "Computer / Software",
+      "Construction / Contractors",
+      "Financial Services",
+      "Hospitality",
+      "Legal",
+      "Manufacturing",
+      "Medical / Dental / Health Services",
+      "Real Estate / Developer",
+      "Retail",
+      "Wholesale Distribution"
+    ],
+    "languages": ["English", "Punjabi", "Hindi"],
+    "credentials": [
+      "Accountant",
+      "Bookkeeper",
+      "CPA (Certified Public Accountant)"
+    ],
+    "socialLinks": {},
+    "profileUrl": "https://proadvisor.intuit.com/app/accountant/search?searchId=pooja-r-loomba-cpa"
+  }
+}
