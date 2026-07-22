@@ -1,0 +1,26 @@
+{
+  "name": "xero-quickbooks-accounting-firm-leads",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Collect and normalize public Xero and QuickBooks accounting advisor profiles.",
+  "dependencies": {
+    "apify": "^3.7.0",
+    "playwright": "1.60.0"
+  },
+  "devDependencies": {
+    "@apify/eslint-config": "^2.0.0",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.5.3",
+    "vitest": "^4.1.0"
+  },
+  "scripts": {
+    "start": "node src/main.js",
+    "lint": "eslint",
+    "test": "vitest run",
+    "build": "node --check src/main.js",
+    "format:check": "prettier --check .",
+    "postinstall": "npx crawlee install-playwright-browsers"
+  }
+}

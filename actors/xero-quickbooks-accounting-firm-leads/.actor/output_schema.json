@@ -1,0 +1,18 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Xero & QuickBooks Accounting Firm Leads Output",
+  "properties": {
+    "dataset": {
+      "type": "string",
+      "title": "Lead dataset",
+      "description": "Deduplicated accounting firms with source provenance.",
+      "template": "{{datasetUrl}}"
+    },
+    "summary": {
+      "type": "string",
+      "title": "Run summary",
+      "description": "Search, profile, enrichment, result, and source-failure counters.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "actorSpecification": 1,
+  "title": "Accounting firm leads dataset",
+  "views": {
+    "overview": {
+      "title": "Accounting firm leads",
+      "transformation": {
+        "fields": [
+          "firmName",
+          "primaryCountry",
+          "primaryCity",
+          "website",
+          "primaryEmail",
+          "primaryPhone",
+          "services",
+          "industriesServed",
+          "hasXeroProfile",
+          "hasQuickBooksProfile",
+          "completenessScore",
+          "scrapedAt"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "firmName": { "label": "Firm", "format": "text" },
+          "primaryCountry": { "label": "Country", "format": "text" },
+          "primaryCity": { "label": "City", "format": "text" },
+          "website": { "label": "Website", "format": "link" },
+          "primaryEmail": { "label": "Email", "format": "text" },
+          "primaryPhone": { "label": "Phone", "format": "text" },
+          "services": { "label": "Services", "format": "array" },
+          "industriesServed": { "label": "Industries", "format": "array" },
+          "hasXeroProfile": { "label": "Xero", "format": "boolean" },
+          "hasQuickBooksProfile": {
+            "label": "QuickBooks",
+            "format": "boolean"
+          },
+          "completenessScore": { "label": "Completeness", "format": "number" },
+          "scrapedAt": { "label": "Scraped at", "format": "date" }
+        }
+      }
+    }
+  }
+}
