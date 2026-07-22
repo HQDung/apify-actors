@@ -48,7 +48,11 @@ try {
     });
   }
   if (input.sources.includes("quickbooks")) {
-    adapters.quickbooks = createQuickBooksAdapter({ browser, createContext });
+    adapters.quickbooks = createQuickBooksAdapter({
+      browser,
+      createContext,
+      onDiagnostic,
+    });
   }
   const { leads, summary } = await runPipeline({
     input,

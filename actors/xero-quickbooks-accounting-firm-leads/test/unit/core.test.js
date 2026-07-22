@@ -20,7 +20,12 @@ import { runPipeline } from "../../src/pipeline/run.js";
 import { validateInput } from "../../src/schemas/validators.js";
 import { completenessScoreFor } from "../../src/scoring/completeness.js";
 import {
+  createQuickBooksAdapter,
+  quickBooksSearchRequestFor,
+} from "../../src/sources/quickbooks/quickbooks-adapter.js";
+import {
   normalizeQuickBooksProfile,
+  parseQuickBooksAddress,
   parseQuickBooksSearchCards,
 } from "../../src/sources/quickbooks/quickbooks-parser.js";
 import { createXeroAdapter } from "../../src/sources/xero/xero-adapter.js";
@@ -303,6 +308,107 @@ describe("accounting firm leads Phase 1", () => {
         ]),
       }),
     );
+  });
+
+  it("builds a UK QuickBooks request with a city-only search term", () => {
+    expect(quickBooksSearchRequestFor("London, United Kingdom")).toEqual({
+      requestedUrl:
+        "https://proadvisor.intuit.com/app/accountant/search?region=uk",
+      searchTerm: "London",
+    });
+  });
+
+  it("parses UK QuickBooks addresses while preserving US parsing", () => {
+    expect(
+      parseQuickBooksAddress(["10 Example Street", "London SW1A 1AA"], {
+        country: "United Kingdom",
+        countryCode: "GB",
+      }),
+    ).toEqual({
+      address: "10 Example Street, London SW1A 1AA",
+      city: "London",
+      region: null,
+      postalCode: "SW1A 1AA",
+      country: "United Kingdom",
+      countryCode: "GB",
+    });
+    expect(
+      parseQuickBooksAddress(["5 St Bride Street", "London, London WC2N 5DU"], {
+        country: "United Kingdom",
+        countryCode: "GB",
+      }).city,
+    ).toBe("London");
+    expect(
+      parseQuickBooksAddress(["450 Park Ave", "NEW YORK, NY 10016"]),
+    ).toEqual(
+      expect.objectContaining({
+        city: "NEW YORK",
+        region: "NY",
+        postalCode: "10016",
+        countryCode: "US",
+      }),
+    );
+  });
+
+  it("uses the UK route and emits safe QuickBooks search diagnostics", async () => {
+    const actions = [];
+    const diagnostics = [];
+    const response = {
+      status: () => 200,
+      headers: () => ({
+        "content-type": "text/html; charset=utf-8",
+        "content-length": "1234",
+      }),
+    };
+    const page = {
+      setDefaultTimeout: () => {},
+      goto: async (url) => {
+        actions.push(["goto", url]);
+        return response;
+      },
+      locator: () => ({
+        fill: async (value) => actions.push(["fill", value]),
+        press: async (value) => actions.push(["press", value]),
+      }),
+      waitForSelector: async () => {},
+      $$eval: async () => [
+        {
+          id: "london-advisor",
+          firmName: "London Accountants",
+          profileUrl:
+            "https://proadvisor.intuit.com/app/accountant/search?searchId=london-advisor",
+        },
+      ],
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({
+        newPage: async () => page,
+        close: async () => {},
+      }),
+      onDiagnostic: (event) => diagnostics.push(event),
+    });
+
+    await expect(
+      adapter.search({ location: "London, United Kingdom", limit: 10 }),
+    ).resolves.toHaveLength(1);
+    expect(actions).toEqual([
+      ["goto", "https://proadvisor.intuit.com/app/accountant/search?region=uk"],
+      ["fill", "London"],
+      ["press", "Enter"],
+    ]);
+    expect(diagnostics).toEqual([
+      expect.objectContaining({
+        source: "quickbooks",
+        location: "London, United Kingdom",
+        stage: "search",
+        httpStatus: 200,
+        contentType: "text/html; charset=utf-8",
+        responseSize: 1234,
+        parsedItems: 1,
+        error: null,
+      }),
+    ]);
   });
 
   it("validates, trims, and deduplicates the public input", () => {

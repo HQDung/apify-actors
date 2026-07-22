@@ -1,3 +1,4 @@
+import { resolveLocation } from "../../location/locale-resolver.js";
 import { classifyEmail, normalizeEmail } from "../../normalization/contact.js";
 import { canonicalizeUrl, domainFromUrl } from "../../normalization/url.js";
 import { mapIndustries, mapServices } from "../../taxonomy/taxonomies.js";
@@ -34,8 +35,30 @@ const certificationId = (value) => {
   return null;
 };
 
-const parseUnitedStatesAddress = (addressLines = []) => {
+export const parseQuickBooksAddress = (
+  addressLines = [],
+  { country = "United States", countryCode = "US" } = {},
+) => {
   const address = addressLines.filter(Boolean).join(", ") || null;
+  if (countryCode === "GB") {
+    const locality = addressLines
+      .at(-1)
+      ?.match(/^(.+?)(?:,)?\s+([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})$/iu);
+    const city = locality?.[1]
+      ?.split(",")
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .at(-1);
+    return {
+      address,
+      city: city ?? null,
+      region: null,
+      postalCode:
+        locality?.[2]?.toLocaleUpperCase().replace(/\s+/gu, " ") ?? null,
+      country,
+      countryCode,
+    };
+  }
   const locality = addressLines
     .at(-1)
     ?.match(/^(.*?),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$/u);
@@ -44,8 +67,8 @@ const parseUnitedStatesAddress = (addressLines = []) => {
     city: locality?.[1]?.trim() ?? null,
     region: locality?.[2] ?? null,
     postalCode: locality?.[3] ?? null,
-    country: "United States",
-    countryCode: "US",
+    country,
+    countryCode,
   };
 };
 
@@ -66,6 +89,7 @@ export const normalizeQuickBooksProfile = (
   profile,
   { locationQuery, includeRawData },
 ) => {
+  const resolvedLocation = resolveLocation(locationQuery);
   const website = canonicalizeUrl(profile.website);
   const services = mapServices(profile.services);
   const credentials = profile.credentials ?? [];
@@ -85,7 +109,12 @@ export const normalizeQuickBooksProfile = (
     firmName: profile.firmName || advisorNameFrom(profile.fullName),
     advisorNames: unique([advisorNameFrom(profile.fullName)]),
     firmTypes,
-    locations: [parseUnitedStatesAddress(profile.addressLines)],
+    locations: [
+      parseQuickBooksAddress(profile.addressLines, {
+        country: resolvedLocation.country ?? "United States",
+        countryCode: resolvedLocation.countryCode ?? "US",
+      }),
+    ],
     website,
     domain: domainFromUrl(website),
     phoneNumbers: unique(profile.phoneNumbers ?? []),
