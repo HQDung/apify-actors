@@ -23,6 +23,10 @@ import {
   normalizeQuickBooksProfile,
   parseQuickBooksSearchCards,
 } from "../../src/sources/quickbooks/quickbooks-parser.js";
+import {
+  normalizeXeroProfile,
+  parseXeroSearchHtml,
+} from "../../src/sources/xero/xero-parser.js";
 import { mapIndustries, mapServices } from "../../src/taxonomy/taxonomies.js";
 
 const lead = (overrides = {}) => ({
@@ -130,6 +134,56 @@ describe("accounting firm leads Phase 1", () => {
     });
     expect(sanitizeError(new Error("cookie=secret\n<html>"))).toBe(
       "cookie=REDACTED",
+    );
+  });
+
+  it("parses a sanitized Xero London embedded-JSON fixture", async () => {
+    const html = await readFile(
+      new URL("../fixtures/xero/london-search.html", import.meta.url),
+      "utf8",
+    );
+    expect(parseXeroSearchHtml(html, 10)).toEqual([
+      expect.objectContaining({
+        firmName: "Sopher + Co LLP",
+        source: "xero",
+        profileUrl:
+          "https://xero.com/uk/advisors/accountant/sopher-co-71ab8e0c4daf",
+      }),
+    ]);
+  });
+
+  it("normalizes a public Xero London profile", async () => {
+    const profile = JSON.parse(
+      await readFile(
+        new URL("../fixtures/xero/london-profile.json", import.meta.url),
+        "utf8",
+      ),
+    );
+    const normalized = normalizeXeroProfile(profile, {
+      locationQuery: "London, United Kingdom",
+      includeRawData: false,
+    });
+    expect(normalized).toEqual(
+      expect.objectContaining({
+        firmName: "Sopher + Co",
+        advisorNames: ["Raz Miah", "Antonia Buliga"],
+        locations: [
+          expect.objectContaining({ city: "London", countryCode: "GB" }),
+        ],
+        services: expect.arrayContaining([
+          "tax",
+          "audit",
+          "business_advisory",
+        ]),
+        sourcePlatforms: ["xero"],
+      }),
+    );
+    expect(normalized.softwarePlatforms[0]).toEqual(
+      expect.objectContaining({
+        platform: "xero",
+        relationship: "partner",
+        profileUrl: profile.profileUrl,
+      }),
     );
   });
 
