@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { firmKeyFor } from "../../src/deduplication/firm-key.js";
 import { mergeFirms } from "../../src/deduplication/merge-firms.js";
+import { resolveLocation } from "../../src/location/locale-resolver.js";
 import {
   classifyEmail,
   normalizeEmail,
@@ -48,6 +49,46 @@ const lead = (overrides = {}) => ({
 });
 
 describe("accounting firm leads Phase 1", () => {
+  it("resolves London and UK locale routes", () => {
+    expect(resolveLocation("London, United Kingdom")).toEqual({
+      query: "London, United Kingdom",
+      city: "London",
+      country: "United Kingdom",
+      countryCode: "GB",
+      locale: "uk",
+      xeroSearchUrl:
+        "https://www.xero.com/uk/find-advisors/united-kingdom/england/greater-london/london-city/",
+      quickBooksSearchUrl:
+        "https://proadvisor.intuit.com/app/accountant/search?region=uk",
+    });
+  });
+
+  it("recognizes UK aliases and London without a country", () => {
+    for (const query of ["UK", "Great Britain", "England", "London"]) {
+      expect(resolveLocation(query)).toEqual(
+        expect.objectContaining({
+          country: "United Kingdom",
+          countryCode: "GB",
+          locale: "uk",
+          quickBooksSearchUrl:
+            "https://proadvisor.intuit.com/app/accountant/search?region=uk",
+        }),
+      );
+    }
+  });
+
+  it("leaves unsupported locations unlocalized", () => {
+    expect(resolveLocation("Singapore")).toEqual({
+      query: "Singapore",
+      city: null,
+      country: null,
+      countryCode: null,
+      locale: null,
+      xeroSearchUrl: null,
+      quickBooksSearchUrl: "https://proadvisor.intuit.com/app/accountant/search",
+    });
+  });
+
   it("parses and normalizes public QuickBooks search and profile fixtures", async () => {
     const fixture = JSON.parse(
       await readFile(
