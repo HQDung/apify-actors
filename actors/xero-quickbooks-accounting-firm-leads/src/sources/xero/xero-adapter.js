@@ -1,9 +1,6 @@
 import { resolveLocation } from "../../location/locale-resolver.js";
 import { createSourceDiagnostic } from "../../logging/source-diagnostics.js";
-import {
-  normalizeXeroProfile,
-  parseXeroSearchHtml,
-} from "./xero-parser.js";
+import { normalizeXeroProfile, parseXeroSearchHtml } from "./xero-parser.js";
 
 const responseSizeFrom = (headers) => {
   const value = Number(headers?.["content-length"]);
@@ -113,11 +110,13 @@ export const createXeroAdapter = ({
             const header = h1?.closest("section") ?? h1?.parentElement;
             const address = clean(header?.querySelector("p")?.textContent);
             const aboutSection = sectionFor("About us");
-            const description = clean(aboutSection?.querySelector("p")?.textContent);
+            const description = clean(
+              aboutSection?.querySelector("p")?.textContent,
+            );
             const industriesSection = sectionFor("Industries");
             const industries = [
               ...(industriesSection?.querySelectorAll(
-                "li, [class*='tag'], [data-testid*='tag']",
+                "li, [class*='Tag__Element'], [data-testid*='tag']",
               ) ?? []),
             ]
               .map((node) => clean(node.textContent))

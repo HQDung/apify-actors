@@ -20,9 +20,7 @@ export const parseXeroSearchHtml = (html, limit) => {
 
   return (cards?.items ?? [])
     .map((item) => ({
-      id:
-        item.links?.[0]?.href?.match(/-([a-f0-9]{12})\/?$/iu)?.[1] ??
-        null,
+      id: item.links?.[0]?.href?.match(/-([a-f0-9]{12})\/?$/iu)?.[1] ?? null,
       firmName: item.heading?.trim() ?? null,
       description: item.description?.trim() ?? null,
       profileUrl: canonicalizeUrl(item.links?.[0]?.href),
@@ -46,6 +44,16 @@ export const normalizeXeroProfile = (
     description,
   ]);
   const website = canonicalizeUrl(profile.website);
+  const addressParts = String(profile.address ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const region = /\bEngland\b/iu.test(addressParts.at(-1) ?? "")
+    ? "England"
+    : null;
+  let city = null;
+  if (region) city = addressParts.at(-2) ?? null;
+  else if (/\bLondon\b/iu.test(profile.address ?? "")) city = "London";
 
   return {
     firmName: profile.firmName,
@@ -54,10 +62,8 @@ export const normalizeXeroProfile = (
     locations: [
       {
         address: profile.address ?? null,
-        city: /\bLondon\b/iu.test(profile.address ?? "") ? "London" : null,
-        region: /\bEngland\b/iu.test(profile.address ?? "")
-          ? "England"
-          : null,
+        city,
+        region,
         postalCode: null,
         country: "United Kingdom",
         countryCode: "GB",

@@ -54,9 +54,7 @@ try {
     input,
     adapters,
     onFailure: ({ source, location, stage, error }) =>
-      onDiagnostic(
-        createSourceDiagnostic({ source, location, stage, error }),
-      ),
+      onDiagnostic(createSourceDiagnostic({ source, location, stage, error })),
   });
   for (const lead of leads) await Actor.pushData(lead);
   await Actor.setValue("OUTPUT", summary);

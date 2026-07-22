@@ -95,7 +95,8 @@ describe("accounting firm leads Phase 1", () => {
       countryCode: null,
       locale: null,
       xeroSearchUrl: null,
-      quickBooksSearchUrl: "https://proadvisor.intuit.com/app/accountant/search",
+      quickBooksSearchUrl:
+        "https://proadvisor.intuit.com/app/accountant/search",
     });
   });
 
@@ -171,11 +172,7 @@ describe("accounting firm leads Phase 1", () => {
         locations: [
           expect.objectContaining({ city: "London", countryCode: "GB" }),
         ],
-        services: expect.arrayContaining([
-          "tax",
-          "audit",
-          "business_advisory",
-        ]),
+        services: expect.arrayContaining(["tax", "audit", "business_advisory"]),
         sourcePlatforms: ["xero"],
       }),
     );
@@ -185,6 +182,24 @@ describe("accounting firm leads Phase 1", () => {
         relationship: "partner",
         profileUrl: profile.profileUrl,
       }),
+    );
+  });
+
+  it("derives a UK Xero profile city from the published address", () => {
+    const normalized = normalizeXeroProfile(
+      {
+        firmName: "MHA",
+        profileUrl: "https://www.xero.com/advisors/example/",
+        address:
+          "1 The Forum, Minerva Business Park, Lynchwood, Peterborough, England",
+      },
+      {
+        locationQuery: "London, United Kingdom",
+        includeRawData: false,
+      },
+    );
+    expect(normalized.locations[0]).toEqual(
+      expect.objectContaining({ city: "Peterborough", region: "England" }),
     );
   });
 
