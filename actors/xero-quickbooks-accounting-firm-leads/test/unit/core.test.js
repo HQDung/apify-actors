@@ -23,6 +23,7 @@ import {
   normalizeQuickBooksProfile,
   parseQuickBooksSearchCards,
 } from "../../src/sources/quickbooks/quickbooks-parser.js";
+import { createXeroAdapter } from "../../src/sources/xero/xero-adapter.js";
 import {
   normalizeXeroProfile,
   parseXeroSearchHtml,
@@ -185,6 +186,45 @@ describe("accounting firm leads Phase 1", () => {
         profileUrl: profile.profileUrl,
       }),
     );
+  });
+
+  it("uses the resolved London URL and reports safe Xero search metadata", async () => {
+    const html = await readFile(
+      new URL("../fixtures/xero/london-search.html", import.meta.url),
+      "utf8",
+    );
+    const requestedUrls = [];
+    const diagnostics = [];
+    const adapter = createXeroAdapter({
+      fetchImpl: async (url) => {
+        requestedUrls.push(url);
+        return new Response(html, {
+          status: 200,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      },
+      onDiagnostic: (event) => diagnostics.push(event),
+    });
+    const items = await adapter.search({
+      location: "London, United Kingdom",
+      limit: 10,
+    });
+    expect(items).toHaveLength(1);
+    expect(requestedUrls).toEqual([
+      "https://www.xero.com/uk/find-advisors/united-kingdom/england/greater-london/london-city/",
+    ]);
+    expect(diagnostics).toEqual([
+      expect.objectContaining({
+        source: "xero",
+        location: "London, United Kingdom",
+        stage: "search",
+        httpStatus: 200,
+        contentType: "text/html; charset=utf-8",
+        responseSize: Buffer.byteLength(html),
+        parsedItems: 1,
+        error: null,
+      }),
+    ]);
   });
 
   it("parses and normalizes public QuickBooks search and profile fixtures", async () => {
@@ -401,12 +441,16 @@ describe("accounting firm leads Phase 1", () => {
   });
 
   it("runs mocked adapters, keeps partial results, merges, and caps final leads", async () => {
+    let xeroProfileContext;
     const xero = {
       source: "xero",
       search: async ({ location }) => [
         { id: `xero-${location}`, profileUrl: "https://xero.test/example" },
       ],
-      fetchProfile: async (item) => item,
+      fetchProfile: async (item, context) => {
+        xeroProfileContext = context;
+        return item;
+      },
       normalize: () =>
         lead({
           firmName: "Example Accounting",
@@ -465,6 +509,7 @@ describe("accounting firm leads Phase 1", () => {
         locations: ["London"],
         sources: ["xero", "quickbooks"],
         maxResults: 1,
+        enrichWebsites: false,
         extractContacts: false,
       }),
       adapters: { xero, quickbooks },
@@ -481,6 +526,15 @@ describe("accounting firm leads Phase 1", () => {
       }),
     );
     expect(result.summary.resultsPushed).toBe(1);
+    expect(xeroProfileContext).toEqual({ location: "London" });
+    expect(result.summary.effectiveInput).toEqual({
+      locations: ["London"],
+      sources: ["xero", "quickbooks"],
+      maxResults: 1,
+      enrichWebsites: false,
+      extractContacts: false,
+      includeRawData: false,
+    });
 
     const partial = await runPipeline({
       input: validateInput({

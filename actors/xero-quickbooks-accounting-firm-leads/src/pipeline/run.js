@@ -29,6 +29,14 @@ export const runPipeline = async ({
   onFailure = () => {},
 }) => {
   const summary = {
+    effectiveInput: {
+      locations: [...input.locations],
+      sources: [...input.sources],
+      maxResults: input.maxResults,
+      enrichWebsites: input.enrichWebsites,
+      extractContacts: input.extractContacts,
+      includeRawData: input.includeRawData,
+    },
     searchJobs: input.locations.length * input.sources.length,
     directoryItemsFound: 0,
     profilesFetched: 0,
@@ -56,7 +64,7 @@ export const runPipeline = async ({
 
       for (const item of items) {
         try {
-          const profile = await adapter.fetchProfile(item);
+          const profile = await adapter.fetchProfile(item, { location });
           summary.profilesFetched++;
           const record = await adapter.normalize(profile, {
             locationQuery: location,
