@@ -11,7 +11,7 @@
     "summary": {
       "type": "string",
       "title": "Run summary",
-      "description": "Effective sanitized input plus search, profile, enrichment, result, and source-failure counters.",
+      "description": "Normalized effective sanitized input plus search, profile, enrichment, result, and source-failure counters.",
       "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
     }
   }

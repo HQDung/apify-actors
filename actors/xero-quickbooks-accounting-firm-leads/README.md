@@ -14,7 +14,7 @@ Use [sample-input.json](sample-input.json):
 {
   "locations": ["London, United Kingdom"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 10,
+  "maxResults": 14,
   "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,
@@ -22,7 +22,7 @@ Use [sample-input.json](sample-input.json):
 }
 ```
 
-Locations are trimmed and deduplicated case-insensitively. The Actor accepts 1–20 locations and returns at most `maxResults` (1–5,000) final deduplicated leads.
+Locations are trimmed and deduplicated case-insensitively. The Actor accepts 1–20 locations and returns at most `maxResults` (1–5,000) final deduplicated leads. When both Xero and QuickBooks are selected, a `maxResults` value below 14 is automatically normalized to 14 so both directories can contribute; single-source runs use the configured value unchanged.
 
 ## Output fields
 
