@@ -44,7 +44,7 @@ Dataset quality: UK location 10/10, services 10/10, industries 10/10, website 8/
 
 - Xero's London page exposes five featured advisors, while its advertised full-results route currently returns 404.
 - QuickBooks requires a browser and currently reads only the first rendered result page; its public GraphQL response exposes cursor pagination that is not yet implemented.
-- A later combined-source run, after several rapid live validations, still returned QuickBooks search cards but nine profile shells timed out despite HTTP 200. The independent QuickBooks run immediately before it fetched all 10 profiles. Treat this as an upstream rendering/rate transient; no automatic retries were added to avoid increasing request pressure.
+- An earlier separate local combined run on 2026-07-22, after several rapid live validations, returned QuickBooks search cards but nine profile shells timed out despite HTTP 200. The independent QuickBooks run immediately before it fetched all 10 profiles. Treat this as an upstream rendering/rate transient; no automatic retries were added to avoid increasing request pressure. It was not reproduced in the successful 2026-07-23 cloud run above.
 - A low combined-source cap can favor the first source in processing order. The combined-source minimum normalization prevents configured values below 14 from reproducing that behavior.
 - Website enrichment is not implemented, so its input flag currently leaves directory-only output.
 
