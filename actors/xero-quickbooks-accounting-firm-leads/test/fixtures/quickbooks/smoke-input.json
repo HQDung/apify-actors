@@ -1,9 +1,7 @@
 {
-  "locations": ["New York, NY"],
   "sources": ["quickbooks"],
-  "maxResults": 1,
-  "enrichWebsites": false,
-  "extractContacts": true,
+  "maxResults": 10,
+  "extractContacts": false,
   "includeRawData": false,
   "proxyConfiguration": { "useApifyProxy": false }
 }

@@ -93,8 +93,8 @@ describe("accounting firm leads Phase 1", () => {
   });
 
   it("leaves unsupported locations unlocalized", () => {
-    expect(resolveLocation("Singapore")).toEqual({
-      query: "Singapore",
+    expect(resolveLocation("Reykjavik")).toEqual({
+      query: "Reykjavik",
       city: null,
       country: null,
       countryCode: null,
@@ -265,7 +265,7 @@ describe("accounting firm leads Phase 1", () => {
     ]);
 
     const normalized = normalizeQuickBooksProfile(fixture.profile, {
-      locationQuery: "New York, United States",
+      locationQuery: "London, United Kingdom",
       includeRawData: false,
     });
     expect(normalized).toEqual(
@@ -414,7 +414,7 @@ describe("accounting firm leads Phase 1", () => {
   it("validates, trims, and deduplicates the public input", () => {
     expect(
       validateInput({
-        locations: ["New York, NY"],
+        locations: ["Legacy location"],
         sources: ["xero", "xero"],
         maxResults: 25,
       }),
@@ -664,7 +664,7 @@ describe("accounting firm leads Phase 1", () => {
 
     const result = await runPipeline({
       input: validateInput({
-        locations: ["New York, NY"],
+        locations: ["Legacy location"],
         sources: ["xero", "quickbooks"],
         maxResults: 1,
         enrichWebsites: false,
@@ -698,7 +698,7 @@ describe("accounting firm leads Phase 1", () => {
 
     const partial = await runPipeline({
       input: validateInput({
-        locations: ["New York, NY"],
+        locations: ["Legacy location"],
         sources: ["xero", "quickbooks"],
       }),
       adapters: { xero, quickbooks: failing },
