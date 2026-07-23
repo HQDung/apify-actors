@@ -1,6 +1,7 @@
 import { actorConfig } from "../niche-config.js";
 
 const supportedSources = new Set(actorConfig.sourceIds);
+const LONDON_LOCATION = "London, United Kingdom";
 
 const boundedInteger = (value, fallback, minimum, maximum, field) => {
   const number = Number(value ?? fallback);
@@ -13,25 +14,12 @@ const boundedInteger = (value, fallback, minimum, maximum, field) => {
 };
 
 export const validateInput = (raw = {}) => {
-  if (!Array.isArray(raw.locations) || raw.locations.length === 0) {
-    throw new Error("At least one location is required.");
-  }
-  if (raw.locations.length > 20) {
-    throw new Error("locations must contain at most 20 values.");
-  }
+  const locations = [LONDON_LOCATION];
 
-  const locations = [];
-  const locationKeys = new Set();
-  for (const value of raw.locations) {
-    if (typeof value !== "string")
-      throw new TypeError("Each location must be a string.");
-    const location = value.trim();
-    if (!location) throw new Error("Locations cannot contain empty values.");
-    const key = location.toLocaleLowerCase();
-    if (!locationKeys.has(key)) {
-      locationKeys.add(key);
-      locations.push(location);
-    }
+  if (raw.enrichWebsites === true) {
+    throw new Error(
+      "Website enrichment is not implemented. Remove enrichWebsites or set it to false.",
+    );
   }
 
   if (raw.sources !== undefined && !Array.isArray(raw.sources)) {
@@ -61,7 +49,7 @@ export const validateInput = (raw = {}) => {
     locations,
     sources,
     maxResults,
-    enrichWebsites: raw.enrichWebsites !== false,
+    enrichWebsites: false,
     extractContacts: raw.extractContacts !== false,
     includeRawData: raw.includeRawData === true,
     proxyConfiguration: raw.proxyConfiguration ?? { useApifyProxy: true },

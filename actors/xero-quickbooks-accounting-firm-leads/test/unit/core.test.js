@@ -414,7 +414,7 @@ describe("accounting firm leads Phase 1", () => {
   it("validates, trims, and deduplicates the public input", () => {
     expect(
       validateInput({
-        locations: [" London, United Kingdom ", "london, united kingdom"],
+        locations: ["New York, NY"],
         sources: ["xero", "xero"],
         maxResults: 25,
       }),
@@ -423,10 +423,25 @@ describe("accounting firm leads Phase 1", () => {
         locations: ["London, United Kingdom"],
         sources: ["xero"],
         maxResults: 25,
-        enrichWebsites: true,
+        enrichWebsites: false,
         extractContacts: true,
         includeRawData: false,
       }),
+    );
+  });
+
+  it("uses canonical London input when locations are omitted", () => {
+    expect(validateInput({ sources: ["quickbooks"] })).toEqual(
+      expect.objectContaining({
+        locations: ["London, United Kingdom"],
+        enrichWebsites: false,
+      }),
+    );
+  });
+
+  it("rejects the unavailable website enrichment option", () => {
+    expect(() => validateInput({ enrichWebsites: true })).toThrow(
+      "Website enrichment is not implemented. Remove enrichWebsites or set it to false.",
     );
   });
 
@@ -461,14 +476,6 @@ describe("accounting firm leads Phase 1", () => {
   });
 
   it("rejects invalid input bounds and source IDs", () => {
-    expect(() => validateInput({ locations: [] })).toThrow(
-      "At least one location is required",
-    );
-    expect(() =>
-      validateInput({
-        locations: Array.from({ length: 21 }, (_, i) => `L${i}`),
-      }),
-    ).toThrow("at most 20");
     expect(() =>
       validateInput({ locations: ["London"], sources: ["google"] }),
     ).toThrow("Unsupported sources: google");
@@ -657,7 +664,7 @@ describe("accounting firm leads Phase 1", () => {
 
     const result = await runPipeline({
       input: validateInput({
-        locations: ["London"],
+        locations: ["New York, NY"],
         sources: ["xero", "quickbooks"],
         maxResults: 1,
         enrichWebsites: false,
@@ -677,9 +684,11 @@ describe("accounting firm leads Phase 1", () => {
       }),
     );
     expect(result.summary.resultsPushed).toBe(1);
-    expect(xeroProfileContext).toEqual({ location: "London" });
+    expect(xeroProfileContext).toEqual({
+      location: "London, United Kingdom",
+    });
     expect(result.summary.effectiveInput).toEqual({
-      locations: ["London"],
+      locations: ["London, United Kingdom"],
       sources: ["xero", "quickbooks"],
       maxResults: 14,
       enrichWebsites: false,
@@ -689,7 +698,7 @@ describe("accounting firm leads Phase 1", () => {
 
     const partial = await runPipeline({
       input: validateInput({
-        locations: ["London"],
+        locations: ["New York, NY"],
         sources: ["xero", "quickbooks"],
       }),
       adapters: { xero, quickbooks: failing },
