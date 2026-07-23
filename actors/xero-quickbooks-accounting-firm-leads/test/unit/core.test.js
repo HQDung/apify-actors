@@ -430,6 +430,36 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
+  it("sets a combined-source minimum of 14 results", () => {
+    expect(
+      validateInput({
+        locations: ["London"],
+        sources: ["xero", "quickbooks"],
+        maxResults: 10,
+      }).maxResults,
+    ).toBe(14);
+  });
+
+  it("preserves combined-source requests at the 14-result minimum", () => {
+    expect(
+      validateInput({
+        locations: ["London"],
+        sources: ["xero", "quickbooks"],
+        maxResults: 14,
+      }).maxResults,
+    ).toBe(14);
+  });
+
+  it("preserves single-source result requests", () => {
+    expect(
+      validateInput({
+        locations: ["London"],
+        sources: ["quickbooks"],
+        maxResults: 10,
+      }).maxResults,
+    ).toBe(10);
+  });
+
   it("rejects invalid input bounds and source IDs", () => {
     expect(() => validateInput({ locations: [] })).toThrow(
       "At least one location is required",
@@ -651,7 +681,7 @@ describe("accounting firm leads Phase 1", () => {
     expect(result.summary.effectiveInput).toEqual({
       locations: ["London"],
       sources: ["xero", "quickbooks"],
-      maxResults: 1,
+      maxResults: 14,
       enrichWebsites: false,
       extractContacts: false,
       includeRawData: false,

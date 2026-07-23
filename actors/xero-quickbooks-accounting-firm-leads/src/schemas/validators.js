@@ -45,11 +45,22 @@ export const validateInput = (raw = {}) => {
   if (invalidSources.length) {
     throw new Error(`Unsupported sources: ${invalidSources.join(", ")}.`);
   }
+  const requestedMaxResults = boundedInteger(
+    raw.maxResults,
+    100,
+    1,
+    5000,
+    "maxResults",
+  );
+  const maxResults =
+    sources.includes("xero") && sources.includes("quickbooks")
+      ? Math.max(requestedMaxResults, 14)
+      : requestedMaxResults;
 
   return {
     locations,
     sources,
-    maxResults: boundedInteger(raw.maxResults, 100, 1, 5000, "maxResults"),
+    maxResults,
     enrichWebsites: raw.enrichWebsites !== false,
     extractContacts: raw.extractContacts !== false,
     includeRawData: raw.includeRawData === true,
