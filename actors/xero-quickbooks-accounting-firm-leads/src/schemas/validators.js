@@ -52,7 +52,7 @@ export const validateInput = (raw = {}) => {
     enrichWebsites: false,
     extractContacts: raw.extractContacts !== false,
     includeRawData: raw.includeRawData === true,
-    proxyConfiguration: raw.proxyConfiguration ?? { useApifyProxy: true },
+    proxyConfiguration: raw.proxyConfiguration ?? { useApifyProxy: false },
   };
 };
 

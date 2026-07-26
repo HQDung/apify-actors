@@ -5,5 +5,5 @@
   "enrichWebsites": true,
   "extractContacts": true,
   "includeRawData": false,
-  "proxyConfiguration": { "useApifyProxy": true }
+  "proxyConfiguration": { "useApifyProxy": false }
 }

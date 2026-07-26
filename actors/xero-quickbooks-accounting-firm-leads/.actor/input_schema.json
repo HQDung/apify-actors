@@ -45,7 +45,7 @@
       "type": "object",
       "description": "Proxy settings for public directory requests.",
       "editor": "proxy",
-      "default": { "useApifyProxy": true }
+      "default": { "useApifyProxy": false }
     }
   }
 }
