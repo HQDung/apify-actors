@@ -1,0 +1,79 @@
+{
+  "title": "Healthy Restaurants & Menu Intelligence Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "location": {
+      "title": "Location",
+      "type": "string",
+      "description": "One city, region, or country to search. Include the country name when the location could be ambiguous.",
+      "editor": "textfield",
+      "default": "London, United Kingdom",
+      "prefill": "London, United Kingdom"
+    },
+    "keywords": {
+      "title": "Restaurant search keywords",
+      "type": "array",
+      "description": "Plain-language search phrases for healthy-focused restaurants. The default list is suitable for a first run.",
+      "editor": "stringList",
+      "default": [
+        "healthy restaurant",
+        "high protein restaurant",
+        "healthy meal prep",
+        "salad bar",
+        "clean eating restaurant"
+      ],
+      "items": { "type": "string" }
+    },
+    "maxRestaurants": {
+      "title": "Maximum restaurants",
+      "type": "integer",
+      "description": "Maximum number of unique restaurants returned after discovery deduplication.",
+      "editor": "number",
+      "default": 30,
+      "minimum": 1,
+      "maximum": 100
+    },
+    "includeMenu": {
+      "title": "Include menu discovery",
+      "type": "boolean",
+      "description": "When enabled, Phase 3 crawls official restaurant homepages and discovers menu URLs without fetching or parsing menu contents.",
+      "editor": "checkbox",
+      "default": true
+    },
+    "normalizedOutputLanguage": {
+      "title": "Normalized output language",
+      "type": "string",
+      "description": "Language used for normalized taxonomy and output labels. Version 1 supports English.",
+      "editor": "select",
+      "default": "en",
+      "enum": ["en"]
+    },
+    "preserveOriginalText": {
+      "title": "Preserve original text",
+      "type": "boolean",
+      "description": "Keep source-language restaurant and menu text alongside normalized values.",
+      "editor": "checkbox",
+      "default": true
+    },
+    "maxMenuPagesPerRestaurant": {
+      "title": "Maximum menu pages per restaurant",
+      "type": "integer",
+      "description": "Hard cap for scored menu URL candidates retained from each official homepage; menu contents are not fetched in Phase 3.",
+      "editor": "number",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "maxMenuItemsPerRestaurant": {
+      "title": "Maximum menu items per restaurant",
+      "type": "integer",
+      "description": "Hard cap for nested menu items stored for each restaurant.",
+      "editor": "number",
+      "default": 200,
+      "minimum": 1,
+      "maximum": 1000
+    }
+  },
+  "required": ["location"]
+}

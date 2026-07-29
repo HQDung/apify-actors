@@ -1,0 +1,43 @@
+{
+  "actorSpecification": 1,
+  "title": "Healthy restaurants and menu discovery dataset",
+  "views": {
+    "overview": {
+      "title": "Restaurants",
+      "transformation": {
+        "fields": [
+          "restaurantName",
+          "matchedKeywords",
+          "location",
+          "contact",
+          "healthyPositioning",
+          "dietaryOptions",
+          "menu",
+          "scrapedAt"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "restaurantName": { "label": "Restaurant", "format": "text" },
+          "matchedKeywords": {
+            "label": "Matched keywords",
+            "format": "array"
+          },
+          "location": { "label": "Location", "format": "object" },
+          "contact": { "label": "Contact", "format": "object" },
+          "healthyPositioning": {
+            "label": "Healthy positioning",
+            "format": "object"
+          },
+          "dietaryOptions": {
+            "label": "Dietary options",
+            "format": "array"
+          },
+          "menu": { "label": "Menu", "format": "object" },
+          "scrapedAt": { "label": "Scraped at", "format": "text" }
+        }
+      }
+    }
+  }
+}

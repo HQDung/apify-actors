@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Healthy Restaurants & Menu Intelligence Output",
+  "properties": {
+    "dataset": {
+      "type": "string",
+      "title": "Restaurant dataset",
+      "description": "One restaurant record per dataset item. Phase 3 adds bounded official homepage enrichment and provenance-bearing menu candidates; menu items remain unparsed.",
+      "template": "{{datasetUrl}}"
+    }
+  }
+}
