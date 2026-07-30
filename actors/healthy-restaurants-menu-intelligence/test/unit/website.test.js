@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { crawlRestaurantWebsite } from "../../src/website/crawl-restaurant-website.js";
 import {
   canonicalizeWebsiteUrl,
   classifyMenuFormat,
@@ -7,9 +8,16 @@ import {
   discoverMenuCandidatesFromHtml,
   fetchWithRedirects,
   isSameDomain,
+  readResponseTextWithTimeout,
   resolveUrl,
   scoreMenuCandidate,
 } from "../../src/website/menu-discovery.js";
+
+const responseForWebsite = (status, body) => ({
+  status,
+  headers: new Headers({ "content-type": "text/html" }),
+  text: async () => body,
+});
 
 describe("website URL handling", () => {
   it("normalizes HTTP URLs and rejects unsafe protocols", () => {
@@ -65,6 +73,60 @@ describe("website URL handling", () => {
       "https://example.com",
       "https://example.com/home",
     ]);
+  });
+
+  it("retries a transient HTTP response but does not retry a deterministic 404", async () => {
+    let transientAttempts = 0;
+    const transientResult = await fetchWithRedirects("https://example.com", {
+      fetchImpl: async () => {
+        transientAttempts += 1;
+        if (transientAttempts === 1)
+          return responseForWebsite(503, "temporarily unavailable");
+        return responseForWebsite(200, "<html></html>");
+      },
+      timeoutMs: 1000,
+      maxAttempts: 2,
+      retryBaseDelayMs: 0,
+    });
+
+    let deterministicAttempts = 0;
+    const deterministicResult = await fetchWithRedirects(
+      "https://example.com/not-found",
+      {
+        fetchImpl: async () => {
+          deterministicAttempts += 1;
+          return responseForWebsite(404, "not found");
+        },
+        timeoutMs: 1000,
+        maxAttempts: 2,
+        retryBaseDelayMs: 0,
+      },
+    );
+
+    expect(transientAttempts).toBe(2);
+    expect(transientResult.response.status).toBe(200);
+    expect(deterministicAttempts).toBe(1);
+    expect(deterministicResult.response.status).toBe(404);
+  });
+
+  it("rejects a response body that exceeds the configured size limit", async () => {
+    await expect(
+      readResponseTextWithTimeout(
+        responseForWebsite(200, "123456789"),
+        1000,
+        4,
+      ),
+    ).rejects.toThrow("response body exceeds the configured limit");
+  });
+
+  it("labels an access-denied homepage as blocked", async () => {
+    const result = await crawlRestaurantWebsite({
+      website: "https://example.com",
+      fetchImpl: async () => responseForWebsite(403, "forbidden"),
+      retryBaseDelayMs: 0,
+    });
+
+    expect(result.errors[0].code).toBe("WEBSITE_BLOCKED");
   });
 });
 

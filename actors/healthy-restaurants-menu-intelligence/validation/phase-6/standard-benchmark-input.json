@@ -1,7 +1,12 @@
 {
   "location": "London, United Kingdom",
-  "keywords": ["healthy restaurant", "high protein restaurant"],
-  "maxRestaurants": 20,
+  "keywords": [
+    "healthy restaurant",
+    "high protein restaurant",
+    "healthy meal prep",
+    "salad bar"
+  ],
+  "maxRestaurants": 30,
   "includeMenu": true,
   "normalizedOutputLanguage": "en",
   "preserveOriginalText": true,

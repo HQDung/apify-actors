@@ -5,7 +5,7 @@
     "dataset": {
       "type": "string",
       "title": "Restaurant dataset",
-      "description": "One restaurant record per dataset item. Phase 3 adds bounded official homepage enrichment and provenance-bearing menu candidates; menu items remain unparsed.",
+      "description": "One restaurant record per dataset item. Phase 5 adds explicit dietary tags, restaurant-published nutrition, provenance, confidence, and explainable healthy-positioning signals to bounded HTML menu extraction; estimated nutrition, PDF/image OCR, and third-party content remain excluded.",
       "template": "{{datasetUrl}}"
     }
   }

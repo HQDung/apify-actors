@@ -33,6 +33,7 @@ const validNutrition = {
   sodiumMilligrams: null,
   servingSizeOriginal: null,
   sourceType: "restaurant_published",
+  sourceUrl: "https://example.com/menu",
 };
 
 const validRecord = {
@@ -76,6 +77,7 @@ const validRecord = {
   menu: {
     status: "extracted",
     sourceUrl: "https://example.com/menu",
+    extractionMethods: ["dom_repeated_structure"],
     menuUrls: ["https://example.com/menu"],
     menuCandidates: [
       {
@@ -97,6 +99,7 @@ const validRecord = {
         sectionOriginal: "Protein Bowls",
         sectionNormalized: "Protein Bowls",
         price: null,
+        extractionMethods: ["dom_repeated_structure"],
         dietaryTags: [validDietaryTag],
         publishedNutrition: validNutrition,
         sourceUrl: "https://example.com/menu",
@@ -237,6 +240,41 @@ describe("healthy restaurant input validation", () => {
   });
 });
 
+describe("Phase 4 menu provenance validation", () => {
+  it("requires extractionMethods on menu output and items", () => {
+    const withoutMenuMethods = structuredClone(validRecord);
+    delete withoutMenuMethods.menu.extractionMethods;
+    expect(isRestaurantOutput(withoutMenuMethods)).toBe(false);
+
+    const withoutItemMethods = structuredClone(validRecord);
+    delete withoutItemMethods.menu.items[0].extractionMethods;
+    expect(isRestaurantOutput(withoutItemMethods)).toBe(false);
+  });
+
+  it("accepts multiple parsed price amounts", () => {
+    expect(
+      isRestaurantOutput({
+        ...validRecord,
+        menu: {
+          ...validRecord.menu,
+          items: [
+            {
+              ...validRecord.menu.items[0],
+              price: {
+                amount: 8,
+                amounts: [8, 11],
+                currency: "GBP",
+                formattedOriginal: "Small £8 / Large £11",
+                priceType: "multiple",
+              },
+            },
+          ],
+        },
+      }),
+    ).toBe(true);
+  });
+});
+
 describe("healthy restaurant output validation", () => {
   it("accepts a complete record and an incomplete menu", () => {
     expect(isRestaurantOutput(validRecord)).toBe(true);
@@ -248,6 +286,7 @@ describe("healthy restaurant output validation", () => {
           sourceUrl: null,
           menuUrls: [],
           menuCandidates: [],
+          extractionMethods: [],
           itemsFound: 0,
           items: [],
         },
@@ -338,6 +377,34 @@ describe("healthy restaurant output validation", () => {
             {
               ...validRecord.menu.items[0],
               publishedNutrition: { ...validNutrition, calories: "610" },
+            },
+          ],
+        },
+      },
+    ],
+    [
+      "negative nutrition value",
+      {
+        menu: {
+          ...validRecord.menu,
+          items: [
+            {
+              ...validRecord.menu.items[0],
+              publishedNutrition: { ...validNutrition, calories: -1 },
+            },
+          ],
+        },
+      },
+    ],
+    [
+      "missing nutrition source",
+      {
+        menu: {
+          ...validRecord.menu,
+          items: [
+            {
+              ...validRecord.menu.items[0],
+              publishedNutrition: { ...validNutrition, sourceUrl: null },
             },
           ],
         },

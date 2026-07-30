@@ -1,0 +1,40 @@
+{
+  "healthyConfidenceBound": { "before": 1.25, "after": 1, "status": "fixed" },
+  "conflictingLegendResolution": {
+    "before": "vegan",
+    "after": null,
+    "status": "fixed"
+  },
+  "nestedJsonLdRestaurantPromotion": {
+    "before": "possible false positive",
+    "after": "not promoted",
+    "status": "fixed"
+  },
+  "repeatedItemAssociation": {
+    "before": "ambiguous first-block association",
+    "after": "block-local evidence",
+    "status": "fixed"
+  },
+  "implausibleNutrition": {
+    "before": "accepted",
+    "after": null,
+    "status": "fixed"
+  },
+  "isolatedItemClaimPromotion": {
+    "before": "possible false restaurant claim",
+    "after": "item-local only",
+    "status": "fixed"
+  },
+  "liveBenchmark": {
+    "phase4RuntimeSeconds": 59.3,
+    "phase5RuntimeSeconds": 72.28,
+    "runtimeIncreasePercent": 21.85,
+    "phase5Records": 10,
+    "phase5OutputBytes": 22197,
+    "phase5Items": 0,
+    "phase5DietaryOptionRestaurants": 2,
+    "phase5PublishedNutritionItems": 0,
+    "phase5SchemaFailures": 0,
+    "computeCost": "not available from local run"
+  }
+}

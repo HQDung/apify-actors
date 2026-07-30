@@ -1,4 +1,9 @@
 import { domainOf, normalizeUrl } from "../normalization/index.js";
+import {
+  DEFAULT_RUNTIME_POLICY,
+  isRetryableError,
+  retryOperation,
+} from "../runtime/reliability.js";
 
 const redirectStatuses = new Set([301, 302, 303, 307, 308]);
 const trackingParameters = /^(?:utm_[^=]+|fbclid|gclid)$/i;
@@ -272,24 +277,43 @@ export const discoverMenuCandidatesFromHtml = (html, homepageUrl) => {
 
 export const fetchWithRedirects = async (
   startUrl,
-  { fetchImpl = globalThis.fetch, timeoutMs = 30_000, maxRedirects = 3 } = {},
+  {
+    fetchImpl = globalThis.fetch,
+    timeoutMs = DEFAULT_RUNTIME_POLICY.timeoutMs,
+    maxRedirects = DEFAULT_RUNTIME_POLICY.maxRedirects,
+    maxAttempts = DEFAULT_RUNTIME_POLICY.maxAttempts,
+    retryBaseDelayMs = DEFAULT_RUNTIME_POLICY.retryBaseDelayMs,
+  } = {},
 ) => {
   let currentUrl = canonicalizeWebsiteUrl(startUrl);
   if (!currentUrl) throw new Error("Invalid website URL.");
   const redirectChain = [currentUrl];
   for (let redirectCount = 0; redirectCount <= maxRedirects; redirectCount++) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-    let response;
-    try {
-      response = await fetchImpl(currentUrl, {
-        redirect: "manual",
-        signal: controller.signal,
-        headers: { accept: "text/html,application/xhtml+xml" },
-      });
-    } finally {
-      clearTimeout(timer);
-    }
+    const requestUrl = currentUrl;
+    const response = await retryOperation(
+      async () => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const nextResponse = await fetchImpl(requestUrl, {
+            redirect: "manual",
+            signal: controller.signal,
+            headers: { accept: "text/html,application/xhtml+xml" },
+          });
+          if (isRetryableError({ status: nextResponse.status })) {
+            const error = new Error(
+              `Transient website response HTTP ${nextResponse.status}.`,
+            );
+            error.status = nextResponse.status;
+            throw error;
+          }
+          return nextResponse;
+        } finally {
+          clearTimeout(timer);
+        }
+      },
+      { maxAttempts, baseDelayMs: retryBaseDelayMs },
+    );
     if (!redirectStatuses.has(response.status))
       return { response, finalUrl: currentUrl, redirectChain };
     if (redirectCount === maxRedirects)
@@ -301,4 +325,28 @@ export const fetchWithRedirects = async (
     redirectChain.push(currentUrl);
   }
   throw new Error("Website redirect limit exceeded.");
+};
+
+export const readResponseTextWithTimeout = async (
+  response,
+  timeoutMs,
+  maxResponseChars = DEFAULT_RUNTIME_POLICY.maxResponseChars,
+) => {
+  let timer;
+  try {
+    const text = await Promise.race([
+      response.text(),
+      new Promise((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error("Website response body timeout.")),
+          timeoutMs,
+        );
+      }),
+    ]);
+    if (text.length > maxResponseChars)
+      throw new Error("Website response body exceeds the configured limit.");
+    return text;
+  } finally {
+    clearTimeout(timer);
+  }
 };

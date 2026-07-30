@@ -18,6 +18,7 @@ export type DietaryTagId =
 export type DietaryTagSourceType =
   | "restaurant_claim"
   | "menu_label"
+  | "menu_section"
   | "menu_description"
   | "website_metadata"
   | "inferred";
@@ -38,10 +39,12 @@ export interface PublishedNutrition {
   sodiumMilligrams: number | null;
   servingSizeOriginal: string | null;
   sourceType: "restaurant_published";
+  sourceUrl: string;
 }
 
 export interface MenuPrice {
   amount: number | null;
+  amounts?: number[];
   currency: string | null;
   formattedOriginal: string | null;
   priceType?: "fixed" | "from" | "range" | "multiple" | "unknown";
@@ -58,7 +61,14 @@ export interface MenuItem {
   publishedNutrition: PublishedNutrition | null;
   dietaryTags: DietaryTag[];
   sourceUrl: string;
+  extractionMethods: MenuExtractionMethod[];
 }
+
+export type MenuExtractionMethod =
+  | "json_ld"
+  | "embedded_json"
+  | "dom_repeated_structure"
+  | "generic_text_parser";
 
 export type MenuStatus =
   | "not_requested"
@@ -88,6 +98,7 @@ export interface MenuOutput {
   sourceUrl: string | null;
   menuUrls: string[];
   menuCandidates: MenuCandidate[];
+  extractionMethods: MenuExtractionMethod[];
   itemsFound: number;
   items: MenuItem[];
 }

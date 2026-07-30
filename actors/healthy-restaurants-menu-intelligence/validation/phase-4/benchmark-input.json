@@ -1,0 +1,7 @@
+{
+  "location": "London, United Kingdom",
+  "keywords": ["healthy restaurant", "salad bar"],
+  "maxRestaurants": 10,
+  "includeMenu": true,
+  "maxMenuPagesPerRestaurant": 3
+}

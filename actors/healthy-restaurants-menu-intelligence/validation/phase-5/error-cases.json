@@ -1,0 +1,68 @@
+[
+  {
+    "restaurant": "validation fixture: strong-official",
+    "sourceUrl": "https://validation.example/classification/strong-official",
+    "expectedResult": "confidence bounded to 1.00",
+    "actualBeforeFix": "confidence 1.25",
+    "actualAfterFix": "confidence 1.00",
+    "rawEvidence": "Healthy meal prep with nutritious macro-focused fitness meals; two dedicated sections; nutrition on 10 items.",
+    "errorCategory": "HEALTHY_CONFIDENCE_MISLEADING",
+    "severity": "critical",
+    "rootCause": "Independent positive signal weights could sum above 100 and confidence was not capped."
+  },
+  {
+    "restaurant": "validation fixture: conflicting V legend",
+    "sourceUrl": "https://validation.example/dietary/conflict",
+    "expectedResult": "V remains unresolved when defined as both vegetarian and vegan",
+    "actualBeforeFix": "last definition won: vegan",
+    "actualAfterFix": "mapping omitted; V unresolved",
+    "rawEvidence": "V = Vegetarian; V = Vegan",
+    "errorCategory": "DIETARY_LEGEND_RESOLUTION_ERROR",
+    "severity": "high",
+    "rootCause": "Legend parser overwrote an earlier mapping without detecting conflicts."
+  },
+  {
+    "restaurant": "validation fixture: nested JSON-LD menu item",
+    "sourceUrl": "https://validation.example/dietary/nested-jsonld",
+    "expectedResult": "nested Vegan menu-item text is not a restaurant-level claim",
+    "actualBeforeFix": "nested JSON-LD item text could be scanned as website metadata",
+    "actualAfterFix": "only top-level Restaurant metadata fields are scanned",
+    "rawEvidence": "Restaurant description is Classic dining; hasMenuItem.description is Vegan options available.",
+    "errorCategory": "DIETARY_OVERGENERALIZED_TO_RESTAURANT",
+    "severity": "high",
+    "rootCause": "Raw JSON-LD text was scanned without respecting restaurant/menu-item boundaries."
+  },
+  {
+    "restaurant": "validation fixture: repeated Green Bowl blocks",
+    "sourceUrl": "https://validation.example/dietary/repeated-item",
+    "expectedResult": "VG belongs to the Bowls item and V belongs to the Wraps item",
+    "actualBeforeFix": "first matching item block could supply evidence for both items",
+    "actualAfterFix": "evidence is captured from each extracted item block",
+    "rawEvidence": "Two sections contain the same item name with different labels.",
+    "errorCategory": "DIETARY_WRONG_ITEM_ASSOCIATION",
+    "severity": "high",
+    "rootCause": "Page-wide first-name matching was used when extracting item evidence."
+  },
+  {
+    "restaurant": "validation fixture: implausible nutrition",
+    "sourceUrl": "https://validation.example/nutrition/implausible",
+    "expectedResult": "no nutrition object",
+    "actualBeforeFix": "99999 kcal, 2000g protein, and 999999mg sodium accepted",
+    "actualAfterFix": "nutrition object is null",
+    "rawEvidence": "99999 kcal | Protein 2000g | Sodium 999999mg",
+    "errorCategory": "NUTRITION_FALSE_POSITIVE",
+    "severity": "high",
+    "rootCause": "Parser checked non-negativity but not plausible per-item magnitude bounds."
+  },
+  {
+    "restaurant": "validation fixture: isolated item description",
+    "sourceUrl": "https://validation.example/dietary/isolated-item",
+    "expectedResult": "item retains a vegan tag; restaurant-level page claim remains empty",
+    "actualBeforeFix": "item description could be promoted as restaurant_claim",
+    "actualAfterFix": "menu-item blocks are excluded from page-level claim scanning",
+    "rawEvidence": "A single menu item description says Vegan options available.",
+    "errorCategory": "DIETARY_OVERGENERALIZED_TO_RESTAURANT",
+    "severity": "high",
+    "rootCause": "Menu-page page-level claim extraction did not remove item blocks before scanning."
+  }
+]

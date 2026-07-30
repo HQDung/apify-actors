@@ -1,0 +1,99 @@
+[
+  {
+    "sampleId": "strong-official",
+    "sourceUrl": "https://validation.example/classification/strong-official",
+    "expectedCategory": "healthy_focused",
+    "expectedBoolean": true,
+    "expectedConfidenceRange": "0.70-1.00",
+    "evidence": [
+      "official healthy positioning",
+      "two dedicated healthy sections",
+      "nutrition on 10 items",
+      "dietary density",
+      "fitness/meal-prep focus"
+    ]
+  },
+  {
+    "sampleId": "macro-program",
+    "sourceUrl": "https://validation.example/classification/macro-program",
+    "expectedCategory": "healthy_focused",
+    "expectedBoolean": true,
+    "expectedConfidenceRange": "0.70-1.00",
+    "evidence": [
+      "macro-focused fitness meals",
+      "two dedicated sections",
+      "nutrition on 6 items",
+      "dietary density",
+      "meal-prep focus"
+    ]
+  },
+  {
+    "sampleId": "mixed-sections",
+    "sourceUrl": "https://validation.example/classification/mixed-sections",
+    "expectedCategory": "mixed_or_uncertain",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["healthy discovery keyword only"]
+  },
+  {
+    "sampleId": "keyword-only",
+    "sourceUrl": "https://validation.example/classification/keyword-only",
+    "expectedCategory": "insufficient_evidence",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["healthy discovery keyword only"]
+  },
+  {
+    "sampleId": "one-salad",
+    "sourceUrl": "https://validation.example/classification/one-salad",
+    "expectedCategory": "insufficient_evidence",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["one salad section is insufficient"]
+  },
+  {
+    "sampleId": "one-vegan",
+    "sourceUrl": "https://validation.example/classification/one-vegan",
+    "expectedCategory": "insufficient_evidence",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["one vegan item is insufficient"]
+  },
+  {
+    "sampleId": "one-gluten-free",
+    "sourceUrl": "https://validation.example/classification/one-gluten-free",
+    "expectedCategory": "insufficient_evidence",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["one gluten-free item is insufficient"]
+  },
+  {
+    "sampleId": "fresh-natural",
+    "sourceUrl": "https://validation.example/classification/fresh-natural",
+    "expectedCategory": "not_healthy_focused",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": ["generic fresh/natural wording is insufficient"]
+  },
+  {
+    "sampleId": "meal-prep",
+    "sourceUrl": "https://validation.example/classification/meal-prep",
+    "expectedCategory": "healthy_focused",
+    "expectedBoolean": true,
+    "expectedConfidenceRange": "0.70-1.00",
+    "evidence": [
+      "fitness meal prep",
+      "high-protein meals",
+      "meal-prep section",
+      "nutrition on 5 items"
+    ]
+  },
+  {
+    "sampleId": "insufficient",
+    "sourceUrl": "https://validation.example/classification/insufficient",
+    "expectedCategory": "insufficient_evidence",
+    "expectedBoolean": false,
+    "expectedConfidenceRange": "0.40-0.69",
+    "evidence": []
+  }
+]

@@ -1,0 +1,70 @@
+[
+  {
+    "sampleId": "combined",
+    "sourceUrl": "https://validation.example/nutrition/combined",
+    "rawText": "610 kcal | Protein 42g | Carbs 58g | Fat 22g | Sodium 710mg | Serving size: 1 bowl",
+    "expected": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": 710,
+      "servingSizeOriginal": "1 bowl",
+      "sourceType": "restaurant_published"
+    }
+  },
+  {
+    "sampleId": "reverse",
+    "sourceUrl": "https://validation.example/nutrition/reverse",
+    "rawText": "42 g protein; 58 g carbohydrates; 22 g fat; 710 mg sodium; 610 calories",
+    "expected": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": 710,
+      "servingSizeOriginal": null,
+      "sourceType": "restaurant_published"
+    }
+  },
+  {
+    "sampleId": "table",
+    "sourceUrl": "https://validation.example/nutrition/table",
+    "rawText": "Calories | Protein | Carbs | Fat\n610 | 42g | 58g | 22g",
+    "expected": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": null,
+      "servingSizeOriginal": null,
+      "sourceType": "restaurant_published"
+    }
+  },
+  {
+    "sampleId": "serving-only",
+    "sourceUrl": "https://validation.example/nutrition/serving-only",
+    "rawText": "Serving size: 1 bowl",
+    "expected": {
+      "calories": null,
+      "proteinGrams": null,
+      "carbohydrateGrams": null,
+      "fatGrams": null,
+      "sodiumMilligrams": null,
+      "servingSizeOriginal": "1 bowl",
+      "sourceType": "restaurant_published"
+    }
+  },
+  {
+    "sampleId": "false-numbers",
+    "sourceUrl": "https://validation.example/nutrition/false-numbers",
+    "rawText": "£6.10 · 42 oz · 58% · 22 items",
+    "expected": null
+  },
+  {
+    "sampleId": "implausible",
+    "sourceUrl": "https://validation.example/nutrition/implausible",
+    "rawText": "99999 kcal | Protein 2000g | Sodium 999999mg",
+    "expected": null
+  }
+]

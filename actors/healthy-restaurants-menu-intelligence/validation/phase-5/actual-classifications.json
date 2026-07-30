@@ -1,0 +1,90 @@
+[
+  {
+    "sampleId": "strong-official",
+    "sourceUrl": "https://validation.example/classification/strong-official",
+    "actualBoolean": true,
+    "actualConfidence": 1,
+    "signals": [
+      "official_positioning",
+      "menu_section",
+      "nutrition_published",
+      "dietary_menu_density",
+      "meal_prep_focus"
+    ]
+  },
+  {
+    "sampleId": "macro-program",
+    "sourceUrl": "https://validation.example/classification/macro-program",
+    "actualBoolean": true,
+    "actualConfidence": 1,
+    "signals": [
+      "official_positioning",
+      "menu_section",
+      "nutrition_published",
+      "dietary_menu_density",
+      "meal_prep_focus"
+    ]
+  },
+  {
+    "sampleId": "mixed-sections",
+    "sourceUrl": "https://validation.example/classification/mixed-sections",
+    "actualBoolean": false,
+    "actualConfidence": 0.52,
+    "signals": ["weak_keyword_match"]
+  },
+  {
+    "sampleId": "keyword-only",
+    "sourceUrl": "https://validation.example/classification/keyword-only",
+    "actualBoolean": false,
+    "actualConfidence": 0.52,
+    "signals": ["weak_keyword_match"]
+  },
+  {
+    "sampleId": "one-salad",
+    "sourceUrl": "https://validation.example/classification/one-salad",
+    "actualBoolean": false,
+    "actualConfidence": 0.52,
+    "signals": ["weak_keyword_match"]
+  },
+  {
+    "sampleId": "one-vegan",
+    "sourceUrl": "https://validation.example/classification/one-vegan",
+    "actualBoolean": false,
+    "actualConfidence": 0.52,
+    "signals": ["weak_keyword_match"]
+  },
+  {
+    "sampleId": "one-gluten-free",
+    "sourceUrl": "https://validation.example/classification/one-gluten-free",
+    "actualBoolean": false,
+    "actualConfidence": 0.52,
+    "signals": ["weak_keyword_match"]
+  },
+  {
+    "sampleId": "fresh-natural",
+    "sourceUrl": "https://validation.example/classification/fresh-natural",
+    "actualBoolean": false,
+    "actualConfidence": 0.5,
+    "signals": []
+  },
+  {
+    "sampleId": "meal-prep",
+    "sourceUrl": "https://validation.example/classification/meal-prep",
+    "actualBoolean": true,
+    "actualConfidence": 1,
+    "signals": [
+      "official_positioning",
+      "menu_section",
+      "nutrition_published",
+      "dietary_menu_density",
+      "meal_prep_focus"
+    ]
+  },
+  {
+    "sampleId": "insufficient",
+    "sourceUrl": "https://validation.example/classification/insufficient",
+    "actualBoolean": false,
+    "actualConfidence": 0.5,
+    "signals": []
+  }
+]

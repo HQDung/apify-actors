@@ -37,7 +37,7 @@
     "includeMenu": {
       "title": "Include menu discovery",
       "type": "boolean",
-      "description": "When enabled, Phase 3 crawls official restaurant homepages and discovers menu URLs without fetching or parsing menu contents.",
+      "description": "When enabled, Phase 5 fetches supported HTML menu URLs discovered on official restaurant websites, extracts menu items, explicit dietary labels, and restaurant-published nutrition.",
       "editor": "checkbox",
       "default": true
     },
@@ -59,7 +59,7 @@
     "maxMenuPagesPerRestaurant": {
       "title": "Maximum menu pages per restaurant",
       "type": "integer",
-      "description": "Hard cap for scored menu URL candidates retained from each official homepage; menu contents are not fetched in Phase 3.",
+      "description": "Hard cap for menu pages processed for each restaurant.",
       "editor": "number",
       "default": 3,
       "minimum": 1,

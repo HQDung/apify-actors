@@ -1,0 +1,91 @@
+[
+  {
+    "sampleId": "standard-card",
+    "sourceUrl": "https://validation.example/standard-card",
+    "fixture": "standard-card.html",
+    "layout": "static card-based",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 1
+  },
+  {
+    "sampleId": "list-menu",
+    "sourceUrl": "https://validation.example/list-menu",
+    "fixture": "list-menu.html",
+    "layout": "list-based",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 2
+  },
+  {
+    "sampleId": "sectioned-menu",
+    "sourceUrl": "https://validation.example/sectioned-menu",
+    "fixture": "sectioned-menu.html",
+    "layout": "multiple sections",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 2
+  },
+  {
+    "sampleId": "no-prices",
+    "sourceUrl": "https://validation.example/no-prices",
+    "fixture": "no-prices.html",
+    "layout": "menu without prices",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 1
+  },
+  {
+    "sampleId": "jsonld-menu",
+    "sourceUrl": "https://validation.example/jsonld-menu",
+    "fixture": "jsonld-menu.html",
+    "layout": "JSON-LD structured menu",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 1
+  },
+  {
+    "sampleId": "duplicate-mobile-desktop",
+    "sourceUrl": "https://validation.example/duplicate-mobile-desktop",
+    "fixture": "duplicate-mobile-desktop.html",
+    "layout": "duplicate mobile and desktop markup",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 1,
+    "rawItemCount": 2
+  },
+  {
+    "sampleId": "text-fallback",
+    "sourceUrl": "https://validation.example/text-fallback",
+    "fixture": "text-fallback.html",
+    "layout": "generic text fallback with range",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 2
+  },
+  {
+    "sampleId": "promotional",
+    "sourceUrl": "https://validation.example/promotional",
+    "fixture": "promotional.html",
+    "layout": "promotional page",
+    "expectedStatus": "extracted_empty",
+    "expectedItemCount": 0
+  },
+  {
+    "sampleId": "empty",
+    "sourceUrl": "https://validation.example/empty",
+    "fixture": "empty.html",
+    "layout": "empty menu page",
+    "expectedStatus": "extracted_empty",
+    "expectedItemCount": 0
+  },
+  {
+    "sampleId": "malformed-structured",
+    "sourceUrl": "https://validation.example/malformed-structured",
+    "fixture": "malformed-structured.html",
+    "layout": "malformed structured data with DOM fallback",
+    "expectedStatus": "extracted",
+    "expectedItemCount": 1
+  },
+  {
+    "sampleId": "live-london-smoke",
+    "sourceUrl": "local Apify dataset",
+    "layout": "live London benchmark",
+    "expectedStatus": "mixed",
+    "expectedItemCount": 0,
+    "note": "Live website/menu page access failed for the HTML candidates in this sandbox; records remained valid."
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "sampleId": "full-text-labels",
+    "sourceUrl": "https://validation.example/dietary/full-text",
+    "sourceType": "saved validation fixture",
+    "coverage": [
+      "vegan",
+      "vegetarian",
+      "gluten_free",
+      "dairy_free",
+      "high_protein",
+      "plant_based"
+    ]
+  },
+  {
+    "sampleId": "legend-v-vg",
+    "sourceUrl": "https://validation.example/dietary/legend",
+    "sourceType": "saved validation fixture",
+    "coverage": ["page-specific legend", "V", "VG"]
+  },
+  {
+    "sampleId": "ambiguous-and-conflicting-labels",
+    "sourceUrl": "https://validation.example/dietary/conflict",
+    "sourceType": "saved validation fixture",
+    "coverage": ["ambiguous V", "ambiguous VG", "conflicting V"]
+  },
+  {
+    "sampleId": "menu-description-and-section",
+    "sourceUrl": "https://validation.example/dietary/description",
+    "sourceType": "saved validation fixture",
+    "coverage": ["high_protein", "low_carb", "plant_based", "dairy_free"]
+  },
+  {
+    "sampleId": "nested-jsonld-menu-item",
+    "sourceUrl": "https://validation.example/dietary/nested-jsonld",
+    "sourceType": "saved validation fixture",
+    "coverage": [
+      "structured-data boundary",
+      "restaurant-level overgeneralization"
+    ]
+  },
+  {
+    "sampleId": "nutrition-formats",
+    "sourceUrl": "https://validation.example/nutrition/combined",
+    "sourceType": "saved validation fixture",
+    "coverage": [
+      "combined text",
+      "reverse labels",
+      "table",
+      "serving size",
+      "false numbers",
+      "implausible numbers"
+    ]
+  },
+  {
+    "sampleId": "healthy-positioning-matrix",
+    "sourceUrl": "https://validation.example/classification/strong-official",
+    "sourceType": "saved validation fixture",
+    "coverage": [
+      "strong",
+      "macro program",
+      "mixed",
+      "keyword only",
+      "single salad",
+      "single vegan item",
+      "single gluten-free item",
+      "fresh/natural",
+      "meal prep",
+      "insufficient"
+    ]
+  },
+  {
+    "sampleId": "live-london-benchmark",
+    "sourceUrl": "local Apify dataset from validation run",
+    "sourceType": "live benchmark",
+    "coverage": [
+      "10 restaurants",
+      "partial source-page failures",
+      "schema-valid partial records"
+    ]
+  }
+]

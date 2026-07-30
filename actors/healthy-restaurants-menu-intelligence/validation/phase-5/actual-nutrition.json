@@ -1,0 +1,68 @@
+[
+  {
+    "sampleId": "combined",
+    "sourceUrl": "https://validation.example/nutrition/combined",
+    "actual": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": 710,
+      "servingSizeOriginal": "1 bowl",
+      "sourceType": "restaurant_published",
+      "sourceUrl": "https://validation.example/nutrition/combined"
+    }
+  },
+  {
+    "sampleId": "reverse",
+    "sourceUrl": "https://validation.example/nutrition/reverse",
+    "actual": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": 710,
+      "servingSizeOriginal": null,
+      "sourceType": "restaurant_published",
+      "sourceUrl": "https://validation.example/nutrition/reverse"
+    }
+  },
+  {
+    "sampleId": "table",
+    "sourceUrl": "https://validation.example/nutrition/table",
+    "actual": {
+      "calories": 610,
+      "proteinGrams": 42,
+      "carbohydrateGrams": 58,
+      "fatGrams": 22,
+      "sodiumMilligrams": null,
+      "servingSizeOriginal": null,
+      "sourceType": "restaurant_published",
+      "sourceUrl": "https://validation.example/nutrition/table"
+    }
+  },
+  {
+    "sampleId": "serving-only",
+    "sourceUrl": "https://validation.example/nutrition/serving-only",
+    "actual": {
+      "calories": null,
+      "proteinGrams": null,
+      "carbohydrateGrams": null,
+      "fatGrams": null,
+      "sodiumMilligrams": null,
+      "servingSizeOriginal": "1 bowl",
+      "sourceType": "restaurant_published",
+      "sourceUrl": "https://validation.example/nutrition/serving-only"
+    }
+  },
+  {
+    "sampleId": "false-numbers",
+    "sourceUrl": "https://validation.example/nutrition/false-numbers",
+    "actual": null
+  },
+  {
+    "sampleId": "implausible",
+    "sourceUrl": "https://validation.example/nutrition/implausible",
+    "actual": null
+  }
+]

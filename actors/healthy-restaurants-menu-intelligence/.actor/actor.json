@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "healthy-restaurants-menu-intelligence",
   "title": "Healthy Restaurants & Menu Intelligence",
-  "description": "Discover healthy restaurants and enrich their official menus with dietary intelligence.",
+  "description": "Discover healthy-focused restaurants and extract structured menus, dietary labels, published nutrition and evidence-backed healthy-positioning data.",
   "version": "0.1",
   "buildTag": "latest",
   "input": "./input_schema.json",

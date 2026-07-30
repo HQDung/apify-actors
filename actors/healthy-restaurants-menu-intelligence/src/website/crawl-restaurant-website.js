@@ -1,9 +1,19 @@
 import {
+  dietaryTagsForOfficialPage,
+  textFromHtml,
+} from "../dietary/extraction.js";
+import {
+  DEFAULT_RUNTIME_POLICY,
+  isBlockedStatus,
+  statusFromError,
+} from "../runtime/reliability.js";
+import {
   canonicalizeWebsiteUrl,
   classifyMenuFormat,
   discoverMenuCandidatesFromHtml,
   fetchWithRedirects,
   isSameDomain,
+  readResponseTextWithTimeout,
 } from "./menu-discovery.js";
 
 const contentTypeFor = (response) =>
@@ -15,28 +25,12 @@ const formatForResponse = (url, contentType) => {
   return classifyMenuFormat(url);
 };
 
-const readResponseTextWithTimeout = async (response, timeoutMs) => {
-  let timer;
-  try {
-    return await Promise.race([
-      response.text(),
-      new Promise((_, reject) => {
-        timer = setTimeout(
-          () => reject(new Error("Website response body timeout.")),
-          timeoutMs,
-        );
-      }),
-    ]);
-  } finally {
-    clearTimeout(timer);
-  }
-};
-
 export const emptyMenu = (status, sourceUrl = null, menuCandidates = []) => ({
   status,
   sourceUrl,
   menuUrls: menuCandidates.map((candidate) => candidate.url),
   menuCandidates,
+  extractionMethods: [],
   itemsFound: 0,
   items: [],
 });
@@ -44,8 +38,11 @@ export const emptyMenu = (status, sourceUrl = null, menuCandidates = []) => ({
 export const crawlRestaurantWebsite = async ({
   website,
   maximumMenuPages = 3,
-  timeoutMs = 30_000,
-  maxRedirects = 3,
+  timeoutMs = DEFAULT_RUNTIME_POLICY.timeoutMs,
+  maxRedirects = DEFAULT_RUNTIME_POLICY.maxRedirects,
+  maxAttempts = DEFAULT_RUNTIME_POLICY.maxAttempts,
+  retryBaseDelayMs = DEFAULT_RUNTIME_POLICY.retryBaseDelayMs,
+  maxResponseChars = DEFAULT_RUNTIME_POLICY.maxResponseChars,
   fetchImpl = globalThis.fetch,
 }) => {
   const requestedUrl = canonicalizeWebsiteUrl(website);
@@ -55,6 +52,8 @@ export const crawlRestaurantWebsite = async ({
       finalUrl: null,
       redirectChain: [],
       pagesCrawled: 0,
+      homepageText: "",
+      homepageDietaryTags: [],
       status: "website_missing",
       menu: emptyMenu("website_missing"),
       warnings: [],
@@ -66,11 +65,18 @@ export const crawlRestaurantWebsite = async ({
       fetchImpl,
       timeoutMs,
       maxRedirects,
+      maxAttempts,
+      retryBaseDelayMs,
     });
     const finalUrl = canonicalizeWebsiteUrl(result.finalUrl) ?? requestedUrl;
     const contentType = contentTypeFor(result.response);
-    if (result.response.status < 200 || result.response.status >= 400)
-      throw new Error(`Website returned HTTP ${result.response.status}.`);
+    if (result.response.status < 200 || result.response.status >= 400) {
+      const error = new Error(
+        `Website returned HTTP ${result.response.status}.`,
+      );
+      error.status = result.response.status;
+      throw error;
+    }
 
     const responseFormat = formatForResponse(finalUrl, contentType);
     if (responseFormat !== "html") {
@@ -87,6 +93,8 @@ export const crawlRestaurantWebsite = async ({
         finalUrl,
         redirectChain: result.redirectChain,
         pagesCrawled: 1,
+        homepageText: "",
+        homepageDietaryTags: [],
         status: "unsupported_format",
         menu: emptyMenu("unsupported_format", finalUrl, [candidate]),
         warnings: [
@@ -100,7 +108,13 @@ export const crawlRestaurantWebsite = async ({
       };
     }
 
-    const html = await readResponseTextWithTimeout(result.response, timeoutMs);
+    const html = await readResponseTextWithTimeout(
+      result.response,
+      timeoutMs,
+      maxResponseChars,
+    );
+    const homepageText = textFromHtml(html);
+    const homepageDietaryTags = dietaryTagsForOfficialPage(html, finalUrl);
     const candidates = discoverMenuCandidatesFromHtml(html, finalUrl)
       .map((candidate) => ({
         url: candidate.url,
@@ -145,6 +159,8 @@ export const crawlRestaurantWebsite = async ({
       finalUrl,
       redirectChain: result.redirectChain,
       pagesCrawled: 1,
+      homepageText,
+      homepageDietaryTags,
       status: "enriched",
       menu: emptyMenu(status, finalUrl, candidates),
       warnings,
@@ -156,12 +172,16 @@ export const crawlRestaurantWebsite = async ({
       finalUrl: null,
       redirectChain: [],
       pagesCrawled: 0,
+      homepageText: "",
+      homepageDietaryTags: [],
       status: "website_unreachable",
       menu: emptyMenu("website_unreachable"),
       warnings: [],
       errors: [
         {
-          code: "WEBSITE_UNREACHABLE",
+          code: isBlockedStatus(statusFromError(error))
+            ? "WEBSITE_BLOCKED"
+            : "WEBSITE_UNREACHABLE",
           message: error instanceof Error ? error.message : String(error),
           sourceUrl: requestedUrl,
         },

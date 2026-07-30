@@ -80,6 +80,7 @@ export const normalizeRestaurantCandidate = (candidate, location, now) => {
       sourceUrl: null,
       menuUrls: [],
       menuCandidates: [],
+      extractionMethods: [],
       itemsFound: 0,
       items: [],
     },

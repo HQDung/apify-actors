@@ -19,11 +19,18 @@ const menuStatuses = new Set([
   "extracted",
   "extracted_empty",
 ]);
+const menuExtractionMethods = new Set([
+  "json_ld",
+  "embedded_json",
+  "dom_repeated_structure",
+  "generic_text_parser",
+]);
 
 const dietaryTagIdSet = new Set(dietaryTagIds);
 const dietarySourceTypes = new Set([
   "restaurant_claim",
   "menu_label",
+  "menu_section",
   "menu_description",
   "website_metadata",
   "inferred",
@@ -136,6 +143,9 @@ const nullableString = (value) => value === null || typeof value === "string";
 const nullableNumber = (value) =>
   value === null || (typeof value === "number" && Number.isFinite(value));
 
+const nullableNonNegativeNumber = (value) =>
+  nullableNumber(value) && (value === null || value >= 0);
+
 const validDietaryTags = (tags) =>
   Array.isArray(tags) &&
   tags.every(
@@ -154,18 +164,22 @@ const validDietaryTags = (tags) =>
 const validNutrition = (nutrition) =>
   nutrition === null ||
   (isRecord(nutrition) &&
-    nullableNumber(nutrition.calories) &&
-    nullableNumber(nutrition.proteinGrams) &&
-    nullableNumber(nutrition.carbohydrateGrams) &&
-    nullableNumber(nutrition.fatGrams) &&
-    nullableNumber(nutrition.sodiumMilligrams) &&
+    nullableNonNegativeNumber(nutrition.calories) &&
+    nullableNonNegativeNumber(nutrition.proteinGrams) &&
+    nullableNonNegativeNumber(nutrition.carbohydrateGrams) &&
+    nullableNonNegativeNumber(nutrition.fatGrams) &&
+    nullableNonNegativeNumber(nutrition.sodiumMilligrams) &&
     nullableString(nutrition.servingSizeOriginal) &&
-    nutrition.sourceType === "restaurant_published");
+    nutrition.sourceType === "restaurant_published" &&
+    typeof nutrition.sourceUrl === "string");
 
 const validPrice = (price) =>
   price === null ||
   (isRecord(price) &&
     nullableNumber(price.amount) &&
+    (price.amounts === undefined ||
+      (Array.isArray(price.amounts) &&
+        price.amounts.every((amount) => nullableNumber(amount)))) &&
     nullableString(price.currency) &&
     nullableString(price.formattedOriginal) &&
     (price.priceType === undefined ||
@@ -187,7 +201,9 @@ const validMenuItem = (item) =>
   hasOwn(item, "publishedNutrition") &&
   validNutrition(item.publishedNutrition) &&
   validDietaryTags(item.dietaryTags) &&
-  typeof item.sourceUrl === "string";
+  typeof item.sourceUrl === "string" &&
+  Array.isArray(item.extractionMethods) &&
+  item.extractionMethods.every((method) => menuExtractionMethods.has(method));
 
 const validMenu = (menu) =>
   isRecord(menu) &&
@@ -210,6 +226,8 @@ const validMenu = (menu) =>
       Array.isArray(candidate.sources) &&
       candidate.sources.every((source) => typeof source === "string"),
   ) &&
+  Array.isArray(menu.extractionMethods) &&
+  menu.extractionMethods.every((method) => menuExtractionMethods.has(method)) &&
   Array.isArray(menu.items) &&
   Number.isInteger(menu.itemsFound) &&
   menu.itemsFound >= 0 &&
@@ -301,4 +319,76 @@ export const isRestaurantOutput = (record) => {
     validLanguage(record.language) &&
     typeof record.scrapedAt === "string"
   );
+};
+
+export const outputValidationIssues = (record) => {
+  const issues = [];
+  if (!record || typeof record !== "object") return ["record"];
+  const findUndefined = (value, path = "record", seen = new Set()) => {
+    if (value === undefined) return [path];
+    if (!value || typeof value !== "object" || seen.has(value)) return [];
+    seen.add(value);
+    if (Array.isArray(value))
+      return value.flatMap((entry, index) =>
+        findUndefined(entry, `${path}[${index}]`, seen),
+      );
+    return Object.entries(value).flatMap(([key, entry]) =>
+      findUndefined(entry, `${path}.${key}`, seen),
+    );
+  };
+  issues.push(...findUndefined(record));
+  if (record.actorOutputSchemaVersion !== 1)
+    issues.push("actorOutputSchemaVersion");
+  if (typeof record.restaurantName !== "string") issues.push("restaurantName");
+  if (typeof record.restaurantNameNormalized !== "string")
+    issues.push("restaurantNameNormalized");
+  if (
+    !Array.isArray(record.matchedKeywords) ||
+    !record.matchedKeywords.every((keyword) => typeof keyword === "string")
+  )
+    issues.push("matchedKeywords");
+  if (!validLocation(record.location)) issues.push("location");
+  if (!validContact(record.contact)) issues.push("contact");
+  if (!validSourceBusiness(record.sourceBusiness))
+    issues.push("sourceBusiness");
+  if (!nullableNumber(record.rating)) issues.push("rating");
+  if (!(
+    record.reviewCount === null ||
+    (Number.isInteger(record.reviewCount) && record.reviewCount >= 0)
+  ))
+    issues.push("reviewCount");
+  if (!nullableString(record.priceLevel)) issues.push("priceLevel");
+  if (!validLanguage(record.language)) issues.push("language");
+  if (typeof record.scrapedAt !== "string") issues.push("scrapedAt");
+  if (!validMenu(record.menu)) {
+    issues.push("menu");
+    if (Array.isArray(record.menu?.items)) {
+      record.menu.items.forEach((item, index) => {
+        if (!validMenuItem(item)) issues.push(`menu.items[${index}]`);
+      });
+    }
+    if (Array.isArray(record.menu?.menuCandidates)) {
+      record.menu.menuCandidates.forEach((candidate, index) => {
+        if (
+          !isRecord(candidate) ||
+          typeof candidate.url !== "string" ||
+          typeof candidate.sourceUrl !== "string" ||
+          !["html", "pdf", "image", "third_party_ordering", "unknown"].includes(
+            candidate.format,
+          ) ||
+          typeof candidate.score !== "number" ||
+          !Number.isFinite(candidate.score) ||
+          typeof candidate.sameDomain !== "boolean" ||
+          !Array.isArray(candidate.sources)
+        )
+          issues.push(`menu.menuCandidates[${index}]`);
+      });
+    }
+  }
+  if (!validDietaryTags(record.dietaryOptions)) issues.push("dietaryOptions");
+  if (!validHealthyPositioning(record.healthyPositioning))
+    issues.push("healthyPositioning");
+  if (!validMessages(record.warnings)) issues.push("warnings");
+  if (!validMessages(record.errors)) issues.push("errors");
+  return issues;
 };

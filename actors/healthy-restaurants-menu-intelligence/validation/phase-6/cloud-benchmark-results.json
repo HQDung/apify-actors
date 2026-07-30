@@ -1,0 +1,28 @@
+{
+  "available": false,
+  "measuredAt": "2026-07-29",
+  "accountCheck": {
+    "command": "apify info",
+    "exitCode": 0,
+    "authenticated": true,
+    "username": "obliging_persimmon_cki",
+    "userId": "ClSYv9ZdzZ4n7Cjcr"
+  },
+  "actorLookup": {
+    "command": "apify actors info healthy-restaurants-menu-intelligence --json",
+    "exitCode": 1,
+    "errorCategory": "ACTOR_NOT_FOUND",
+    "message": "Actor with name or ID healthy-restaurants-menu-intelligence was not found.",
+    "sourceVersion": null
+  },
+  "ownedActorListing": {
+    "command": "apify actors ls --my --limit 100",
+    "exitCode": 0,
+    "restaurantActorPresent": false
+  },
+  "runs": [],
+  "limitations": [
+    "The CLI account is authenticated, but no existing remote restaurant Actor/build is available to call.",
+    "No apify push or deployment was performed, so cloud runtime, cost, dataset coverage, and cloud/local differences are unavailable rather than estimated."
+  ]
+}

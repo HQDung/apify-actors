@@ -1,0 +1,126 @@
+[
+  {
+    "sampleId": "full-text-labels",
+    "sourceUrl": "https://validation.example/dietary/full-text",
+    "rawText": "Vegan, vegetarian, gluten-free, dairy-free, high-protein and plant-based options",
+    "expectedTags": [
+      {
+        "id": "vegan",
+        "labelOriginal": "Vegan",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      },
+      {
+        "id": "vegetarian",
+        "labelOriginal": "vegetarian",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      },
+      {
+        "id": "gluten_free",
+        "labelOriginal": "gluten-free",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      },
+      {
+        "id": "dairy_free",
+        "labelOriginal": "dairy-free",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      },
+      {
+        "id": "high_protein",
+        "labelOriginal": "high-protein",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      },
+      {
+        "id": "plant_based",
+        "labelOriginal": "plant-based options",
+        "sourceType": "restaurant_claim",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "legend-v-vg",
+    "sourceUrl": "https://validation.example/dietary/legend",
+    "rawText": "VG Protein Bowl",
+    "legend": { "V": "vegetarian", "VG": "vegan" },
+    "expectedTags": [
+      {
+        "id": "vegan",
+        "labelOriginal": "VG",
+        "sourceType": "menu_label",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "ambiguous-v",
+    "sourceUrl": "https://validation.example/dietary/ambiguous-v",
+    "rawText": "V Green Bowl",
+    "expectedTags": [],
+    "expectedUnresolved": "V"
+  },
+  {
+    "sampleId": "ambiguous-vg",
+    "sourceUrl": "https://validation.example/dietary/ambiguous-vg",
+    "rawText": "VG Protein Bowl",
+    "expectedTags": [],
+    "expectedUnresolved": "VG"
+  },
+  {
+    "sampleId": "conflicting-v",
+    "sourceUrl": "https://validation.example/dietary/conflict",
+    "rawText": "V Green Bowl",
+    "legend": {},
+    "expectedTags": [],
+    "expectedUnresolved": "V: conflicting definitions"
+  },
+  {
+    "sampleId": "menu-description",
+    "sourceUrl": "https://validation.example/dietary/description",
+    "rawText": "A high-protein, low-carb plant-based bowl",
+    "expectedTags": [
+      {
+        "id": "high_protein",
+        "labelOriginal": "high-protein",
+        "sourceType": "menu_description",
+        "confidence": 1
+      },
+      {
+        "id": "plant_based",
+        "labelOriginal": "plant-based",
+        "sourceType": "menu_description",
+        "confidence": 1
+      },
+      {
+        "id": "low_carb",
+        "labelOriginal": "low-carb",
+        "sourceType": "menu_description",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "menu-section",
+    "sourceUrl": "https://validation.example/dietary/section",
+    "rawText": "Dairy-Free Desserts",
+    "expectedTags": [
+      {
+        "id": "dairy_free",
+        "labelOriginal": "Dairy-Free",
+        "sourceType": "menu_section",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "nested-jsonld-menu-item",
+    "sourceUrl": "https://validation.example/dietary/nested-jsonld",
+    "rawText": "Nested menu item says Vegan options; restaurant description does not.",
+    "expectedTags": [],
+    "expectedUnresolved": "nested item label is not a restaurant claim"
+  }
+]

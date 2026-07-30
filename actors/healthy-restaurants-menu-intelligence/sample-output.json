@@ -1,0 +1,136 @@
+[
+  {
+    "actorOutputSchemaVersion": 1,
+    "restaurantId": "2a5f909311d5b1a427a54ea4",
+    "restaurantName": "Mallow Borough Market",
+    "restaurantNameNormalized": "mallow borough market",
+    "matchedKeywords": ["healthy restaurant"],
+    "location": {
+      "address": "1 Cathedral St, London SE1 9DE, United Kingdom",
+      "city": "London",
+      "region": null,
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "postalCode": "SE1 9DE",
+      "latitude": null,
+      "longitude": null
+    },
+    "contact": {
+      "website": "https://mallowlondon.com/locations/borough-market",
+      "phone": "+442078468785"
+    },
+    "sourceBusiness": {
+      "platform": "google_maps",
+      "sourceUrl": "https://www.google.com/maps/place/Mallow+Borough+Market/data=!4m7!3m6!1s0x487603b011c5c489:0x4ae757f4174c3225!8m2!3d51.5062513!4d-0.0904033!16s%2Fg%2F11p12ngcjx!19sChIJicTFEbADdkgRJTJMF_RX50o",
+      "canonicalUrl": "https://www.google.com/maps/place/Mallow+Borough+Market/data=!4m7!3m6!1s0x487603b011c5c489:0x4ae757f4174c3225!8m2!3d51.5062513!4d-0.0904033!16s%2Fg%2F11p12ngcjx!19sChIJicTFEbADdkgRJTJMF_RX50o",
+      "placeId": "0x487603b011c5c489:0x4ae757f4174c3225",
+      "normalizedDomain": "mallowlondon.com",
+      "scrapedAt": "2026-07-29T15:37:48.359Z"
+    },
+    "rating": 4.8,
+    "reviewCount": null,
+    "priceLevel": null,
+    "healthyPositioning": {
+      "isHealthyFocused": false,
+      "confidence": 0.52,
+      "signals": [
+        {
+          "type": "weak_keyword_match",
+          "value": "healthy restaurant",
+          "sourceUrl": "https://mallowlondon.com/locations/borough-market"
+        }
+      ]
+    },
+    "dietaryOptions": [],
+    "menu": {
+      "status": "website_unreachable",
+      "sourceUrl": null,
+      "menuUrls": [],
+      "menuCandidates": [],
+      "extractionMethods": [],
+      "itemsFound": 0,
+      "items": []
+    },
+    "language": { "detected": null, "normalizedOutput": "en" },
+    "warnings": [],
+    "errors": [
+      {
+        "code": "WEBSITE_UNREACHABLE",
+        "message": "Website redirect limit exceeded.",
+        "sourceUrl": "https://mallowlondon.com/locations/borough-market"
+      }
+    ],
+    "scrapedAt": "2026-07-29T15:37:48.359Z"
+  },
+  {
+    "actorOutputSchemaVersion": 1,
+    "restaurantId": "0d81b3764b2bd25988b8b864",
+    "restaurantName": "KIN Cafe",
+    "restaurantNameNormalized": "kin cafe",
+    "matchedKeywords": ["healthy restaurant"],
+    "location": {
+      "address": "22 Foley St, London W1W 6DT, United Kingdom",
+      "city": "London",
+      "region": null,
+      "country": "United Kingdom",
+      "countryCode": "GB",
+      "postalCode": "W1W 6DT",
+      "latitude": null,
+      "longitude": null
+    },
+    "contact": {
+      "website": "https://kinlondon.com/cafe",
+      "phone": "+442035895185"
+    },
+    "sourceBusiness": {
+      "platform": "google_maps",
+      "sourceUrl": "https://www.google.com/maps/place/KIN+Cafe/data=!4m7!3m6!1s0x48761b2a0fae295f:0xc98aef8c316cb868!8m2!3d51.5193427!4d-0.1403111!16s%2Fg%2F1q64s61ww!19sChIJXymuDyobdkgRaLhsMYzvisk",
+      "canonicalUrl": "https://www.google.com/maps/place/KIN+Cafe/data=!4m7!3m6!1s0x48761b2a0fae295f:0xc98aef8c316cb868!8m2!3d51.5193427!4d-0.1403111!16s%2Fg%2F1q64s61ww!19sChIJXymuDyobdkgRaLhsMYzvisk",
+      "placeId": "0x48761b2a0fae295f:0xc98aef8c316cb868",
+      "normalizedDomain": "kinlondon.com",
+      "scrapedAt": "2026-07-29T15:37:48.361Z"
+    },
+    "rating": 4.8,
+    "reviewCount": null,
+    "priceLevel": null,
+    "healthyPositioning": {
+      "isHealthyFocused": false,
+      "confidence": 0.52,
+      "signals": [
+        {
+          "type": "weak_keyword_match",
+          "value": "healthy restaurant",
+          "sourceUrl": "https://kinlondon.com/cafe"
+        }
+      ]
+    },
+    "dietaryOptions": [
+      {
+        "id": "plant_based",
+        "labelOriginal": "Plant-Based Menu",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://kinlondon.com/cafe",
+        "confidence": 1
+      }
+    ],
+    "menu": {
+      "status": "menu_not_found",
+      "sourceUrl": "https://kinlondon.com/cafe",
+      "menuUrls": [],
+      "menuCandidates": [],
+      "extractionMethods": [],
+      "itemsFound": 0,
+      "items": []
+    },
+    "language": { "detected": null, "normalizedOutput": "en" },
+    "warnings": [
+      {
+        "code": "MENU_NOT_FOUND",
+        "message": "No likely menu link was found on the official homepage.",
+        "sourceUrl": "https://kinlondon.com/cafe"
+      }
+    ],
+    "errors": [],
+    "scrapedAt": "2026-07-29T15:37:48.361Z"
+  }
+]

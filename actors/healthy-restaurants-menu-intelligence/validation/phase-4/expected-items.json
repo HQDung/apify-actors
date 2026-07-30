@@ -1,0 +1,141 @@
+[
+  {
+    "sampleId": "standard-card",
+    "sectionOriginal": "Bowls",
+    "nameOriginal": "Green Bowl",
+    "descriptionOriginal": "Quinoa, herbs and seasonal greens",
+    "price": {
+      "amount": 12.5,
+      "currency": "GBP",
+      "formattedOriginal": "£12.50",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/standard-card"
+  },
+  {
+    "sampleId": "list-menu",
+    "sectionOriginal": null,
+    "nameOriginal": "Roasted Salmon",
+    "descriptionOriginal": null,
+    "price": {
+      "amount": 14,
+      "currency": "GBP",
+      "formattedOriginal": "from £14",
+      "priceType": "from"
+    },
+    "sourceUrl": "https://validation.example/list-menu"
+  },
+  {
+    "sampleId": "list-menu",
+    "sectionOriginal": null,
+    "nameOriginal": "Lentil Soup",
+    "descriptionOriginal": null,
+    "price": {
+      "amount": 8,
+      "currency": "GBP",
+      "formattedOriginal": "£8",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/list-menu"
+  },
+  {
+    "sampleId": "sectioned-menu",
+    "sectionOriginal": "Small Plates",
+    "nameOriginal": "Hummus",
+    "descriptionOriginal": "Chickpeas and tahini",
+    "price": {
+      "amount": 6,
+      "currency": "GBP",
+      "formattedOriginal": "£6",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/sectioned-menu"
+  },
+  {
+    "sampleId": "sectioned-menu",
+    "sectionOriginal": "Desserts",
+    "nameOriginal": "Fruit Bowl",
+    "descriptionOriginal": "Fresh seasonal fruit",
+    "price": {
+      "amount": 5,
+      "currency": "GBP",
+      "formattedOriginal": "£5",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/sectioned-menu"
+  },
+  {
+    "sampleId": "no-prices",
+    "sectionOriginal": "Salads",
+    "nameOriginal": "Green Salad",
+    "descriptionOriginal": "Leaves, herbs and lemon dressing",
+    "price": null,
+    "sourceUrl": "https://validation.example/no-prices"
+  },
+  {
+    "sampleId": "jsonld-menu",
+    "sectionOriginal": "Mains",
+    "nameOriginal": "Chickpea Curry",
+    "descriptionOriginal": "Coconut, spinach and rice",
+    "price": {
+      "amount": 13.5,
+      "currency": "GBP",
+      "formattedOriginal": "13.50",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/jsonld-menu"
+  },
+  {
+    "sampleId": "duplicate-mobile-desktop",
+    "sectionOriginal": null,
+    "nameOriginal": "Avocado Toast",
+    "descriptionOriginal": "Seeded sourdough",
+    "price": {
+      "amount": 9,
+      "currency": "GBP",
+      "formattedOriginal": "£9",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/duplicate-mobile-desktop"
+  },
+  {
+    "sampleId": "text-fallback",
+    "sectionOriginal": "Daily Menu",
+    "nameOriginal": "Protein Plate",
+    "descriptionOriginal": null,
+    "price": {
+      "amount": 15,
+      "currency": "GBP",
+      "formattedOriginal": "£15",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/text-fallback"
+  },
+  {
+    "sampleId": "text-fallback",
+    "sectionOriginal": "Daily Menu",
+    "nameOriginal": "Green Salad",
+    "descriptionOriginal": null,
+    "price": {
+      "amount": 10,
+      "amounts": [10, 12],
+      "currency": "GBP",
+      "formattedOriginal": "£10–£12",
+      "priceType": "range"
+    },
+    "sourceUrl": "https://validation.example/text-fallback"
+  },
+  {
+    "sampleId": "malformed-structured",
+    "sectionOriginal": "Mains",
+    "nameOriginal": "Tofu Bowl",
+    "descriptionOriginal": "Rice and greens",
+    "price": {
+      "amount": 11,
+      "currency": "GBP",
+      "formattedOriginal": "£11",
+      "priceType": "fixed"
+    },
+    "sourceUrl": "https://validation.example/malformed-structured"
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "sampleId": "full-text-labels",
+    "sourceUrl": "https://validation.example/dietary/full-text",
+    "actualTags": [
+      {
+        "id": "high_protein",
+        "labelOriginal": "high-protein",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      },
+      {
+        "id": "plant_based",
+        "labelOriginal": "plant-based options",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      },
+      {
+        "id": "gluten_free",
+        "labelOriginal": "gluten-free",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      },
+      {
+        "id": "dairy_free",
+        "labelOriginal": "dairy-free",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      },
+      {
+        "id": "vegetarian",
+        "labelOriginal": "vegetarian",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      },
+      {
+        "id": "vegan",
+        "labelOriginal": "Vegan",
+        "sourceType": "restaurant_claim",
+        "sourceUrl": "https://validation.example/dietary/full-text",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "legend-v-vg",
+    "sourceUrl": "https://validation.example/dietary/legend",
+    "actualTags": [
+      {
+        "id": "vegan",
+        "labelOriginal": "VG",
+        "sourceType": "menu_label",
+        "sourceUrl": "https://validation.example/dietary/legend",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "ambiguous-v",
+    "sourceUrl": "https://validation.example/dietary/ambiguous-v",
+    "actualTags": [],
+    "actualUnresolved": "V"
+  },
+  {
+    "sampleId": "ambiguous-vg",
+    "sourceUrl": "https://validation.example/dietary/ambiguous-vg",
+    "actualTags": [],
+    "actualUnresolved": "VG"
+  },
+  {
+    "sampleId": "conflicting-v",
+    "sourceUrl": "https://validation.example/dietary/conflict",
+    "actualTags": [],
+    "actualUnresolved": "V: conflicting definitions"
+  },
+  {
+    "sampleId": "menu-description",
+    "sourceUrl": "https://validation.example/dietary/description",
+    "actualTags": [
+      {
+        "id": "high_protein",
+        "labelOriginal": "high-protein",
+        "sourceType": "menu_description",
+        "sourceUrl": "https://validation.example/dietary/description",
+        "confidence": 1
+      },
+      {
+        "id": "plant_based",
+        "labelOriginal": "plant-based",
+        "sourceType": "menu_description",
+        "sourceUrl": "https://validation.example/dietary/description",
+        "confidence": 1
+      },
+      {
+        "id": "low_carb",
+        "labelOriginal": "low-carb",
+        "sourceType": "menu_description",
+        "sourceUrl": "https://validation.example/dietary/description",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "menu-section",
+    "sourceUrl": "https://validation.example/dietary/section",
+    "actualTags": [
+      {
+        "id": "dairy_free",
+        "labelOriginal": "Dairy-Free",
+        "sourceType": "menu_section",
+        "sourceUrl": "https://validation.example/dietary/section",
+        "confidence": 1
+      }
+    ]
+  },
+  {
+    "sampleId": "nested-jsonld-menu-item",
+    "sourceUrl": "https://validation.example/dietary/nested-jsonld",
+    "actualTags": [],
+    "actualUnresolved": "nested item label is not a restaurant claim"
+  }
+]
