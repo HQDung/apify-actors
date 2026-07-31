@@ -1,6 +1,6 @@
 # Phase 6 Publish-Readiness Report
 
-Date: 2026-07-29
+Date: 2026-07-30
 
 ## Executive summary
 
@@ -8,7 +8,7 @@ Phase 6 hardened the Healthy Restaurants & Menu Intelligence Actor without addin
 
 The final local benchmarks completed successfully. The small run pushed 10 of 10 schema-valid records. The standard run pushed 30 of 30 schema-valid records and retained 117 deduplicated menu items across three extracted menus. A regression found during the standard run—an undefined internal `sourceEvidenceText` field reintroduced by duplicate menu-item merging—was fixed with a regression test and confirmed by the post-fix rerun.
 
-The authenticated Apify account is valid, but it does not contain an existing remote restaurant Actor/build. No deployment was performed because the project rules prohibit automatic publishing. Cloud runtime, cost, and cloud coverage therefore remain unavailable.
+The authenticated Apify account is valid and contains the pushed private Actor `ItLJs9pHV9h1Ysiyt` at build `0.1.1` (`Kw1f0vkx6MCFxiQhg`). Three authorized cloud smoke runs completed successfully without publishing or pricing changes. They produced 40 schema-valid records, zero duplicate restaurant IDs, 326.034 seconds of runtime, 0.362260 compute units, and $0.074536 total reported usage.
 
 ## Phase 5 prerequisite
 
@@ -57,6 +57,8 @@ The authenticated Apify account is valid, but it does not contain an existing re
 | `npm test -- --run test/integration`                                |    0 | Fixture integrations passed; live-gated test remained skipped. |
 | `npx apify validate-schema`                                         |    0 | Input, dataset, and output schemas valid.                      |
 | `git diff --check`                                                  |    0 | No whitespace errors.                                          |
+| `apify actors start ...` + `apify runs wait ...` (3 cloud inputs)   |    0 | Three cloud runs succeeded on build `0.1.1`.                   |
+| Cloud dataset validator (3 datasets)                                |    0 | 40/40 records passed `isRestaurantOutput`; 0 duplicate IDs.    |
 
 No type-check command is configured in `package.json`; no unconfigured type-check command was invented.
 
@@ -86,7 +88,16 @@ The live menu coverage is limited by redirects, blocked pages, missing menus, an
 
 ## Cloud benchmark
 
-The CLI account check succeeded for `obliging_persimmon_cki`. A read-only lookup of `healthy-restaurants-menu-intelligence` returned `ACTOR_NOT_FOUND`, and the owned Actor list contained no remote restaurant Actor/build. No cloud smoke was run and no `apify push` was performed. Details are in [cloud-benchmark-results.json](./cloud-benchmark-results.json).
+Full measured data is in [cloud-benchmark-results.json](./cloud-benchmark-results.json). The private Actor `ItLJs9pHV9h1Ysiyt` ran build `0.1.1` successfully for all three inputs.
+
+| Input                          | Records | Schema-valid | Duplicate IDs | Menu statuses                                   |      Runtime | Compute units |         Usage |
+| ------------------------------ | ------: | -----------: | ------------: | ----------------------------------------------- | -----------: | ------------: | ------------: |
+| Menu enabled, 10 restaurants   |      10 |         100% |             0 | 4 unreachable, 2 not found, 1 missing, 3 failed |      70.259s |      0.078066 |     $0.016020 |
+| Menu disabled, 10 restaurants  |      10 |         100% |             0 | 10 not requested                                |      49.688s |      0.055209 |     $0.011354 |
+| Three keywords, 20 restaurants |      20 |         100% |             0 | 9 unreachable, 3 not found, 1 missing, 7 failed |     206.087s |      0.228986 |     $0.047162 |
+| **Total**                      |  **40** |     **100%** |         **0** | **40 successful records; 0 menu items**         | **326.034s** |  **0.362260** | **$0.074536** |
+
+The menu-disabled run confirmed that `includeMenu: false` emits `not_requested` for all records. The menu-enabled samples produced four restaurant-level dietary-option records but no menu items or published nutrition values; the live results remain source-page limited and are not parser-recall measurements.
 
 ## Output-quality review
 
@@ -110,13 +121,13 @@ The final standard run also manually confirmed three extracted-menu records with
 ## Known limitations and remaining risks
 
 - Google Maps and restaurant websites can redirect, block, rate-limit, or omit usable menu links; valid partial records are preserved, but live item coverage remains source-dependent.
-- Cloud benchmarking requires an existing remote restaurant Actor/build or a separately authorized deployment; neither was available in this run.
-- Local runs do not expose Apify compute cost.
+- Cloud coverage is limited to the three London smoke inputs and the private Actor build tested here; it is not a production-scale accuracy study.
+- Local runs do not expose Apify compute cost, while the cloud runs reported $0.074536 total usage across three inputs.
 - PDF/image/OCR, third-party ordering pages, nutrition estimation, allergen-safety guarantees, reviews/social, delivery platforms, multi-location support, monitoring, alerts, and new discovery sources remain out of scope.
 - The labelled Phase 5 fixture sample is smaller than production-scale accuracy targets; it must not be generalized beyond supported deterministic patterns.
 
 ## Final recommendation
 
-`BLOCKED`
+`READY_TO_PUBLISH`
 
-The local implementation and verification criteria pass, but Phase 6 cannot be considered publish-ready until an existing or explicitly deployed remote restaurant Actor is available for the required cloud smoke benchmarks and cost/runtime capture. No deployment was performed automatically.
+The local and cloud verification criteria pass: all three cloud runs succeeded on the pushed build, all 40 cloud records passed the output validator, duplicate IDs were zero, menu-disabled behavior was confirmed, and runtime/cost fields were captured. The live samples remain source-dependent and contain no extracted menu items, so Phase 5 deterministic fixtures remain the evidence for positive item-level dietary and nutrition extraction. No publishing or pricing change was performed by this validation pass.

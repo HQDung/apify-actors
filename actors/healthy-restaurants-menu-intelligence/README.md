@@ -108,7 +108,7 @@ The final 2026-07-29 local measurements were:
 | Small, 10 restaurants    |          10 |                  4 |          9 |          0 |         100% |  54.46s |
 | Standard, 30 restaurants |          30 |                 13 |         31 |        117 |         100% | 255.19s |
 
-These values are source-dependent observations, not completeness guarantees. Cloud values and cost were unavailable because no remote restaurant Actor/build existed in the authenticated account.
+These values are source-dependent observations, not completeness guarantees. The pushed private cloud build `0.1.1` was smoke-tested with menu enabled, menu disabled, and three keywords: 40/40 records were schema-valid with 0 duplicate IDs across 326.034 seconds, 0.362260 compute units, and $0.074536 total reported usage. The menu-disabled run returned `not_requested` for all 10 records; the menu-enabled cloud samples returned no menu items or published nutrition values because live source pages were unavailable or failed. See [validation/phase-6/cloud-benchmark-results.json](./validation/phase-6/cloud-benchmark-results.json) for run IDs and per-input measurements.
 
 ## Roadmap
 

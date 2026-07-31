@@ -1,6 +1,6 @@
 {
-  "available": false,
-  "measuredAt": "2026-07-29",
+  "available": true,
+  "measuredAt": "2026-07-30",
   "accountCheck": {
     "command": "apify info",
     "exitCode": 0,
@@ -10,19 +10,110 @@
   },
   "actorLookup": {
     "command": "apify actors info healthy-restaurants-menu-intelligence --json",
-    "exitCode": 1,
-    "errorCategory": "ACTOR_NOT_FOUND",
-    "message": "Actor with name or ID healthy-restaurants-menu-intelligence was not found.",
-    "sourceVersion": null
-  },
-  "ownedActorListing": {
-    "command": "apify actors ls --my --limit 100",
     "exitCode": 0,
-    "restaurantActorPresent": false
+    "actorId": "ItLJs9pHV9h1Ysiyt",
+    "actorName": "healthy-restaurants-menu-intelligence",
+    "isPublic": false,
+    "sourceVersion": "0.1.1",
+    "buildId": "Kw1f0vkx6MCFxiQhg",
+    "buildStatus": "SUCCEEDED"
   },
-  "runs": [],
+  "runs": [
+    {
+      "name": "menu-enabled-small",
+      "inputFile": "validation/phase-6/small-benchmark-input.json",
+      "runId": "FNumkCUFgj7hM27Wg",
+      "status": "SUCCEEDED",
+      "exitCode": 0,
+      "startedAt": "2026-07-30T01:01:19.940Z",
+      "finishedAt": "2026-07-30T01:02:30.366Z",
+      "runtimeSeconds": 70.259,
+      "computeUnits": 0.07806555555555555,
+      "usageTotalUsd": 0.016019588889814092,
+      "datasetId": "PNY7NmYz1hhWUFmDQ",
+      "records": 10,
+      "schemaValidRecords": 10,
+      "schemaValidityRate": 1,
+      "uniqueRestaurantIds": 10,
+      "duplicateRestaurantIds": 0,
+      "menuStatuses": {
+        "website_unreachable": 4,
+        "menu_not_found": 2,
+        "website_missing": 1,
+        "extraction_failed": 3
+      },
+      "menuItems": 0,
+      "recordsWithDietaryOptions": 2,
+      "recordsWithPublishedNutrition": 0
+    },
+    {
+      "name": "menu-disabled",
+      "inputFile": "validation/phase-6/menu-disabled-cloud-input.json",
+      "runId": "2qYssLSWXpWAUC3fo",
+      "status": "SUCCEEDED",
+      "exitCode": 0,
+      "startedAt": "2026-07-30T01:04:05.045Z",
+      "finishedAt": "2026-07-30T01:04:54.886Z",
+      "runtimeSeconds": 49.688,
+      "computeUnits": 0.05520888888888889,
+      "usageTotalUsd": 0.011353934660212861,
+      "datasetId": "IX8aRvt6hndxqoAsf",
+      "records": 10,
+      "schemaValidRecords": 10,
+      "schemaValidityRate": 1,
+      "uniqueRestaurantIds": 10,
+      "duplicateRestaurantIds": 0,
+      "menuStatuses": {
+        "not_requested": 10
+      },
+      "menuItems": 0,
+      "recordsWithDietaryOptions": 0,
+      "recordsWithPublishedNutrition": 0
+    },
+    {
+      "name": "multiple-keywords",
+      "inputFile": "validation/phase-6/multiple-keywords-cloud-input.json",
+      "runId": "v2B4gt4Npg6Baq1rf",
+      "status": "SUCCEEDED",
+      "exitCode": 0,
+      "startedAt": "2026-07-30T01:05:31.864Z",
+      "finishedAt": "2026-07-30T01:08:58.127Z",
+      "runtimeSeconds": 206.087,
+      "computeUnits": 0.22898555555555555,
+      "usageTotalUsd": 0.04716200814684398,
+      "datasetId": "TaQ7aywEDcbipPVu0",
+      "records": 20,
+      "schemaValidRecords": 20,
+      "schemaValidityRate": 1,
+      "uniqueRestaurantIds": 20,
+      "duplicateRestaurantIds": 0,
+      "menuStatuses": {
+        "website_unreachable": 9,
+        "menu_not_found": 3,
+        "website_missing": 1,
+        "extraction_failed": 7
+      },
+      "menuItems": 0,
+      "recordsWithDietaryOptions": 4,
+      "recordsWithPublishedNutrition": 0
+    }
+  ],
+  "aggregate": {
+    "runs": 3,
+    "successfulRuns": 3,
+    "records": 40,
+    "schemaValidRecords": 40,
+    "schemaValidityRate": 1,
+    "duplicateRestaurantIds": 0,
+    "runtimeSeconds": 326.034,
+    "computeUnits": 0.36226,
+    "usageTotalUsd": 0.07453553169687093,
+    "menuItems": 0,
+    "recordsWithPublishedNutrition": 0
+  },
   "limitations": [
-    "The CLI account is authenticated, but no existing remote restaurant Actor/build is available to call.",
-    "No apify push or deployment was performed, so cloud runtime, cost, dataset coverage, and cloud/local differences are unavailable rather than estimated."
+    "These runs are live London observations and do not measure parser recall for unsupported or unavailable menu pages.",
+    "No menu items or published nutrition values were returned in the three cloud samples; deterministic Phase 5 fixtures remain the evidence source for positive item-level extraction paths.",
+    "The Actor is private in the authenticated account; no publishing or pricing change was performed by this validation pass."
   ]
 }
