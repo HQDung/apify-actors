@@ -60,6 +60,8 @@ Build `0.1.8` repeated the complete 15-case directory-only matrix after the webs
 
 Total Actor runtime was 354.9 seconds and total usage cost was `$0.0833` (average `$0.0056` per case). Compared with build `0.1.6`, runtime decreased 16.6%, cost decreased 16.3%, QuickBooks partial profiles decreased from 6 to 2, and all three London soak runs completed without retries or partial profiles. The known Xero profile miss remained one each in New York, Sydney, and Singapore, including their combined cases.
 
+The public input schema now matches runtime defaults, including `extractContacts: true`. Every matrix and website-gate input set `extractContacts: false` explicitly, so this schema correction does not change the recorded benchmark conditions.
+
 | Case                     | Cloud run                                                                  | Results | Profiles | Unique | Failures | Retries | Partial | Runtime |    Cost |
 | ------------------------ | -------------------------------------------------------------------------- | ------: | -------: | -----: | -------: | ------: | ------: | ------: | ------: |
 | Xero London              | [3tFyrPKxc9Ob8b19w](https://console.apify.com/view/runs/3tFyrPKxc9Ob8b19w) |       5 |        5 |      5 |        0 |       0 |       0 |   30.5s | $0.0070 |

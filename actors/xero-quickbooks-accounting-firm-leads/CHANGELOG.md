@@ -8,3 +8,4 @@
 - Added website fixtures and regression coverage for extraction, duplicate domains, retries, redirects, invalid content, timeouts, and disabled enrichment.
 - Build 0.1.8 passed the 15-case directory-only cloud regression with usable results in every case and no QuickBooks source failures.
 - The build 0.1.8 website gate preserved all directory rows but enriched 6 of 17 domains; redirect canonicalization and failed-attempt website provenance remain release blockers.
+- Aligned the Console input schema and sample with the runtime default `extractContacts: true`.

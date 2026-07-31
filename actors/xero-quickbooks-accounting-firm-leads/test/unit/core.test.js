@@ -831,6 +831,25 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
+  it("keeps input schema defaults aligned with runtime defaults", async () => {
+    const inputSchema = JSON.parse(
+      await readFile(
+        new URL("../../.actor/input_schema.json", import.meta.url),
+        "utf8",
+      ),
+    );
+    const runtimeDefaults = validateInput({});
+
+    expect(
+      Object.fromEntries(
+        Object.entries(inputSchema.properties).map(([field, schema]) => [
+          field,
+          schema.default,
+        ]),
+      ),
+    ).toEqual(runtimeDefaults);
+  });
+
   it("uses canonical London input when locations are omitted", () => {
     expect(validateInput({ sources: ["quickbooks"] })).toEqual(
       expect.objectContaining({

@@ -3,7 +3,7 @@
   "sources": ["xero", "quickbooks"],
   "maxResults": 5,
   "enrichWebsites": false,
-  "extractContacts": false,
+  "extractContacts": true,
   "includeRawData": false,
   "proxyConfiguration": { "useApifyProxy": false }
 }

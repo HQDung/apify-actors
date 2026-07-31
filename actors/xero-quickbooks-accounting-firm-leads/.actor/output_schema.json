@@ -11,7 +11,7 @@
     "summary": {
       "type": "string",
       "title": "Run summary",
-      "description": "Normalized effective input plus directory search, profile, partial-profile, result, merge-reason, per-source failure, retry-attempt, rendered-pagination, and optional website attempts/successes/failures/page/contact/service/industry coverage and domain-timeout counters. Website enrichment is bounded per canonical domain and disabled by default.",
+      "description": "Runtime-aligned effective input plus directory search, profile, partial-profile, result, merge-reason, per-source failure, retry-attempt, rendered-pagination, and optional website attempts/successes/failures/page/contact/service/industry coverage and domain-timeout counters. Website enrichment is bounded per canonical domain and disabled by default.",
       "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
     }
   }

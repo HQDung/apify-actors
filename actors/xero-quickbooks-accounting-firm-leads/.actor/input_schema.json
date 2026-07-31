@@ -41,8 +41,8 @@
     "extractContacts": {
       "title": "Extract public contact people",
       "type": "boolean",
-      "description": "Extract publicly listed accounting-firm contacts.",
-      "default": false
+      "description": "Retain publicly listed accounting-firm contacts. Enabled by default; set false to omit contact records from final output.",
+      "default": true
     },
     "enrichWebsites": {
       "title": "Enrich company websites",

@@ -16,13 +16,13 @@ Use [sample-input.json](sample-input.json):
   "sources": ["xero", "quickbooks"],
   "maxResults": 5,
   "enrichWebsites": false,
-  "extractContacts": false,
+  "extractContacts": true,
   "includeRawData": false,
   "proxyConfiguration": { "useApifyProxy": false }
 }
 ```
 
-`locations` accepts 1–20 trimmed, unique cities, regions, postcodes, or countries. The Actor returns at most `maxResults` (1–5,000) final deduplicated leads across all requested jobs. Source jobs are interleaved before the final cap so one directory cannot monopolize the output. Set `enrichWebsites: true` to inspect published website data for the capped final lead set; `false` keeps the directory-only path unchanged.
+`locations` accepts 1–20 trimmed, unique cities, regions, postcodes, or countries. The Actor returns at most `maxResults` (1–5,000) final deduplicated leads across all requested jobs. Source jobs are interleaved before the final cap so one directory cannot monopolize the output. Public contact records are retained by default; set `extractContacts: false` to omit them from final output. Set `enrichWebsites: true` to inspect published website data for the capped final lead set; `false` keeps the directory-only path unchanged.
 
 When enabled, each canonical public domain is fetched at most once, for a maximum of three HTML pages (homepage plus same-domain contact/about/team candidates), with a 10-second page deadline, a 30-second domain budget, two retries, abortable requests, same-domain redirect validation, non-HTML skipping, and low concurrency. Only explicit emails, phones, `mailto:` contact names, social links, descriptions, services, and industries are retained. A failed website never removes directory data. Website page URLs are retained in `sourceRecords`, and `OUTPUT` reports attempts, successes, failures, pages, emails, phones, services, industries, contacts, and domain timeouts.
 
