@@ -14,7 +14,7 @@ Use [sample-input.json](sample-input.json):
 {
   "locations": ["London, United Kingdom", "Sydney, Australia"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 20,
+  "maxResults": 5,
   "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,
@@ -56,6 +56,18 @@ apify validate-schema
 ```
 
 Both sources have passed independent London live runs with directory items and profiles fetched. The global contract and source behavior are covered by fixtures and unit tests; live validation for the initial UK/US/Australia/Singapore matrix remains the next benchmark checkpoint. Website enrichment is unavailable, so these are directory-only results. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, retry-safe errors, and merge reasons. They never include cookies, tokens, full HTML, or sensitive headers.
+
+## Reliability-gate matrix
+
+Run the serial 15-case local matrix after the checks above:
+
+```bash
+node validation/run-global-matrix.mjs --mode local
+```
+
+It covers each source in London, New York, Sydney, and Singapore; combined-source runs; and a three-run QuickBooks London soak. Each case uses five results, directory-only mode, contacts/raw data disabled, and proxy disabled. Results include runtime, a `resultClass` (`usable_results`, `no_public_results`, `source_failure`, or `profile_failures`), rows, firm-name/profile URL coverage, duplicate domains, completeness, search-job failures, retries, and rendered pagination pages. The runner never edits benchmark notes or publishes an Actor. After local validation, push a private build and run the same matrix with `--mode cloud`.
+
+`OUTPUT` exposes `retryAttempts`, `paginationPages`, and `partialProfiles` keyed by source. QuickBooks retries the complete profile navigation/render/evaluation transaction and recreates the browser page after retryable navigation or timeout failures; deterministic 4xx/profile-not-found errors are not retried. If a public profile page remains unavailable, the adapter preserves the search-card firm name, address, services, and profile URL as a marked partial profile. Website enrichment remains blocked by input validation.
 
 ## Limitations and responsible use
 

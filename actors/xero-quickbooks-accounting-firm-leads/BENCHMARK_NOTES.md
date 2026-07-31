@@ -6,6 +6,26 @@ The actor now accepts 1–20 normalized locations, preserves the requested `maxR
 
 Planned initial live matrix: London (GB), New York (US), Sydney (AU), and Singapore (SG), each with Xero-only, QuickBooks-only, and combined directory-only inputs. Record search jobs, directory items, profiles fetched, unique firms, merge reasons, source failures, retry counts, runtime, cost, and completeness.
 
+## Reliability-gate implementation — 2026-07-31
+
+The reliability gate now includes `validation/global-matrix-inputs.json` and the serial `validation/run-global-matrix.mjs` runner. It executes eight single-source cases, four combined cases, and three QuickBooks London soak cases with `maxResults: 5`, directory-only options, contacts/raw data disabled, and proxy disabled. The runner emits machine-readable JSON and does not update this file automatically.
+
+QuickBooks profile retrieval now retries the complete navigation, rendered-profile wait, and extraction transaction as one bounded operation. A retry closes and recreates the page; deterministic 4xx/profile-not-found failures stop immediately. When the public profile remains unavailable, search-card fields are retained as a marked partial profile. `OUTPUT` and source diagnostics expose per-source `retryAttempts`, `paginationPages`, and partial-profile counts. Website enrichment remains unavailable.
+
+Local gate command:
+
+```bash
+node validation/run-global-matrix.mjs --mode local
+```
+
+Cloud gate command after a private build push (never public publishing):
+
+```bash
+node validation/run-global-matrix.mjs --mode cloud
+```
+
+Record each case's runtime, run ID (cloud), `resultClass` (`usable_results`, `no_public_results`, `source_failure`, or `profile_failures`), search-job failures, directory items, profiles fetched, retries, rendered pages, duplicate domains, profile URL coverage, firm-name coverage, and completeness below once the gate is run.
+
 ## London live-source validation — 2026-07-22
 
 Input per run: London, United Kingdom, one source, maximum 10 results, proxy disabled, directory-only mode, and contact extraction disabled.

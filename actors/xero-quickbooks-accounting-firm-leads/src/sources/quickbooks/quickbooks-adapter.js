@@ -6,6 +6,8 @@ import {
   parseQuickBooksSearchCards,
 } from "./quickbooks-parser.js";
 
+const profileOperationTimeoutMs = 10_000;
+
 const responseMetadata = (response) => {
   const headers = response?.headers() ?? {};
   const size = Number(headers["content-length"]);
@@ -31,23 +33,39 @@ export const createQuickBooksAdapter = ({
 }) => {
   let context;
   let page;
+  const metrics = {
+    retryAttempts: 0,
+    paginationPages: 0,
+    partialProfiles: 0,
+  };
+  const configurePage = (activePage) => {
+    activePage.setDefaultTimeout(30_000);
+    activePage.setDefaultNavigationTimeout?.(30_000);
+    return activePage;
+  };
   const getPage = async () => {
     if (!context) context = await createContext(browser);
-    if (!page) page = await context.newPage();
-    page.setDefaultTimeout(30_000);
-    page.setDefaultNavigationTimeout?.(30_000);
-    return page;
+    if (!page) page = configurePage(await context.newPage());
+    return configurePage(page);
+  };
+  const recreatePage = async () => {
+    const previousPage = page;
+    page = null;
+    await previousPage?.close?.().catch(() => {});
+    return getPage();
   };
 
   return {
     source: "quickbooks",
     search: async ({ location, limit }) => {
-      const activePage = await getPage();
       const { requestedUrl, searchTerm } = quickBooksSearchRequestFor(location);
       let response;
+      let operationRetryAttempts = 0;
+      let paginationPages = 0;
       try {
         const items = await retryOperation(
           async () => {
+            const activePage = await getPage();
             response = await activePage.goto(requestedUrl, {
               waitUntil: "domcontentloaded",
             });
@@ -94,6 +112,8 @@ export const createQuickBooksAdapter = ({
             while (cards.length < limit) {
               const previousLength = cards.length;
               const nextCards = await readCards();
+              paginationPages += 1;
+              metrics.paginationPages += 1;
               for (const card of nextCards) {
                 const key = card.id ?? card.profileUrl;
                 if (!key || seenIds.has(key)) continue;
@@ -117,7 +137,14 @@ export const createQuickBooksAdapter = ({
             }
             return parseQuickBooksSearchCards(cards, limit);
           },
-          { delayMs: 50 },
+          {
+            delayMs: 50,
+            onRetry: async () => {
+              operationRetryAttempts += 1;
+              metrics.retryAttempts += 1;
+              await recreatePage();
+            },
+          },
         );
         onDiagnostic(
           createSourceDiagnostic({
@@ -127,6 +154,8 @@ export const createQuickBooksAdapter = ({
             requestedUrl,
             ...responseMetadata(response),
             parsedItems: items.length,
+            retryAttempts: operationRetryAttempts,
+            paginationPages,
           }),
         );
         return items;
@@ -138,6 +167,8 @@ export const createQuickBooksAdapter = ({
             stage: "search",
             requestedUrl,
             ...responseMetadata(response),
+            retryAttempts: operationRetryAttempts,
+            paginationPages,
             error,
           }),
         );
@@ -145,101 +176,121 @@ export const createQuickBooksAdapter = ({
       }
     },
     fetchProfile: async (item, { location } = {}) => {
-      const activePage = await getPage();
       let response;
+      let operationRetryAttempts = 0;
       try {
-        response = await retryOperation(
-          () =>
-            withTimeout(
-              () =>
-                activePage.goto(item.profileUrl, {
-                  waitUntil: "domcontentloaded",
-                }),
-              30_000,
-            ),
-          { delayMs: 50 },
-        );
-        await retryOperation(
-          () =>
-            activePage.waitForSelector(
-              '[data-automation-id="mm_full_name_read"]',
-            ),
-          { delayMs: 50 },
-        );
-        const profile = await activePage.evaluate(
-          ({ id, profileUrl }) => {
-            const text = (automationId) =>
-              document
-                .querySelector(`[data-automation-id="${automationId}"]`)
-                ?.textContent?.trim() ?? null;
-            const list = (automationId) => {
-              const container = document.querySelector(
-                `[data-automation-id="${automationId}"]`,
+        const profile = await retryOperation(
+          async () => {
+            const activePage = await getPage();
+            return withTimeout(async () => {
+              response = await activePage.goto(item.profileUrl, {
+                waitUntil: "domcontentloaded",
+              });
+              const status = Number(response?.status?.());
+              if (status >= 400 && status < 500) {
+                throw Object.assign(
+                  new Error(`QuickBooks profile returned HTTP ${status}.`),
+                  { status },
+                );
+              }
+              await activePage.waitForSelector(
+                '[data-automation-id="mm_full_name_read"]',
               );
-              if (!container) return [];
-              const items = [...container.querySelectorAll("li")]
-                .map((node) => node.textContent.trim())
-                .filter(Boolean);
-              return items.length
-                ? items
-                : container.textContent
-                    .split("\n")
-                    .map((value) => value.trim())
-                    .filter(Boolean);
-            };
-            const href = (automationId) =>
-              document
-                .querySelector(`[data-automation-id="${automationId}"] a`)
-                ?.getAttribute("href") ?? null;
-            const languageText = text("mm_bio_languages_list") ?? "";
-            const credentialsTitle = document.querySelector(
-              '[data-automation-id="mm_bio_professional_designations_title"]',
-            );
-            const credentials = credentialsTitle?.parentElement
-              ? [...credentialsTitle.parentElement.querySelectorAll("li")]
-                  .map((node) => node.textContent.trim())
-                  .filter(Boolean)
-              : [];
-            return {
-              id,
-              fullName: text("mm_full_name_read"),
-              firmName: text("mm_firm_name_read"),
-              addressLines: [
-                text("mm_address_read_1"),
-                text("mm_address_read_2"),
-              ].filter(Boolean),
-              website: text("mm_website_read"),
-              phoneNumbers: [
-                ...document.querySelectorAll('a[href^="tel:"]'),
-              ].map((link) => link.getAttribute("href").replace(/^tel:/u, "")),
-              services: list("mm_services_list"),
-              certifications: [
-                ...document.querySelectorAll(
-                  '[data-automation-id="mm_cert_checkbox_edit"]',
-                ),
-              ]
-                .map((node) => node.textContent.trim().replace(/\s+/gu, " "))
-                .filter(Boolean),
-              description:
-                text("mm_bio_about_me_description") ??
-                text("mm_bio_about_me_show_more_trimmed_description"),
-              industries: list("mm_bio_industries_preview_display_list"),
-              languages: languageText
-                .replace(/^Languages\s*/iu, "")
-                .split(/[,\n]/u)
-                .map((value) => value.trim())
-                .filter(Boolean),
-              credentials,
-              socialLinks: {
-                linkedin: href("mm_bio_social_linkedin_button"),
-                facebook: href("mm_bio_social_facebook_button"),
-                instagram: null,
-                x: null,
-              },
-              profileUrl,
-            };
+              const renderedProfile = await activePage.evaluate(
+                ({ id, profileUrl }) => {
+                  const text = (automationId) =>
+                    document
+                      .querySelector(`[data-automation-id="${automationId}"]`)
+                      ?.textContent?.trim() ?? null;
+                  const list = (automationId) => {
+                    const container = document.querySelector(
+                      `[data-automation-id="${automationId}"]`,
+                    );
+                    if (!container) return [];
+                    const items = [...container.querySelectorAll("li")]
+                      .map((node) => node.textContent.trim())
+                      .filter(Boolean);
+                    return items.length
+                      ? items
+                      : container.textContent
+                          .split("\n")
+                          .map((value) => value.trim())
+                          .filter(Boolean);
+                  };
+                  const href = (automationId) =>
+                    document
+                      .querySelector(`[data-automation-id="${automationId}"] a`)
+                      ?.getAttribute("href") ?? null;
+                  const languageText = text("mm_bio_languages_list") ?? "";
+                  const credentialsTitle = document.querySelector(
+                    '[data-automation-id="mm_bio_professional_designations_title"]',
+                  );
+                  const credentials = credentialsTitle?.parentElement
+                    ? [...credentialsTitle.parentElement.querySelectorAll("li")]
+                        .map((node) => node.textContent.trim())
+                        .filter(Boolean)
+                    : [];
+                  return {
+                    id,
+                    fullName: text("mm_full_name_read"),
+                    firmName: text("mm_firm_name_read"),
+                    addressLines: [
+                      text("mm_address_read_1"),
+                      text("mm_address_read_2"),
+                    ].filter(Boolean),
+                    website: text("mm_website_read"),
+                    phoneNumbers: [
+                      ...document.querySelectorAll('a[href^="tel:"]'),
+                    ].map((link) =>
+                      link.getAttribute("href").replace(/^tel:/u, ""),
+                    ),
+                    services: list("mm_services_list"),
+                    certifications: [
+                      ...document.querySelectorAll(
+                        '[data-automation-id="mm_cert_checkbox_edit"]',
+                      ),
+                    ]
+                      .map((node) =>
+                        node.textContent.trim().replace(/\s+/gu, " "),
+                      )
+                      .filter(Boolean),
+                    description:
+                      text("mm_bio_about_me_description") ??
+                      text("mm_bio_about_me_show_more_trimmed_description"),
+                    industries: list("mm_bio_industries_preview_display_list"),
+                    languages: languageText
+                      .replace(/^Languages\s*/iu, "")
+                      .split(/[,\n]/u)
+                      .map((value) => value.trim())
+                      .filter(Boolean),
+                    credentials,
+                    socialLinks: {
+                      linkedin: href("mm_bio_social_linkedin_button"),
+                      facebook: href("mm_bio_social_facebook_button"),
+                      instagram: null,
+                      x: null,
+                    },
+                    profileUrl,
+                  };
+                },
+                { id: item.id, profileUrl: item.profileUrl },
+              );
+              if (!renderedProfile?.firmName) {
+                throw new Error(
+                  "QuickBooks profile did not render an advisor.",
+                );
+              }
+              return renderedProfile;
+            }, profileOperationTimeoutMs);
           },
-          { id: item.id, profileUrl: item.profileUrl },
+          {
+            delayMs: 50,
+            onRetry: async () => {
+              operationRetryAttempts += 1;
+              metrics.retryAttempts += 1;
+              await recreatePage();
+            },
+          },
         );
         onDiagnostic(
           createSourceDiagnostic({
@@ -249,10 +300,43 @@ export const createQuickBooksAdapter = ({
             requestedUrl: item.profileUrl,
             ...responseMetadata(response),
             parsedItems: 1,
+            retryAttempts: operationRetryAttempts,
           }),
         );
         return profile;
       } catch (error) {
+        if (item.firmName || item.fullName) {
+          metrics.partialProfiles += 1;
+          const fallbackProfile = {
+            id: item.id,
+            fullName: item.fullName,
+            firmName: item.firmName,
+            addressLines: item.address ? [item.address] : [],
+            description: item.description,
+            services: item.services ?? [],
+            industries: [],
+            credentials: [],
+            certifications: [],
+            languages: [],
+            socialLinks: {},
+            profileUrl: item.profileUrl,
+            partialProfile: true,
+          };
+          onDiagnostic(
+            createSourceDiagnostic({
+              source: "quickbooks",
+              location,
+              stage: "profile",
+              requestedUrl: item.profileUrl,
+              ...responseMetadata(response),
+              parsedItems: 1,
+              retryAttempts: operationRetryAttempts,
+              partial: true,
+              error,
+            }),
+          );
+          return fallbackProfile;
+        }
         onDiagnostic(
           createSourceDiagnostic({
             source: "quickbooks",
@@ -260,6 +344,7 @@ export const createQuickBooksAdapter = ({
             stage: "profile",
             requestedUrl: item.profileUrl,
             ...responseMetadata(response),
+            retryAttempts: operationRetryAttempts,
             error,
           }),
         );
@@ -267,6 +352,7 @@ export const createQuickBooksAdapter = ({
       }
     },
     normalize: normalizeQuickBooksProfile,
+    getMetrics: () => ({ ...metrics }),
     close: async () => context?.close(),
   };
 };

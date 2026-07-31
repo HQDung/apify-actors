@@ -59,6 +59,9 @@ export const runPipeline = async ({
       advisor: 0,
       unknown: 0,
     },
+    retryAttempts: { xero: 0, quickbooks: 0 },
+    paginationPages: { xero: 0, quickbooks: 0 },
+    partialProfiles: { xero: 0, quickbooks: 0 },
     sourceFailures: { xero: 0, quickbooks: 0, website: 0 },
   };
   const normalized = [];
@@ -93,6 +96,7 @@ export const runPipeline = async ({
           location: job.location,
         });
         summary.profilesFetched++;
+        if (profile?.partialProfile) summary.partialProfiles[job.source]++;
         const record = await job.adapter.normalize(profile, {
           locationQuery: job.location,
           includeRawData: input.includeRawData,
@@ -135,5 +139,11 @@ export const runPipeline = async ({
   }
   summary.uniqueFirms = firms.size;
   summary.resultsPushed = leads.length;
+  for (const source of input.sources) {
+    const metrics = adapters[source]?.getMetrics?.() ?? {};
+    summary.retryAttempts[source] = Number(metrics.retryAttempts) || 0;
+    summary.paginationPages[source] = Number(metrics.paginationPages) || 0;
+    summary.partialProfiles[source] = Number(metrics.partialProfiles) || 0;
+  }
   return { leads, summary };
 };
