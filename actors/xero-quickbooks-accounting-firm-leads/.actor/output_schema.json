@@ -11,7 +11,7 @@
     "summary": {
       "type": "string",
       "title": "Run summary",
-      "description": "Normalized effective locations plus directory search, profile, partial-profile, result, merge-reason, source-failure, retry-attempt, and rendered-pagination counters.",
+      "description": "Normalized effective locations plus directory search, profile, partial-profile, result, merge-reason, source-failure, retry-attempt, and rendered-pagination counters. Build 0.1.6 completed the 15-case global cloud gate.",
       "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
     }
   }

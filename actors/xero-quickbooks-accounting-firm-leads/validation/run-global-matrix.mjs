@@ -68,25 +68,27 @@ const readLocalSummary = async (storageDir) => {
   });
 };
 
-const parseCloudOutput = (stdout) => {
-  const parsed = [];
-  for (const line of stdout.split(/\r?\n/u).map((value) => value.trim())) {
-    if (!line) continue;
-    try {
-      parsed.push(JSON.parse(line));
-    } catch {
-      // The CLI may print a human-readable status line around JSON output.
+const parseStructuredOutput = (output) => {
+  const candidates = [];
+  for (const marker of ["\n{", "\n[", "{", "["]) {
+    let index = output.lastIndexOf(marker);
+    while (index >= 0) {
+      candidates.push(index + marker.length - 1);
+      const previousIndex = output.lastIndexOf(marker, index - 1);
+      if (previousIndex === index) break;
+      index = previousIndex;
     }
   }
-  const rows = parsed.flatMap((value) => {
-    if (Array.isArray(value)) return value;
-    if (value?.firmName || value?.profileUrl) return [value];
-    return [];
-  });
-  const run = parsed.find(
-    (value) => value && typeof value === "object" && (value.runId || value.id),
-  );
-  return { rows, run: run ?? null };
+  for (const index of [...new Set(candidates)].sort(
+    (left, right) => right - left,
+  )) {
+    try {
+      return JSON.parse(output.slice(index).trim());
+    } catch {
+      // Ignore human-readable CLI lines and embedded log JSON.
+    }
+  }
+  throw new Error("Apify CLI returned no parseable JSON payload.");
 };
 
 const hasValue = (value) => {
@@ -174,25 +176,72 @@ const runCase = async (mode, defaults, testCase) => {
         "--input-file",
         inputFile,
         "--json",
-        "--output-dataset",
-        "--silent",
         "--timeout",
         "600",
       ],
       { timeoutMs: 660_000 },
     );
-    const cloud = parseCloudOutput(result.stdout);
+    if (result.code !== 0) {
+      return {
+        id: testCase.id,
+        mode,
+        input,
+        runtimeMs: Math.round(performance.now() - startedAt),
+        exitCode: result.code,
+        error: (result.stderr || result.stdout).trim().slice(-1000),
+        run: null,
+        summary: null,
+        resultClass: "source_failure",
+        quality: qualityFor([]),
+      };
+    }
+    const call = parseStructuredOutput(result.stdout);
+    const runId =
+      call.run?.id ?? result.stdout.match(/\/runs\/([A-Za-z0-9]+)/u)?.[1];
+    if (!runId)
+      throw new Error(`Cloud call returned no run ID: ${testCase.id}`);
+    const runInfoResult = await runCommand(
+      "apify",
+      ["runs", "info", runId, "--json"],
+      { timeoutMs: 30_000 },
+    );
+    const runInfo = parseStructuredOutput(runInfoResult.stdout);
+    const datasetId =
+      runInfo.defaultDatasetId ?? runInfo.storageIds?.datasets?.default;
+    const keyValueStoreId =
+      runInfo.defaultKeyValueStoreId ??
+      runInfo.storageIds?.keyValueStores?.default;
+    const datasetResult = await runCommand(
+      "apify",
+      ["datasets", "get-items", datasetId],
+      { timeoutMs: 30_000 },
+    );
+    const rows = parseStructuredOutput(datasetResult.stdout);
+    const summaryResult = await runCommand(
+      "apify",
+      ["key-value-stores", "get-value", keyValueStoreId, "OUTPUT"],
+      { timeoutMs: 30_000 },
+    );
+    const summary = parseStructuredOutput(summaryResult.stdout);
     return {
       id: testCase.id,
       mode,
       input,
       runtimeMs: Math.round(performance.now() - startedAt),
       exitCode: result.code,
-      error: result.code === 0 ? null : result.stderr.trim().slice(-1000),
-      run: cloud.run,
-      summary: null,
-      resultClass: resultClassFor(cloud.rows, null),
-      quality: qualityFor(cloud.rows),
+      error: null,
+      run: {
+        id: runInfo.id,
+        status: runInfo.status,
+        buildNumber: runInfo.buildNumber,
+        usageTotalUsd: runInfo.usageTotalUsd,
+        durationMillis: runInfo.stats?.durationMillis,
+        consoleUrl: runInfo.consoleUrl,
+        datasetId,
+      },
+      summary,
+      resultClass: resultClassFor(rows, summary),
+      quality: qualityFor(rows),
     };
   } finally {
     await rm(tempDir, { recursive: true, force: true });

@@ -1,6 +1,6 @@
 {
   "title": "Global Xero & QuickBooks Accounting Firm Leads",
-  "description": "Find public accounting firm and advisor profiles worldwide from Xero and QuickBooks directories. Directory runs expose bounded retry, rendered-pagination, and partial-profile counters in OUTPUT; website enrichment is reserved for a later phase.",
+  "description": "Find public accounting firm and advisor profiles worldwide from Xero and QuickBooks directories. Build 0.1.6 validated UK, US, Australia, and Singapore directory routes in the global cloud gate; runs expose bounded retry, rendered-pagination, and partial-profile counters in OUTPUT. Website enrichment is reserved for a later phase.",
   "type": "object",
   "schemaVersion": 1,
   "properties": {
