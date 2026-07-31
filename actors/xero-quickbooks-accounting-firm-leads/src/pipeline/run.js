@@ -58,6 +58,9 @@ export const runPipeline = async ({
     websiteContactsFound: 0,
     websiteEmailsFound: 0,
     websitePhonesFound: 0,
+    websiteServicesFound: 0,
+    websiteIndustriesFound: 0,
+    websiteDomainTimeouts: 0,
     resultsPushed: 0,
     duplicateMerges: 0,
     mergeReasons: {
@@ -155,6 +158,9 @@ export const runPipeline = async ({
       summary.websiteContactsFound = Number(metrics.contactsFound) || 0;
       summary.websiteEmailsFound = Number(metrics.emailsFound) || 0;
       summary.websitePhonesFound = Number(metrics.phonesFound) || 0;
+      summary.websiteServicesFound = Number(metrics.servicesFound) || 0;
+      summary.websiteIndustriesFound = Number(metrics.industriesFound) || 0;
+      summary.websiteDomainTimeouts = Number(metrics.domainTimeouts) || 0;
       summary.sourceFailures.website = summary.websiteFailures;
       summary.retryAttempts.website = Number(metrics.retryAttempts) || 0;
     } catch (error) {
