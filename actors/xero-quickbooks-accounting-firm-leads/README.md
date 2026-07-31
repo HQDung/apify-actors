@@ -14,7 +14,7 @@ Use [sample-input.json](sample-input.json):
 {
   "locations": ["London, United Kingdom"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 20,
+  "maxResults": 5,
   "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,
@@ -64,7 +64,7 @@ npm run build
 apify validate-schema
 ```
 
-Both sources have passed independent London live runs with directory items and profiles fetched. Build 0.1.6 completed the 15-case UK/US/Australia/Singapore cloud matrix; Xero had three isolated profile-render misses, while QuickBooks completed all search jobs without source failures. That gate used directory-only inputs; website enrichment is separately opt-in and bounded as described above. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, retry-safe errors, and merge reasons. They never include cookies, tokens, full HTML, or sensitive headers.
+Build 0.1.8 completed the 15-case UK/US/Australia/Singapore directory-only cloud matrix with usable results in every case. Xero retained three isolated profile-render misses, while QuickBooks completed every search job and all three London soak runs without source failures. The separate website-enabled gate preserved all directory rows but enriched only 6 of 17 domains; redirect normalization and failed-attempt provenance remain release blockers, so website enrichment stays opt-in and disabled by default. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, retry-safe errors, and merge reasons. They never include cookies, tokens, full HTML, or sensitive headers.
 
 ## Reliability-gate matrix
 
@@ -74,7 +74,7 @@ Run the serial 15-case local matrix after the checks above:
 node validation/run-global-matrix.mjs --mode local
 ```
 
-It covers each source in London, New York, Sydney, and Singapore; combined-source runs; and a three-run QuickBooks London soak. Each case uses five results, directory-only mode, contacts/raw data disabled, and proxy disabled. Results include runtime, a `resultClass` (`usable_results`, `no_public_results`, `source_failure`, or `profile_failures`), rows, firm-name/profile URL coverage, duplicate domains, completeness, search-job failures, retries, and rendered pagination pages. Build 0.1.6 completed all 15 cases successfully; the runner never edits benchmark notes or publishes an Actor.
+It covers each source in London, New York, Sydney, and Singapore; combined-source runs; and a three-run QuickBooks London soak. Each case uses five results, directory-only mode, contacts/raw data disabled, and proxy disabled. Results include runtime, a `resultClass` (`usable_results`, `no_public_results`, `source_failure`, or `profile_failures`), rows, firm-name/profile URL coverage, duplicate domains, completeness, search-job failures, retries, and rendered pagination pages. Build 0.1.8 completed all 15 cases successfully; the runner never edits benchmark notes or publishes an Actor.
 
 `OUTPUT` exposes `retryAttempts`, `paginationPages`, and `partialProfiles` keyed by source, plus `websiteAttempts`, `websiteSuccesses`, `websiteFailures`, `websitePagesFetched`, `websiteEmailsFound`, `websitePhonesFound`, and `websiteContactsFound` when enrichment is enabled. QuickBooks retries the complete profile navigation/render/evaluation transaction and recreates the browser page after retryable navigation or timeout failures; deterministic 4xx/profile-not-found errors are not retried. If a public profile page remains unavailable, the adapter preserves the search-card firm name, address, services, and profile URL as a marked partial profile.
 
@@ -104,7 +104,7 @@ Website runs also expose `websiteServicesFound`, `websiteIndustriesFound`, and `
 
 ## Limitations and responsible use
 
-Coverage and fields are limited to what each public directory route publishes. Xero city pages may expose featured advisors only when their full-results route is unavailable; build 0.1.6 had one profile-render miss in each of New York, Sydney, and Singapore. QuickBooks requires JavaScript/browser interaction and may vary by regional route; rendered pagination is bounded and stops on exhaustion or repeated cards. Network, 429/5xx, and navigation-timeout failures receive bounded retries. Website enrichment is opt-in, limited to canonical public domains and three HTML pages per domain; timeouts, non-HTML responses, and other failures preserve directory-only fields. No authentication or CAPTCHA bypass is used. The Actor processes public business data only, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
+Coverage and fields are limited to what each public directory route publishes. Xero city pages may expose featured advisors only when their full-results route is unavailable; build 0.1.8 had one profile-render miss in each of New York, Sydney, and Singapore. QuickBooks requires JavaScript/browser interaction and may vary by regional route; rendered pagination is bounded and stops on exhaustion or repeated cards. Network, 429/5xx, and navigation-timeout failures receive bounded retries. Website enrichment is opt-in, limited to canonical public domains and three HTML pages per domain; timeouts, redirect loops, non-HTML responses, and other failures preserve directory-only fields. Build 0.1.8 enriched 6 of 17 website domains in the controlled cloud gate, with Sydney and Singapore producing no successful website pages. No authentication or CAPTCHA bypass is used. The Actor processes public business data only, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
 
 ## Tiếng Việt
 

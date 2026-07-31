@@ -54,23 +54,54 @@ Total Actor runtime was 425.4 seconds across the cases, with total usage cost `$
 
 The representative combined London benchmark [Vkdhq94Kd4BmOSDdO](https://console.apify.com/view/runs/Vkdhq94Kd4BmOSDdO) used `maxResults: 14` and completed in 58.4s at `$0.0137`: 15 directory items, 15 profiles, 14 unique firms, 14 pushed rows, 1 domain merge, zero failures/retries, one QuickBooks pagination page, 8/14 websites, 1/14 emails, 0/14 phones, and average completeness 65. This is the primary benchmark row; the 15-case matrix is the reliability gate. Both are directory-only and remain the baseline for comparing the opt-in website phase.
 
-## Website enrichment implementation — 2026-07-31
+## Build 0.1.8 directory regression gate — 2026-07-31
 
-The next phase is implemented on branch `codex/phase5-completion` behind `enrichWebsites: true`; it is not published automatically. The pipeline caps enrichment to final deduplicated leads, groups them by canonical domain, and uses a two-worker bounded fetcher. Each domain receives one homepage request plus up to two same-domain contact/about/team candidates, a 10-second page deadline, two retries, redirect following, an HTML-only check, and a 2 MB response guard. Failed or unsupported pages leave directory fields intact.
+Build `0.1.8` repeated the complete 15-case directory-only matrix after the website-enrichment implementation was merged. All runs exited successfully with usable results. The gate produced 19 search jobs, 95 directory cards, 89 fetched profiles, 87 fully rendered profiles, 84 summed unique firms, 68 pushed rows, 5 duplicate-domain merges, 6 Xero profile failures, 0 QuickBooks source failures, 2 QuickBooks partial profiles, 11 rendered QuickBooks pagination pages, and 0 website attempts. Fully rendered coverage was 91.6% of directory cards.
 
-Website parsing is explicit-only: normalized public business emails, normalized phone numbers, `mailto:` contact names, canonical social URLs, meta/paragraph descriptions, and taxonomy values from visible service/industry text. Website page URLs are recorded as `sourceRecords` with `source: "website"`; diagnostics are sanitized and emitted per page. Requests are abortable, limited to a 30-second domain budget, and validated across same-domain redirects. `OUTPUT` now includes website attempts, successes, failures, pages, emails, phones, services, industries, contacts, retries, and domain timeouts. Unit coverage includes domain deduplication, the three-page cap, transient retry, non-HTML rejection, timeout cancellation, redirect validation, malformed entities, partial enrichment, disabled-path preservation, and pipeline metric wiring. No cloud website benchmark was run from this branch.
+Total Actor runtime was 354.9 seconds and total usage cost was `$0.0833` (average `$0.0056` per case). Compared with build `0.1.6`, runtime decreased 16.6%, cost decreased 16.3%, QuickBooks partial profiles decreased from 6 to 2, and all three London soak runs completed without retries or partial profiles. The known Xero profile miss remained one each in New York, Sydney, and Singapore, including their combined cases.
 
-Local controlled checks on this branch: a London Xero run with `maxResults: 20` completed 5/5 profiles and 5/5 results with zero source failures; the cross-locale Xero sample (`Sydney, Australia` + `Singapore`, `maxResults: 5`) completed 8 profiles and 5 results with two known Xero profile misses. Both public directory samples exposed no normalized company website, so website attempts were correctly `0` and no website fetch was performed. The fixture suite separately verified successful extraction and bounded failures; a QuickBooks 20-lead attempt was stopped after repeated 30-second profile-render retries, before any benchmark claim.
+| Case                     | Cloud run                                                                  | Results | Profiles | Unique | Failures | Retries | Partial | Runtime |    Cost |
+| ------------------------ | -------------------------------------------------------------------------- | ------: | -------: | -----: | -------: | ------: | ------: | ------: | ------: |
+| Xero London              | [3tFyrPKxc9Ob8b19w](https://console.apify.com/view/runs/3tFyrPKxc9Ob8b19w) |       5 |        5 |      5 |        0 |       0 |       0 |   30.5s | $0.0070 |
+| Xero New York            | [qfg62C3LE6DNB9Yde](https://console.apify.com/view/runs/qfg62C3LE6DNB9Yde) |       4 |        4 |      4 |        1 |       0 |       0 |   28.3s | $0.0064 |
+| Xero Sydney              | [8LaBRKP92RsTiPPm0](https://console.apify.com/view/runs/8LaBRKP92RsTiPPm0) |       4 |        4 |      4 |        1 |       0 |       0 |   32.8s | $0.0074 |
+| Xero Singapore           | [rOJvQeCnwQqsc2Hyb](https://console.apify.com/view/runs/rOJvQeCnwQqsc2Hyb) |       4 |        4 |      4 |        1 |       0 |       0 |    6.9s | $0.0016 |
+| QuickBooks London        | [iC3N4ZChM6mjGdJab](https://console.apify.com/view/runs/iC3N4ZChM6mjGdJab) |       4 |        5 |      4 |        0 |       0 |       0 |   29.7s | $0.0068 |
+| QuickBooks New York      | [9MZTuyt9AjmaFqcZ0](https://console.apify.com/view/runs/9MZTuyt9AjmaFqcZ0) |       5 |        5 |      5 |        0 |       0 |       0 |   35.6s | $0.0082 |
+| QuickBooks Sydney        | [OHn4uAIk1ay6vhjjw](https://console.apify.com/view/runs/OHn4uAIk1ay6vhjjw) |       5 |        5 |      5 |        0 |       0 |       1 |   10.0s | $0.0025 |
+| QuickBooks Singapore     | [6zb6v3gkDmD8qUbSu](https://console.apify.com/view/runs/6zb6v3gkDmD8qUbSu) |       5 |        5 |      5 |        0 |       0 |       0 |    9.7s | $0.0025 |
+| Combined London          | [gg68X5YCrjPTphQR4](https://console.apify.com/view/runs/gg68X5YCrjPTphQR4) |       5 |       10 |      9 |        0 |       0 |       0 |   23.1s | $0.0056 |
+| Combined New York        | [agseEjJiL2nYzmMUs](https://console.apify.com/view/runs/agseEjJiL2nYzmMUs) |       5 |        9 |      9 |        1 |       0 |       0 |   24.7s | $0.0060 |
+| Combined Sydney          | [765gEqtXk7BhV0y60](https://console.apify.com/view/runs/765gEqtXk7BhV0y60) |       5 |        9 |      9 |        1 |       0 |       1 |   45.0s | $0.0104 |
+| Combined Singapore       | [JHUhlGjhY8iaSMDDn](https://console.apify.com/view/runs/JHUhlGjhY8iaSMDDn) |       5 |        9 |      9 |        1 |       0 |       0 |   47.9s | $0.0111 |
+| QuickBooks London soak 1 | [TbVl7PzpF8xoZnLgu](https://console.apify.com/view/runs/TbVl7PzpF8xoZnLgu) |       4 |        5 |      4 |        0 |       0 |       0 |   10.1s | $0.0025 |
+| QuickBooks London soak 2 | [xkRYRmIMmfdWC3Eym](https://console.apify.com/view/runs/xkRYRmIMmfdWC3Eym) |       4 |        5 |      4 |        0 |       0 |       0 |   10.2s | $0.0026 |
+| QuickBooks London soak 3 | [ts1pMJxKbqWMYffzU](https://console.apify.com/view/runs/ts1pMJxKbqWMYffzU) |       4 |        5 |      4 |        0 |       0 |       0 |   10.3s | $0.0025 |
 
-## Next phase plan — bounded website enrichment
+## Build 0.1.8 website-enrichment cloud gate — 2026-07-31
 
-The global directory gate is acceptable for moving into website enrichment, with the three Xero profile misses retained as a reliability follow-up. The next release gate should:
+Website enrichment is merged into `main` and deployed in build `0.1.8` behind `enrichWebsites: true`. The controlled cloud gate used QuickBooks-only inputs for London, New York, Sydney, and Singapore with five results, contacts/raw data disabled, and proxy disabled. This maximized canonical-domain coverage while preserving the directory-only regression baseline.
 
-1. Run the controlled opt-in benchmark and compare it with the directory-only baseline; keep the default false.
-2. Preserve the implemented bounds: canonical public domains, 10-second page deadline, two retries, three pages per domain, low concurrency, redirect following, HTML-only parsing, and directory fallback.
-3. Keep extraction explicit-only and source-traceable; never guess addresses or infer people.
-4. Keep `OUTPUT` website attempts/successes/failures and contact-coverage counters stable while collecting benchmark evidence.
-5. Acceptance for release is no directory regression, no unbounded work, no duplicate canonical domains, separate website/contact coverage, and unchanged behavior with `enrichWebsites: false`; decide separately whether to build or publish.
+All four Actor runs exited successfully and preserved all 19 directory rows. Across 17 canonical domains, 6 enriched and 11 failed: a 35.3% website success rate. Successful pages added 5 public website emails, 7 phones, 1 contact, 33 service classifications, and 18 industry classifications. The gate fetched 6 pages, used 2 website retries, recorded no domain-budget timeouts, ran for 116.1 total Actor seconds, and cost `$0.0271`.
+
+| Location  | Cloud run                                                                  | Rows | Domains | Success | Pages | Emails | Phones | Contacts | Avg. completeness | Runtime |    Cost |
+| --------- | -------------------------------------------------------------------------- | ---: | ------: | ------: | ----: | -----: | -----: | -------: | ----------------: | ------: | ------: |
+| London    | [XUs3Y25VLhVe0m5Ns](https://console.apify.com/view/runs/XUs3Y25VLhVe0m5Ns) |    4 |       4 |     3/4 |     3 |      2 |      3 |        0 |                83 |   44.9s | $0.0103 |
+| New York  | [VupgVFc1KeUNmZcNs](https://console.apify.com/view/runs/VupgVFc1KeUNmZcNs) |    5 |       4 |     3/4 |     3 |      3 |      4 |        1 |                79 |   15.4s | $0.0037 |
+| Sydney    | [79ni7T29UuVnSfbHp](https://console.apify.com/view/runs/79ni7T29UuVnSfbHp) |    5 |       4 |     0/4 |     0 |      0 |      0 |        0 |                66 |   16.1s | $0.0039 |
+| Singapore | [wBWZyMCjtK96XOiPk](https://console.apify.com/view/runs/wBWZyMCjtK96XOiPk) |    5 |       5 |     0/5 |     0 |      0 |      0 |        0 |                73 |   39.7s | $0.0091 |
+
+The website release gate did not pass. Seven of the 11 domain failures were redirect-limit errors, three were fetch failures, and one was HTTP 404. Redirect handling currently canonicalizes every `Location` target before following it; removing a server-required `www` host or trailing slash can repeat the same redirect until the five-hop limit. Secondary contact/about pages showed the same pattern. A separate provenance defect adds `"website"` to `sourcePlatforms` for every attempted domain even when no page succeeded; Sydney and Singapore therefore reported website platform provenance on nine rows while recording zero website `sourceRecords`.
+
+## Next phase plan — website release blockers
+
+The build `0.1.8` directory-only path passes its regression gate, but website enrichment should remain opt-in and the Actor should not be promoted as website-validated until the following work is complete:
+
+1. Follow same-registrable-domain redirects without canonicalizing away server-required hosts or trailing slashes; reject private/IP and cross-domain targets, detect repeated exact targets, and retain the five-hop limit.
+2. Add `"website"` to `sourcePlatforms` only when at least one website page succeeds and a corresponding website `sourceRecord` exists.
+3. Add regression fixtures for `www` redirects, trailing-slash redirects, exact redirect loops, and all-pages-failed provenance.
+4. Repeat the four website-enabled cloud cases and require materially better global success with no false website provenance, no duplicate canonical domains, bounded runtime, and complete directory fallback.
+5. Keep `enrichWebsites: false` as the default and decide separately whether to publish or change pricing after the repeated gate passes.
 
 ## London live-source validation — 2026-07-22
 
@@ -123,7 +154,7 @@ The prior isolated local Actor run used the earlier public sample input, which o
 - Xero produced one profile-render miss in each of New York, Sydney, and Singapore; directory search jobs still completed and overall fully rendered profile coverage remained above the 80% gate.
 - QuickBooks rendered pagination is implemented when a public next control is available and stops on exhaustion or repeated cards. Internal GraphQL cursor behavior is not used.
 - Source/location jobs are interleaved before final capping, so a low `maxResults` value no longer favors the first source in processing order.
-- The opt-in website phase is implemented locally on `codex/website-enrichment`; it still needs a validated build and controlled cloud benchmark before any release decision.
+- Build `0.1.8` passed the complete directory-only cloud regression. Its website gate failed at 6/17 successful domains because redirect canonicalization produced repeated redirect-limit errors, and attempted-but-failed domains received inaccurate website platform provenance.
 
 ## Planned benchmarks
 
