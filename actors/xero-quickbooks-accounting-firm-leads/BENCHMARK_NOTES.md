@@ -10,7 +10,7 @@ Initial live matrix: London (GB), New York (US), Sydney (AU), and Singapore (SG)
 
 The reliability gate now includes `validation/global-matrix-inputs.json` and the serial `validation/run-global-matrix.mjs` runner. It executes eight single-source cases, four combined cases, and three QuickBooks London soak cases with `maxResults: 5`, directory-only options, contacts/raw data disabled, and proxy disabled. The runner emits machine-readable JSON and does not update this file automatically.
 
-QuickBooks profile retrieval now retries the complete navigation, rendered-profile wait, and extraction transaction as one bounded operation. A retry closes and recreates the page; deterministic 4xx/profile-not-found failures stop immediately. When the public profile remains unavailable, search-card fields are retained as a marked partial profile. `OUTPUT` and source diagnostics expose per-source `retryAttempts`, `paginationPages`, and partial-profile counts. Website enrichment remains unavailable.
+QuickBooks profile retrieval now retries the complete navigation, rendered-profile wait, and extraction transaction as one bounded operation. A retry closes and recreates the page; deterministic 4xx/profile-not-found failures stop immediately. When the public profile remains unavailable, search-card fields are retained as a marked partial profile. `OUTPUT` and source diagnostics expose per-source `retryAttempts`, `paginationPages`, and partial-profile counts. The completed gate used directory-only inputs; website enrichment is now an opt-in bounded phase.
 
 Local gate command:
 
@@ -52,17 +52,25 @@ Total Actor runtime was 425.4 seconds across the cases, with total usage cost `$
 | QuickBooks London soak 2 | [4ZsXxBv5Yf4LncCGe](https://console.apify.com/view/runs/4ZsXxBv5Yf4LncCGe) |       4 |        5 |      4 |        0 |       0 |       0 |    9.5s | $0.0024 |
 | QuickBooks London soak 3 | [GBwyx0OgOGNmdw4Gt](https://console.apify.com/view/runs/GBwyx0OgOGNmdw4Gt) |       5 |        5 |      5 |        0 |       8 |       4 |  127.1s | $0.0288 |
 
-The representative combined London benchmark [Vkdhq94Kd4BmOSDdO](https://console.apify.com/view/runs/Vkdhq94Kd4BmOSDdO) used `maxResults: 14` and completed in 58.4s at `$0.0137`: 15 directory items, 15 profiles, 14 unique firms, 14 pushed rows, 1 domain merge, zero failures/retries, one QuickBooks pagination page, 8/14 websites, 1/14 emails, 0/14 phones, and average completeness 65. This is the primary benchmark row; the 15-case matrix is the reliability gate.
+The representative combined London benchmark [Vkdhq94Kd4BmOSDdO](https://console.apify.com/view/runs/Vkdhq94Kd4BmOSDdO) used `maxResults: 14` and completed in 58.4s at `$0.0137`: 15 directory items, 15 profiles, 14 unique firms, 14 pushed rows, 1 domain merge, zero failures/retries, one QuickBooks pagination page, 8/14 websites, 1/14 emails, 0/14 phones, and average completeness 65. This is the primary benchmark row; the 15-case matrix is the reliability gate. Both are directory-only and remain the baseline for comparing the opt-in website phase.
+
+## Website enrichment implementation — 2026-07-31
+
+The next phase is implemented on branch `codex/website-enrichment` behind `enrichWebsites: true`; it is not published automatically. The pipeline caps enrichment to final deduplicated leads, groups them by canonical domain, and uses a two-worker bounded fetcher. Each domain receives one homepage request plus up to two same-domain contact/about/team candidates, a 10-second page deadline, two retries, redirect following, an HTML-only check, and a 2 MB response guard. Failed or unsupported pages leave directory fields intact.
+
+Website parsing is explicit-only: normalized public business emails, normalized phone numbers, `mailto:` contact names, canonical social URLs, and meta/paragraph descriptions. Website page URLs are recorded as `sourceRecords` with `source: "website"`; diagnostics are sanitized and emitted per page. `OUTPUT` now includes `websiteAttempts`, `websiteSuccesses`, `websiteFailures`, `websitePagesFetched`, `websiteEmailsFound`, `websitePhonesFound`, and `websiteContactsFound`. Unit coverage includes domain deduplication, the three-page cap, transient retry, non-HTML rejection, timeout bounding, partial enrichment, disabled-path preservation, and pipeline metric wiring. No cloud website benchmark was run from this branch.
+
+Local controlled checks on this branch: a London Xero run with `maxResults: 20` completed 5/5 profiles and 5/5 results with zero source failures; the cross-locale Xero sample (`Sydney, Australia` + `Singapore`, `maxResults: 5`) completed 8 profiles and 5 results with two known Xero profile misses. Both public directory samples exposed no normalized company website, so website attempts were correctly `0` and no website fetch was performed. The fixture suite separately verified successful extraction and bounded failures; a QuickBooks 20-lead attempt was stopped after repeated 30-second profile-render retries, before any benchmark claim.
 
 ## Next phase plan — bounded website enrichment
 
-The global directory gate is acceptable for moving into website enrichment, with the three Xero profile misses retained as a reliability follow-up. The next implementation phase should:
+The global directory gate is acceptable for moving into website enrichment, with the three Xero profile misses retained as a reliability follow-up. The next release gate should:
 
-1. Add opt-in website enrichment behind `enrichWebsites: true`; keep the default false and reject unsupported modes until the implementation is complete.
-2. Enrich only canonical public domains, with a 10-second request deadline, two retries, a maximum of three pages per domain, and low concurrency. Follow redirects, skip non-HTML responses, and preserve directory-only records when enrichment fails.
-3. Extract only explicitly published business emails, phones, contact names, social links, and descriptions; never guess addresses or infer people. Attach source URLs and enrichment diagnostics to each field.
-4. Extend `OUTPUT` with website attempts/successes/failures and contact-coverage counters; add fixtures and tests for redirects, timeouts, duplicate domains, invalid content types, and partial enrichment.
-5. Validate local fixtures, then run a controlled 20-lead London benchmark and a cross-locale sample. Acceptance: no directory regressions, no unbounded work, no duplicate canonical domains, website success and contact coverage reported separately, and `enrichWebsites: false` output unchanged.
+1. Run the controlled opt-in benchmark and compare it with the directory-only baseline; keep the default false.
+2. Preserve the implemented bounds: canonical public domains, 10-second page deadline, two retries, three pages per domain, low concurrency, redirect following, HTML-only parsing, and directory fallback.
+3. Keep extraction explicit-only and source-traceable; never guess addresses or infer people.
+4. Keep `OUTPUT` website attempts/successes/failures and contact-coverage counters stable while collecting benchmark evidence.
+5. Acceptance for release is no directory regression, no unbounded work, no duplicate canonical domains, separate website/contact coverage, and unchanged behavior with `enrichWebsites: false`; decide separately whether to build or publish.
 
 ## London live-source validation — 2026-07-22
 
@@ -106,7 +114,7 @@ Dataset quality: UK location 10/10, services 10/10, industries 10/10, website 8/
 
 ## London directory-only contract smoke — 2026-07-23
 
-The isolated local Actor run used the public sample input, which now omits both `locations` and `enrichWebsites`. The runtime canonicalized the effective input to London, United Kingdom, both sources, `maxResults: 14`, directory-only mode, and contact extraction disabled. It produced one summary output with 2 search jobs, 15 directory items, 5 profiles fetched, 5 unique firms, and 5 pushed results. Xero completed with 0 failures; QuickBooks returned 10 search cards but all 10 profile-page waits timed out; website enrichment remained 0. This confirms the public-contract change and reproduces the intermittent QuickBooks profile-rendering blocker.
+The prior isolated local Actor run used the earlier public sample input, which omitted both `locations` and `enrichWebsites`; the current sample explicitly demonstrates the opt-in phase. The prior runtime canonicalized the effective input to London, United Kingdom, both sources, `maxResults: 14`, directory-only mode, and contact extraction disabled. It produced one summary output with 2 search jobs, 15 directory items, 5 profiles fetched, 5 unique firms, and 5 pushed results. Xero completed with 0 failures; QuickBooks returned 10 search cards but all 10 profile-page waits timed out; website enrichment remained 0. This confirms the directory-only contract baseline and reproduces the intermittent QuickBooks profile-rendering blocker.
 
 ### Current blockers
 
@@ -115,7 +123,7 @@ The isolated local Actor run used the public sample input, which now omits both 
 - Xero produced one profile-render miss in each of New York, Sydney, and Singapore; directory search jobs still completed and overall fully rendered profile coverage remained above the 80% gate.
 - QuickBooks rendered pagination is implemented when a public next control is available and stops on exhaustion or repeated cards. Internal GraphQL cursor behavior is not used.
 - Source/location jobs are interleaved before final capping, so a low `maxResults` value no longer favors the first source in processing order.
-- Website enrichment is unavailable by contract; the public input schema exposes directory-only mode and rejects `enrichWebsites: true`.
+- The opt-in website phase is implemented locally on `codex/website-enrichment`; it still needs a validated build and controlled cloud benchmark before any release decision.
 
 ## Planned benchmarks
 

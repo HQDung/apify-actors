@@ -31,12 +31,6 @@ export const validateInput = (raw = {}) => {
     throw new Error("locations must contain no more than 20 values.");
   }
 
-  if (raw.enrichWebsites === true) {
-    throw new Error(
-      "Website enrichment is not implemented. Remove enrichWebsites or set it to false.",
-    );
-  }
-
   if (raw.sources !== undefined && !Array.isArray(raw.sources)) {
     throw new TypeError("sources must be an array.");
   }
@@ -59,7 +53,7 @@ export const validateInput = (raw = {}) => {
     locations,
     sources,
     maxResults: requestedMaxResults,
-    enrichWebsites: false,
+    enrichWebsites: raw.enrichWebsites === true,
     extractContacts: raw.extractContacts !== false,
     includeRawData: raw.includeRawData === true,
     proxyConfiguration: raw.proxyConfiguration ?? { useApifyProxy: false },

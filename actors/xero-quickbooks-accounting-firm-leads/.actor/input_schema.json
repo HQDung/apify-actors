@@ -1,6 +1,6 @@
 {
   "title": "Global Xero & QuickBooks Accounting Firm Leads",
-  "description": "Find public accounting firm and advisor profiles worldwide from Xero and QuickBooks directories. Build 0.1.6 validated UK, US, Australia, and Singapore directory routes in the global cloud gate; runs expose bounded retry, rendered-pagination, and partial-profile counters in OUTPUT. Website enrichment is reserved for a later phase.",
+  "description": "Find public accounting firm and advisor profiles worldwide from Xero and QuickBooks directories. Build 0.1.6 validated UK, US, Australia, and Singapore directory routes in the global cloud gate; runs expose bounded directory and optional website-enrichment counters in OUTPUT.",
   "type": "object",
   "schemaVersion": 1,
   "properties": {
@@ -47,7 +47,7 @@
     "enrichWebsites": {
       "title": "Enrich company websites",
       "type": "boolean",
-      "description": "Reserved for the website-enrichment phase. Keep disabled for the current directory-only implementation.",
+      "description": "Opt-in bounded website enrichment. Each canonical public domain gets at most three HTML pages, a 10-second page deadline, two retries, and low concurrency; failures preserve the directory record. Default is false.",
       "default": false
     },
     "includeRawData": {

@@ -35,6 +35,7 @@ export const runPipeline = async ({
   adapters,
   now = () => new Date(),
   onFailure = () => {},
+  websiteEnricher = null,
 }) => {
   const summary = {
     effectiveInput: {
@@ -50,6 +51,13 @@ export const runPipeline = async ({
     profilesFetched: 0,
     uniqueFirms: 0,
     websitesEnriched: 0,
+    websiteAttempts: 0,
+    websiteSuccesses: 0,
+    websiteFailures: 0,
+    websitePagesFetched: 0,
+    websiteContactsFound: 0,
+    websiteEmailsFound: 0,
+    websitePhonesFound: 0,
     resultsPushed: 0,
     duplicateMerges: 0,
     mergeReasons: {
@@ -129,10 +137,41 @@ export const runPipeline = async ({
     }
   });
 
+  let finalRecords = [...firms.values()].slice(0, input.maxResults);
+  if (input.enrichWebsites) {
+    try {
+      const activeEnricher = websiteEnricher;
+      if (!activeEnricher)
+        throw new Error(
+          "Website enrichment is enabled but no enricher is configured.",
+        );
+      finalRecords = await activeEnricher.enrich(finalRecords);
+      const metrics = activeEnricher.getMetrics?.() ?? {};
+      summary.websiteAttempts = Number(metrics.attempts) || 0;
+      summary.websiteSuccesses = Number(metrics.successes) || 0;
+      summary.websiteFailures = Number(metrics.failures) || 0;
+      summary.websitesEnriched = summary.websiteSuccesses;
+      summary.websitePagesFetched = Number(metrics.pagesFetched) || 0;
+      summary.websiteContactsFound = Number(metrics.contactsFound) || 0;
+      summary.websiteEmailsFound = Number(metrics.emailsFound) || 0;
+      summary.websitePhonesFound = Number(metrics.phonesFound) || 0;
+      summary.sourceFailures.website = summary.websiteFailures;
+      summary.retryAttempts.website = Number(metrics.retryAttempts) || 0;
+    } catch (error) {
+      summary.websiteFailures = 1;
+      summary.sourceFailures.website = 1;
+      onFailure({
+        source: "website",
+        location: null,
+        stage: "enrichment",
+        error,
+      });
+    }
+  }
   const scrapedAt = now().toISOString();
-  const leads = [...firms.values()]
-    .slice(0, input.maxResults)
-    .map((lead) => finalizeLead(lead, scrapedAt, input));
+  const leads = finalRecords.map((lead) =>
+    finalizeLead(lead, scrapedAt, input),
+  );
   for (const lead of leads) {
     if (!isNormalizedLead(lead))
       throw new Error(`Invalid normalized lead: ${lead.firmName}.`);
