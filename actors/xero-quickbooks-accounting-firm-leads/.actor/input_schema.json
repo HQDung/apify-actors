@@ -47,7 +47,7 @@
     "enrichWebsites": {
       "title": "Enrich company websites",
       "type": "boolean",
-      "description": "Opt-in bounded website enrichment. Each canonical public domain gets at most three HTML pages, a 10-second page deadline, two retries, and low concurrency; failures preserve the directory record. Default is false.",
+      "description": "Opt-in bounded website enrichment. Each canonical public domain gets at most three HTML pages, a 10-second page deadline, a 30-second domain budget, two retries, abortable requests, and low concurrency; failures preserve the directory record. Default is false.",
       "default": false
     },
     "includeRawData": {

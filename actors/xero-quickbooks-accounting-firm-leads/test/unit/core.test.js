@@ -1225,6 +1225,13 @@ describe("accounting firm leads Phase 1", () => {
       ]),
     );
     expect(enriched[0].phoneNumbers).toContain("+4402012345678");
+    expect(enriched[0].sourcePlatforms).toEqual(
+      expect.arrayContaining(["website"]),
+    );
+    expect(enriched[0].services).toEqual(
+      expect.arrayContaining(["bookkeeping", "tax"]),
+    );
+    expect(enriched[0].industriesServed).toContain("construction");
     expect(enriched[0].socialLinks.linkedin).toBe(
       "https://linkedin.com/company/example",
     );
@@ -1247,6 +1254,8 @@ describe("accounting firm leads Phase 1", () => {
         contactsFound: 1,
       }),
     );
+    expect(enricher.getMetrics().servicesFound).toBeGreaterThan(0);
+    expect(enricher.getMetrics().industriesFound).toBeGreaterThan(0);
   });
 
   it("deduplicates domains and caps website pages at three", async () => {
@@ -1358,6 +1367,9 @@ describe("accounting firm leads Phase 1", () => {
         failures: 0,
         pagesFetched: 1,
         contactsFound: 0,
+        servicesFound: 1,
+        industriesFound: 1,
+        domainTimeouts: 0,
         retryAttempts: 0,
       }),
     };
@@ -1380,6 +1392,9 @@ describe("accounting firm leads Phase 1", () => {
         websiteSuccesses: 1,
         websiteFailures: 0,
         websitePagesFetched: 1,
+        websiteServicesFound: 1,
+        websiteIndustriesFound: 1,
+        websiteDomainTimeouts: 0,
       }),
     );
   });
@@ -1539,6 +1554,40 @@ describe("accounting firm leads Phase 1", () => {
     ]);
     expect(privateRedirectCalls).toBe(1);
     expect(privateRedirectEnricher.getMetrics()).toEqual(
+      expect.objectContaining({ attempts: 1, successes: 0, failures: 1 }),
+    );
+  });
+
+  it("aborts a timed-out website request and preserves the directory lead", async () => {
+    let aborted = false;
+    const enricher = createWebsiteEnricher({
+      fetchImpl: async (_url, { signal }) =>
+        new Promise((resolve, reject) => {
+          signal.addEventListener("abort", () => {
+            aborted = true;
+            reject(new Error("request aborted"));
+          });
+        }),
+      timeoutMs: 5,
+      domainTimeoutMs: 10,
+      delayMs: 0,
+    });
+    const records = await enricher.enrich([
+      lead({
+        website: "https://timeout.example",
+        domain: "timeout.example",
+      }),
+    ]);
+
+    expect(aborted).toBe(true);
+    expect(records[0]).toEqual(
+      expect.objectContaining({
+        firmName: "Example Accounting",
+        website: "https://timeout.example",
+        emails: [],
+      }),
+    );
+    expect(enricher.getMetrics()).toEqual(
       expect.objectContaining({ attempts: 1, successes: 0, failures: 1 }),
     );
   });

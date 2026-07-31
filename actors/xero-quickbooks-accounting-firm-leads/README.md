@@ -24,7 +24,14 @@ Use [sample-input.json](sample-input.json):
 
 `locations` accepts 1–20 trimmed, unique cities, regions, postcodes, or countries. The Actor returns at most `maxResults` (1–5,000) final deduplicated leads across all requested jobs. Source jobs are interleaved before the final cap so one directory cannot monopolize the output. Set `enrichWebsites: true` to inspect published website data for the capped final lead set; `false` keeps the directory-only path unchanged.
 
-When enabled, each canonical public domain is fetched at most once, for a maximum of three HTML pages (homepage plus same-domain contact/about/team candidates), with a 10-second page deadline, two retries, redirect following, non-HTML skipping, and low concurrency. Only explicit emails, phones, `mailto:` contact names, social links, and descriptions are retained. A failed website never removes directory data. Website page URLs are retained in `sourceRecords`, and `OUTPUT` reports attempts, successes, failures, pages, emails, phones, and contact coverage.
+When enabled, each canonical public domain is fetched at most once, for a maximum of three HTML pages (homepage plus same-domain contact/about/team candidates), with a 10-second page deadline, a 30-second domain budget, two retries, abortable requests, same-domain redirect validation, non-HTML skipping, and low concurrency. Only explicit emails, phones, `mailto:` contact names, social links, descriptions, services, and industries are retained. A failed website never removes directory data. Website page URLs are retained in `sourceRecords`, and `OUTPUT` reports attempts, successes, failures, pages, emails, phones, services, industries, contacts, and domain timeouts.
+
+## API example
+
+```bash
+apify call xero-quickbooks-accounting-firm-leads \
+  --input-file sample-input.json
+```
 
 ## Output fields
 
@@ -70,6 +77,30 @@ node validation/run-global-matrix.mjs --mode local
 It covers each source in London, New York, Sydney, and Singapore; combined-source runs; and a three-run QuickBooks London soak. Each case uses five results, directory-only mode, contacts/raw data disabled, and proxy disabled. Results include runtime, a `resultClass` (`usable_results`, `no_public_results`, `source_failure`, or `profile_failures`), rows, firm-name/profile URL coverage, duplicate domains, completeness, search-job failures, retries, and rendered pagination pages. Build 0.1.6 completed all 15 cases successfully; the runner never edits benchmark notes or publishes an Actor.
 
 `OUTPUT` exposes `retryAttempts`, `paginationPages`, and `partialProfiles` keyed by source, plus `websiteAttempts`, `websiteSuccesses`, `websiteFailures`, `websitePagesFetched`, `websiteEmailsFound`, `websitePhonesFound`, and `websiteContactsFound` when enrichment is enabled. QuickBooks retries the complete profile navigation/render/evaluation transaction and recreates the browser page after retryable navigation or timeout failures; deterministic 4xx/profile-not-found errors are not retried. If a public profile page remains unavailable, the adapter preserves the search-card firm name, address, services, and profile URL as a marked partial profile.
+
+Website runs also expose `websiteServicesFound`, `websiteIndustriesFound`, and `websiteDomainTimeouts`. Website-derived emails include their page URL; page-level provenance is retained in `sourceRecords`.
+
+## Example output
+
+```json
+{
+  "firmName": "Example Accounting Partners",
+  "website": "https://example-accounting.com",
+  "domain": "example-accounting.com",
+  "primaryEmail": "hello@example-accounting.com",
+  "services": ["bookkeeping", "tax"],
+  "industriesServed": ["construction"],
+  "hasXeroProfile": true,
+  "hasQuickBooksProfile": true,
+  "sourcePlatforms": ["xero", "quickbooks", "website"],
+  "sourceRecords": [
+    { "source": "xero", "profileUrl": "https://www.xero.com/..." },
+    { "source": "website", "profileUrl": "https://example-accounting.com" }
+  ],
+  "completenessScore": 88,
+  "scrapedAt": "2026-07-31T00:00:00.000Z"
+}
+```
 
 ## Limitations and responsible use
 

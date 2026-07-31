@@ -7,12 +7,18 @@ import {
   normalizePhone,
 } from "../normalization/contact.js";
 import { canonicalizeUrl, domainFromUrl } from "../normalization/url.js";
-import { retryOperation, withTimeout } from "../reliability/retry.js";
+import {
+  isRetryableError,
+  retryOperation,
+  withTimeout,
+} from "../reliability/retry.js";
+import { mapIndustries, mapServices } from "../taxonomy/taxonomies.js";
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 const DEFAULT_MAX_PAGES = 3;
 const DEFAULT_CONCURRENCY = 2;
 const DEFAULT_ATTEMPTS = 3;
+const DEFAULT_DOMAIN_TIMEOUT_MS = 30_000;
 const MAX_DESCRIPTION_LENGTH = 1_000;
 const MAX_HTML_BYTES = 2_000_000;
 const MAX_REDIRECTS = 5;
@@ -261,6 +267,11 @@ const mergePageData = (aggregate, page) => {
     pages: [...aggregate.pages, page.url],
     emails,
     phoneNumbers: unique([...aggregate.phoneNumbers, ...page.phoneNumbers]),
+    services: unique([...aggregate.services, ...page.services]),
+    industriesServed: unique([
+      ...aggregate.industriesServed,
+      ...page.industriesServed,
+    ]),
     contacts,
     socialLinks: { ...aggregate.socialLinks, ...page.socialLinks },
     description: aggregate.description ?? page.description,
@@ -307,10 +318,16 @@ const applyPageData = (record, data) => {
   }
   return {
     ...record,
+    sourcePlatforms: unique([...(record.sourcePlatforms ?? []), "website"]),
     emails,
     phoneNumbers: unique([
       ...(record.phoneNumbers ?? []),
       ...data.phoneNumbers,
+    ]),
+    services: unique([...(record.services ?? []), ...data.services]),
+    industriesServed: unique([
+      ...(record.industriesServed ?? []),
+      ...data.industriesServed,
     ]),
     contacts,
     socialLinks: { ...(record.socialLinks ?? {}), ...data.socialLinks },
@@ -322,6 +339,7 @@ const applyPageData = (record, data) => {
 export const createWebsiteEnricher = ({
   fetchImpl = globalThis.fetch,
   timeoutMs = DEFAULT_TIMEOUT_MS,
+  domainTimeoutMs = DEFAULT_DOMAIN_TIMEOUT_MS,
   maxPagesPerDomain = DEFAULT_MAX_PAGES,
   concurrency = DEFAULT_CONCURRENCY,
   attempts = DEFAULT_ATTEMPTS,
@@ -340,14 +358,18 @@ export const createWebsiteEnricher = ({
     contactsFound: 0,
     emailsFound: 0,
     phonesFound: 0,
+    servicesFound: 0,
+    industriesFound: 0,
+    domainTimeouts: 0,
     retryAttempts: 0,
   };
 
-  const fetchResponse = async (initialUrl) => {
+  const fetchResponse = async (initialUrl, signal) => {
     let currentUrl = initialUrl;
     for (let redirect = 0; redirect <= MAX_REDIRECTS; redirect += 1) {
       const response = await fetchImpl(currentUrl, {
         redirect: "manual",
+        signal,
         headers: {
           accept: "text/html,application/xhtml+xml;q=0.9,*/*;q=0.1",
           "user-agent": "accounting-firm-leads/website-enrichment",
@@ -376,24 +398,42 @@ export const createWebsiteEnricher = ({
     throw new Error("Website redirect limit exceeded.");
   };
 
-  const fetchHtml = async (url, location) => {
+  const fetchHtml = async (url, location, deadline) => {
     let lastStatus = null;
     let lastContentType = null;
     try {
       const page = await retryOperation(
         async () => {
-          const result = await withTimeout(async () => {
-            const { response, url: responseUrl } = await fetchResponse(url);
-            lastStatus = Number(responseStatus(response)) || null;
-            lastContentType = responseHeader(response, "content-type");
-            if (!response?.ok && lastStatus !== 200)
-              throw errorForResponse(response);
-            const body = await responseBody(response);
-            if (Buffer.byteLength(body) > MAX_HTML_BYTES) {
-              throw new Error("Website response exceeds the 2MB HTML limit.");
-            }
-            return { body, response, url: responseUrl };
-          }, timeoutMs);
+          const remainingMs = deadline
+            ? Math.max(1, deadline - Date.now())
+            : timeoutMs;
+          const controller = new AbortController();
+          let result;
+          try {
+            result = await withTimeout(
+              async () => {
+                const { response, url: responseUrl } = await fetchResponse(
+                  url,
+                  controller.signal,
+                );
+                lastStatus = Number(responseStatus(response)) || null;
+                lastContentType = responseHeader(response, "content-type");
+                if (!response?.ok && lastStatus !== 200)
+                  throw errorForResponse(response);
+                const body = await responseBody(response);
+                if (Buffer.byteLength(body) > MAX_HTML_BYTES) {
+                  throw new Error(
+                    "Website response exceeds the 2MB HTML limit.",
+                  );
+                }
+                return { body, response, url: responseUrl };
+              },
+              Math.min(timeoutMs, remainingMs),
+            );
+          } catch (error) {
+            controller.abort();
+            throw error;
+          }
           const contentType =
             responseHeader(result.response, "content-type") ?? "";
           if (!/text\/html|application\/xhtml\+xml/iu.test(contentType)) {
@@ -406,6 +446,9 @@ export const createWebsiteEnricher = ({
         {
           attempts,
           delayMs,
+          shouldRetry: (error) =>
+            Date.now() < (deadline ?? Number.POSITIVE_INFINITY) &&
+            isRetryableError(error),
           onRetry: async () => {
             metrics.retryAttempts += 1;
           },
@@ -449,6 +492,8 @@ export const createWebsiteEnricher = ({
       pages: [],
       emails: [],
       phoneNumbers: [],
+      services: [],
+      industriesServed: [],
       contacts: [],
       socialLinks: {},
       description: null,
@@ -459,11 +504,16 @@ export const createWebsiteEnricher = ({
     }
     const queue = [homepageUrl];
     const visited = new Set();
+    const deadline = Date.now() + domainTimeoutMs;
     while (queue.length && aggregate.pages.length < maxPagesPerDomain) {
+      if (Date.now() >= deadline) {
+        metrics.domainTimeouts += 1;
+        break;
+      }
       const url = queue.shift();
       if (visited.has(url)) continue;
       visited.add(url);
-      const page = await fetchHtml(url, location);
+      const page = await fetchHtml(url, location, deadline);
       if (!page) continue;
       try {
         const emailData = extractEmails(page.html, page.url);
@@ -471,6 +521,8 @@ export const createWebsiteEnricher = ({
           url: page.url,
           ...emailData,
           phoneNumbers: extractPhones(page.html),
+          services: mapServices([textFromHtml(page.html)]),
+          industriesServed: mapIndustries([textFromHtml(page.html)]),
           socialLinks: extractSocialLinks(page.html),
           description: extractDescription(page.html),
         });
@@ -502,6 +554,8 @@ export const createWebsiteEnricher = ({
     metrics.pagesFetched += aggregate.pages.length;
     metrics.emailsFound += aggregate.emails.length;
     metrics.phonesFound += aggregate.phoneNumbers.length;
+    metrics.servicesFound += aggregate.services.length;
+    metrics.industriesFound += aggregate.industriesServed.length;
     metrics.contactsFound += aggregate.contacts.length;
     if (aggregate.pages.length) metrics.successes += 1;
     else metrics.failures += 1;
