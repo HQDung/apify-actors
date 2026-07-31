@@ -1,5 +1,11 @@
 # Benchmark notes
 
+## Global directory contract implementation — 2026-07-31
+
+The actor now accepts 1–20 normalized locations, preserves the requested `maxResults` cap, interleaves source/location jobs before capping, retries transient directory failures, and paginates rendered QuickBooks results when a public next control is available. Unit and fixture coverage is green; no cloud benchmark or publication was performed in this phase.
+
+Planned initial live matrix: London (GB), New York (US), Sydney (AU), and Singapore (SG), each with Xero-only, QuickBooks-only, and combined directory-only inputs. Record search jobs, directory items, profiles fetched, unique firms, merge reasons, source failures, retry counts, runtime, cost, and completeness.
+
 ## London live-source validation — 2026-07-22
 
 Input per run: London, United Kingdom, one source, maximum 10 results, proxy disabled, directory-only mode, and contact extraction disabled.
@@ -47,9 +53,9 @@ The isolated local Actor run used the public sample input, which now omits both 
 ### Current blockers
 
 - Xero's London page exposes five featured advisors, while its advertised full-results route currently returns 404.
-- QuickBooks requires a browser and currently reads only the first rendered result page; its public GraphQL response exposes cursor pagination that is not yet implemented.
-- An earlier separate local combined run on 2026-07-22, after several rapid live validations, returned QuickBooks search cards but nine profile shells timed out despite HTTP 200. The independent QuickBooks run immediately before it fetched all 10 profiles. Treat this as an upstream rendering/rate transient; no automatic retries were added to avoid increasing request pressure. It was not reproduced in the successful 2026-07-23 cloud run above.
-- A low combined-source cap can favor the first source in processing order. The combined-source minimum normalization prevents configured values below 14 from reproducing that behavior.
+- QuickBooks requires a browser and may return transient profile-rendering timeouts despite HTTP 200. Navigation and selector operations now have explicit deadlines and bounded retries; live stability still requires the planned cloud matrix.
+- QuickBooks rendered pagination is implemented when a public next control is available and stops on exhaustion or repeated cards. Internal GraphQL cursor behavior is not used.
+- Source/location jobs are interleaved before final capping, so a low `maxResults` value no longer favors the first source in processing order.
 - Website enrichment is unavailable by contract; the public input schema exposes directory-only mode and rejects `enrichWebsites: true`.
 
 ## Planned benchmarks

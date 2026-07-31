@@ -1,8 +1,8 @@
 {
   "actorSpecification": 1,
   "name": "xero-quickbooks-accounting-firm-leads",
-  "title": "London Xero & QuickBooks Accounting Firm Leads",
-  "description": "Find and normalize public Xero and QuickBooks accounting advisor profiles in London, United Kingdom.",
+  "title": "Global Xero & QuickBooks Accounting Firm Leads",
+  "description": "Find and normalize public Xero and QuickBooks accounting advisor profiles across requested locations.",
   "version": "0.1",
   "buildTag": "latest",
   "input": "./input_schema.json",

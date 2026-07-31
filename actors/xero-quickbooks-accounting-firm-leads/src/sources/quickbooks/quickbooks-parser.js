@@ -59,6 +59,30 @@ export const parseQuickBooksAddress = (
       countryCode,
     };
   }
+  if (countryCode === "AU") {
+    const locality = addressLines
+      .at(-1)
+      ?.match(/^(.+?)\s+([A-Z]{2,3})\s+(\d{4})$/iu);
+    return {
+      address,
+      city: locality?.[1]?.trim() ?? null,
+      region: locality?.[2]?.toLocaleUpperCase() ?? null,
+      postalCode: locality?.[3] ?? null,
+      country,
+      countryCode,
+    };
+  }
+  if (countryCode === "SG") {
+    const locality = addressLines.at(-1)?.match(/^(.+?)\s+(\d{6})$/u);
+    return {
+      address,
+      city: locality?.[1]?.trim() ?? null,
+      region: null,
+      postalCode: locality?.[2] ?? null,
+      country,
+      countryCode,
+    };
+  }
   const locality = addressLines
     .at(-1)
     ?.match(/^(.*?),\s*([A-Z]{2})\s+(\d{5}(?:-\d{4})?)$/u);

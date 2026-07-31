@@ -1,7 +1,7 @@
 import { actorConfig } from "../niche-config.js";
 
 const supportedSources = new Set(actorConfig.sourceIds);
-const LONDON_LOCATION = "London, United Kingdom";
+const DEFAULT_LOCATION = "London, United Kingdom";
 
 const boundedInteger = (value, fallback, minimum, maximum, field) => {
   const number = Number(value ?? fallback);
@@ -14,7 +14,22 @@ const boundedInteger = (value, fallback, minimum, maximum, field) => {
 };
 
 export const validateInput = (raw = {}) => {
-  const locations = [LONDON_LOCATION];
+  if (raw.locations !== undefined && !Array.isArray(raw.locations)) {
+    throw new TypeError("locations must be an array.");
+  }
+  const locations = [
+    ...new Set(
+      (raw.locations ?? [DEFAULT_LOCATION]).map((location) =>
+        String(location).trim(),
+      ),
+    ),
+  ];
+  if (locations.length === 0 || locations.some((location) => !location)) {
+    throw new Error("locations must contain at least one non-empty value.");
+  }
+  if (locations.length > 20) {
+    throw new Error("locations must contain no more than 20 values.");
+  }
 
   if (raw.enrichWebsites === true) {
     throw new Error(
@@ -40,15 +55,10 @@ export const validateInput = (raw = {}) => {
     5000,
     "maxResults",
   );
-  const maxResults =
-    sources.includes("xero") && sources.includes("quickbooks")
-      ? Math.max(requestedMaxResults, 14)
-      : requestedMaxResults;
-
   return {
     locations,
     sources,
-    maxResults,
+    maxResults: requestedMaxResults,
     enrichWebsites: false,
     extractContacts: raw.extractContacts !== false,
     includeRawData: raw.includeRawData === true,

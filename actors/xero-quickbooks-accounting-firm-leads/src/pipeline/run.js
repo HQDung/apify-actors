@@ -3,6 +3,14 @@ import { mergeFirms } from "../deduplication/merge-firms.js";
 import { isNormalizedLead } from "../schemas/validators.js";
 import { completenessScoreFor } from "../scoring/completeness.js";
 
+const mergeReasonFor = (key) => {
+  if (key.startsWith("domain:")) return "domain";
+  if (key.startsWith("phone:")) return "phone";
+  if (key.startsWith("name-location:")) return "name-location";
+  if (key.startsWith("advisor:")) return "advisor";
+  return "unknown";
+};
+
 const finalizeLead = (lead, scrapedAt, { extractContacts }) => {
   const primaryLocation = lead.locations?.[0] ?? {};
   const sourcePlatforms = new Set(lead.sourcePlatforms ?? []);
@@ -44,9 +52,17 @@ export const runPipeline = async ({
     websitesEnriched: 0,
     resultsPushed: 0,
     duplicateMerges: 0,
+    mergeReasons: {
+      domain: 0,
+      phone: 0,
+      "name-location": 0,
+      advisor: 0,
+      unknown: 0,
+    },
     sourceFailures: { xero: 0, quickbooks: 0, website: 0 },
   };
   const normalized = [];
+  const jobQueues = [];
 
   for (const source of input.sources) {
     const adapter = adapters[source];
@@ -61,22 +77,38 @@ export const runPipeline = async ({
         onFailure({ source, location, stage: "search", error });
         continue;
       }
+      jobQueues.push({ source, location, adapter, items: [...items] });
+    }
+  }
 
-      for (const item of items) {
-        try {
-          const profile = await adapter.fetchProfile(item, { location });
-          summary.profilesFetched++;
-          const record = await adapter.normalize(profile, {
-            locationQuery: location,
-            includeRawData: input.includeRawData,
-          });
-          if (!record?.firmName)
-            throw new Error("Normalized profile has no firm name.");
-          normalized.push(record);
-        } catch (error) {
-          summary.sourceFailures[source]++;
-          onFailure({ source, location, stage: "profile", item, error });
-        }
+  let queueHasItems = true;
+  while (queueHasItems) {
+    queueHasItems = false;
+    for (const job of jobQueues) {
+      const item = job.items.shift();
+      if (!item) continue;
+      queueHasItems = true;
+      try {
+        const profile = await job.adapter.fetchProfile(item, {
+          location: job.location,
+        });
+        summary.profilesFetched++;
+        const record = await job.adapter.normalize(profile, {
+          locationQuery: job.location,
+          includeRawData: input.includeRawData,
+        });
+        if (!record?.firmName)
+          throw new Error("Normalized profile has no firm name.");
+        normalized.push(record);
+      } catch (error) {
+        summary.sourceFailures[job.source]++;
+        onFailure({
+          source: job.source,
+          location: job.location,
+          stage: "profile",
+          item,
+          error,
+        });
       }
     }
   }
@@ -87,6 +119,7 @@ export const runPipeline = async ({
     if (firms.has(key)) {
       firms.set(key, mergeFirms(firms.get(key), record));
       summary.duplicateMerges++;
+      summary.mergeReasons[mergeReasonFor(key)]++;
     } else {
       firms.set(key, record);
     }

@@ -1,3 +1,4 @@
+import { resolveLocation } from "../../location/locale-resolver.js";
 import { canonicalizeUrl, domainFromUrl } from "../../normalization/url.js";
 import { mapIndustries, mapServices } from "../../taxonomy/taxonomies.js";
 
@@ -35,6 +36,7 @@ export const normalizeXeroProfile = (
   { locationQuery, includeRawData },
 ) => {
   const description = profile.description ?? "";
+  const resolvedLocation = resolveLocation(locationQuery);
   const inferredLabels = /\bbusiness consult/iu.test(description)
     ? ["Business advisory"]
     : [];
@@ -53,7 +55,7 @@ export const normalizeXeroProfile = (
     : null;
   let city = null;
   if (region) city = addressParts.at(-2) ?? null;
-  else if (/\bLondon\b/iu.test(profile.address ?? "")) city = "London";
+  else if (resolvedLocation.city) city = resolvedLocation.city;
 
   return {
     firmName: profile.firmName,
@@ -65,8 +67,8 @@ export const normalizeXeroProfile = (
         city,
         region,
         postalCode: null,
-        country: "United Kingdom",
-        countryCode: "GB",
+        country: resolvedLocation.country,
+        countryCode: resolvedLocation.countryCode,
       },
     ],
     website,
