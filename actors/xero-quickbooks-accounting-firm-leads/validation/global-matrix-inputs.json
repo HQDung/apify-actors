@@ -1,0 +1,82 @@
+{
+  "defaults": {
+    "maxResults": 5,
+    "enrichWebsites": false,
+    "extractContacts": false,
+    "includeRawData": false,
+    "proxyConfiguration": { "useApifyProxy": false }
+  },
+  "cases": [
+    {
+      "id": "xero-london",
+      "sources": ["xero"],
+      "locations": ["London, United Kingdom"]
+    },
+    {
+      "id": "xero-new-york",
+      "sources": ["xero"],
+      "locations": ["New York, United States"]
+    },
+    {
+      "id": "xero-sydney",
+      "sources": ["xero"],
+      "locations": ["Sydney, Australia"]
+    },
+    { "id": "xero-singapore", "sources": ["xero"], "locations": ["Singapore"] },
+    {
+      "id": "quickbooks-london",
+      "sources": ["quickbooks"],
+      "locations": ["London, United Kingdom"]
+    },
+    {
+      "id": "quickbooks-new-york",
+      "sources": ["quickbooks"],
+      "locations": ["New York, United States"]
+    },
+    {
+      "id": "quickbooks-sydney",
+      "sources": ["quickbooks"],
+      "locations": ["Sydney, Australia"]
+    },
+    {
+      "id": "quickbooks-singapore",
+      "sources": ["quickbooks"],
+      "locations": ["Singapore"]
+    },
+    {
+      "id": "combined-london",
+      "sources": ["xero", "quickbooks"],
+      "locations": ["London, United Kingdom"]
+    },
+    {
+      "id": "combined-new-york",
+      "sources": ["xero", "quickbooks"],
+      "locations": ["New York, United States"]
+    },
+    {
+      "id": "combined-sydney",
+      "sources": ["xero", "quickbooks"],
+      "locations": ["Sydney, Australia"]
+    },
+    {
+      "id": "combined-singapore",
+      "sources": ["xero", "quickbooks"],
+      "locations": ["Singapore"]
+    },
+    {
+      "id": "quickbooks-london-soak-1",
+      "sources": ["quickbooks"],
+      "locations": ["London, United Kingdom"]
+    },
+    {
+      "id": "quickbooks-london-soak-2",
+      "sources": ["quickbooks"],
+      "locations": ["London, United Kingdom"]
+    },
+    {
+      "id": "quickbooks-london-soak-3",
+      "sources": ["quickbooks"],
+      "locations": ["London, United Kingdom"]
+    }
+  ]
+}

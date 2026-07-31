@@ -36,15 +36,25 @@ export const createSourceDiagnostic = ({
   contentType = null,
   responseSize = null,
   parsedItems = 0,
+  retryAttempts,
+  paginationPages,
+  partial,
   error = null,
-}) => ({
-  source,
-  location,
-  stage,
-  requestedUrl: sanitizeUrl(requestedUrl),
-  httpStatus: status,
-  contentType,
-  responseSize,
-  parsedItems,
-  error: error ? sanitizeError(error) : null,
-});
+}) => {
+  const diagnostic = {
+    source,
+    location,
+    stage,
+    requestedUrl: sanitizeUrl(requestedUrl),
+    httpStatus: status,
+    contentType,
+    responseSize,
+    parsedItems,
+    error: error ? sanitizeError(error) : null,
+  };
+  if (retryAttempts !== undefined) diagnostic.retryAttempts = retryAttempts;
+  if (paginationPages !== undefined)
+    diagnostic.paginationPages = paginationPages;
+  if (partial !== undefined) diagnostic.partial = partial;
+  return diagnostic;
+};

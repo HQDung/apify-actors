@@ -16,6 +16,10 @@ export const createXeroAdapter = ({
 } = {}) => {
   let context;
   let page;
+  const metrics = {
+    retryAttempts: 0,
+    paginationPages: 0,
+  };
 
   const getPage = async () => {
     if (!browser || !createContext) {
@@ -38,30 +42,38 @@ export const createXeroAdapter = ({
 
       let response;
       let responseSize = null;
+      let operationRetryAttempts = 0;
       try {
         const items = await retryOperation(
-          async () => {
-            response = await fetchImpl(requestedUrl, {
-              headers: { accept: "text/html,application/xhtml+xml" },
-              redirect: "follow",
-            });
-            const html = await response.text();
-            responseSize = Buffer.byteLength(html);
-            if (!response.ok) {
-              throw Object.assign(
-                new Error(`Xero search returned HTTP ${response.status}.`),
-                { status: response.status },
-              );
-            }
-            const contentType = response.headers.get("content-type");
-            if (!contentType?.toLocaleLowerCase().includes("text/html")) {
-              throw new Error(
-                "Xero search returned an unexpected content type.",
-              );
-            }
-            return parseXeroSearchHtml(html, limit);
+          () =>
+            withTimeout(async () => {
+              response = await fetchImpl(requestedUrl, {
+                headers: { accept: "text/html,application/xhtml+xml" },
+                redirect: "follow",
+              });
+              const html = await response.text();
+              responseSize = Buffer.byteLength(html);
+              if (!response.ok) {
+                throw Object.assign(
+                  new Error(`Xero search returned HTTP ${response.status}.`),
+                  { status: response.status },
+                );
+              }
+              const contentType = response.headers.get("content-type");
+              if (!contentType?.toLocaleLowerCase().includes("text/html")) {
+                throw new Error(
+                  "Xero search returned an unexpected content type.",
+                );
+              }
+              return parseXeroSearchHtml(html, limit);
+            }, 30_000),
+          {
+            delayMs: 50,
+            onRetry: async () => {
+              operationRetryAttempts += 1;
+              metrics.retryAttempts += 1;
+            },
           },
-          { delayMs: 50 },
         );
         const contentType = response.headers.get("content-type");
         onDiagnostic(
@@ -74,6 +86,7 @@ export const createXeroAdapter = ({
             contentType,
             responseSize,
             parsedItems: items.length,
+            retryAttempts: operationRetryAttempts,
           }),
         );
         return items;
@@ -87,6 +100,7 @@ export const createXeroAdapter = ({
             status: response?.status ?? null,
             contentType: response?.headers.get("content-type") ?? null,
             responseSize,
+            retryAttempts: operationRetryAttempts,
             error,
           }),
         );
@@ -96,6 +110,7 @@ export const createXeroAdapter = ({
     fetchProfile: async (item, { location } = {}) => {
       const activePage = await getPage();
       let response;
+      let operationRetryAttempts = 0;
       try {
         response = await retryOperation(
           () =>
@@ -106,11 +121,21 @@ export const createXeroAdapter = ({
                 }),
               30_000,
             ),
-          { delayMs: 50 },
+          {
+            delayMs: 50,
+            onRetry: async () => {
+              operationRetryAttempts += 1;
+              metrics.retryAttempts += 1;
+            },
+          },
         );
         const heading = activePage.locator("main h1");
         await retryOperation(() => heading.waitFor({ state: "visible" }), {
           delayMs: 50,
+          onRetry: async () => {
+            operationRetryAttempts += 1;
+            metrics.retryAttempts += 1;
+          },
         });
         const profile = await activePage.evaluate(
           ({ fallbackName }) => {
@@ -181,6 +206,7 @@ export const createXeroAdapter = ({
             contentType: headers["content-type"] ?? null,
             responseSize: responseSizeFrom(headers),
             parsedItems: 1,
+            retryAttempts: operationRetryAttempts,
           }),
         );
         return profile;
@@ -195,6 +221,7 @@ export const createXeroAdapter = ({
             status: response?.status() ?? null,
             contentType: headers["content-type"] ?? null,
             responseSize: responseSizeFrom(headers),
+            retryAttempts: operationRetryAttempts,
             error,
           }),
         );
@@ -202,6 +229,7 @@ export const createXeroAdapter = ({
       }
     },
     normalize: normalizeXeroProfile,
+    getMetrics: () => ({ ...metrics }),
     close: async () => context?.close(),
   };
 };

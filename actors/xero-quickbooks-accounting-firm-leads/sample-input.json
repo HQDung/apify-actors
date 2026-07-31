@@ -1,7 +1,7 @@
 {
   "locations": ["London, United Kingdom", "Sydney, Australia"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 20,
+  "maxResults": 5,
   "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,

@@ -96,6 +96,27 @@ describe("accounting firm leads Phase 1", () => {
     ).toBe(true);
   });
 
+  it("runs an awaited retry hook before the next attempt", async () => {
+    const events = [];
+    let attempts = 0;
+    await expect(
+      retryOperation(
+        async () => {
+          attempts += 1;
+          if (attempts === 1) throw new Error("navigation timeout");
+          return "ok";
+        },
+        {
+          delayMs: 0,
+          onRetry: async ({ attempt, nextAttempt }) => {
+            events.push([attempt, nextAttempt]);
+          },
+        },
+      ),
+    ).resolves.toBe("ok");
+    expect(events).toEqual([[1, 2]]);
+  });
+
   it("bounds operations that never settle", async () => {
     await expect(withTimeout(() => new Promise(() => {}), 5)).rejects.toThrow(
       "Operation timed out after 5ms.",
@@ -607,6 +628,134 @@ describe("accounting firm leads Phase 1", () => {
     expect(calls).toBe(2);
   });
 
+  it("recreates the QuickBooks page after a profile navigation timeout", async () => {
+    let pagesCreated = 0;
+    let firstPageClosed = false;
+    const response = {
+      status: () => 200,
+      headers: () => ({ "content-type": "text/html; charset=utf-8" }),
+    };
+    const firstPage = {
+      setDefaultTimeout: () => {},
+      setDefaultNavigationTimeout: () => {},
+      goto: async () => {
+        throw new Error("navigation timeout");
+      },
+      close: async () => {
+        firstPageClosed = true;
+      },
+    };
+    const secondPage = {
+      setDefaultTimeout: () => {},
+      setDefaultNavigationTimeout: () => {},
+      goto: async () => response,
+      waitForSelector: async () => {},
+      evaluate: async () => ({
+        id: "profile-1",
+        firmName: "Recovered Firm",
+        profileUrl: "https://proadvisor.intuit.com/profile-1",
+      }),
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({
+        newPage: async () => {
+          pagesCreated += 1;
+          return pagesCreated === 1 ? firstPage : secondPage;
+        },
+      }),
+    });
+
+    await expect(
+      adapter.fetchProfile(
+        {
+          id: "profile-1",
+          profileUrl: "https://proadvisor.intuit.com/profile-1",
+        },
+        { location: "London, United Kingdom" },
+      ),
+    ).resolves.toEqual(expect.objectContaining({ firmName: "Recovered Firm" }));
+    expect(pagesCreated).toBe(2);
+    expect(firstPageClosed).toBe(true);
+  });
+
+  it("does not retry deterministic QuickBooks profile failures", async () => {
+    let pagesCreated = 0;
+    const page = {
+      setDefaultTimeout: () => {},
+      setDefaultNavigationTimeout: () => {},
+      goto: async () => {
+        throw Object.assign(new Error("profile not found"), { status: 404 });
+      },
+      close: async () => {},
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({
+        newPage: async () => {
+          pagesCreated += 1;
+          return page;
+        },
+      }),
+    });
+
+    await expect(
+      adapter.fetchProfile(
+        {
+          id: "missing-profile",
+          profileUrl: "https://proadvisor.intuit.com/missing-profile",
+        },
+        { location: "London, United Kingdom" },
+      ),
+    ).rejects.toThrow("profile not found");
+    expect(pagesCreated).toBe(1);
+  });
+
+  it("keeps QuickBooks search-card data when a profile is unavailable", async () => {
+    const diagnostics = [];
+    const response = { status: () => 200, headers: () => ({}) };
+    const page = {
+      setDefaultTimeout: () => {},
+      setDefaultNavigationTimeout: () => {},
+      goto: async () => response,
+      waitForSelector: async () => {
+        throw new Error("profile not found");
+      },
+      close: async () => {},
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({ newPage: async () => page }),
+      onDiagnostic: (event) => diagnostics.push(event),
+    });
+
+    await expect(
+      adapter.fetchProfile(
+        {
+          id: "partial-profile",
+          fullName: "A. Advisor",
+          firmName: "Search Card Accounting",
+          address: "10 Example Street, London SW1A 1AA",
+          services: ["Bookkeeping"],
+          profileUrl:
+            "https://proadvisor.intuit.com/app/accountant/searchId=partial-profile",
+        },
+        { location: "London, United Kingdom" },
+      ),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        firmName: "Search Card Accounting",
+        partialProfile: true,
+      }),
+    );
+    expect(diagnostics.at(-1)).toEqual(
+      expect.objectContaining({ partial: true, parsedItems: 1 }),
+    );
+    expect(adapter.getMetrics()).toEqual(
+      expect.objectContaining({ partialProfiles: 1 }),
+    );
+  });
+
   it("loads additional QuickBooks result pages until the limit", async () => {
     let pageNumber = 0;
     const response = { status: () => 200, headers: () => ({}) };
@@ -958,6 +1107,35 @@ describe("accounting firm leads Phase 1", () => {
     });
     expect(partial.leads).toHaveLength(1);
     expect(partial.summary.sourceFailures.quickbooks).toBe(1);
+  });
+
+  it("exposes adapter retry and pagination metrics in the run summary", async () => {
+    const makeAdapter = (source, metrics) => ({
+      source,
+      search: async () => [],
+      fetchProfile: async () => null,
+      normalize: () => null,
+      getMetrics: () => metrics,
+    });
+    const result = await runPipeline({
+      input: validateInput({
+        locations: ["London"],
+        sources: ["xero", "quickbooks"],
+        maxResults: 5,
+      }),
+      adapters: {
+        xero: makeAdapter("xero", { retryAttempts: 1, paginationPages: 0 }),
+        quickbooks: makeAdapter("quickbooks", {
+          retryAttempts: 2,
+          paginationPages: 3,
+        }),
+      },
+    });
+    expect(result.summary.retryAttempts).toEqual({ xero: 1, quickbooks: 2 });
+    expect(result.summary.paginationPages).toEqual({
+      xero: 0,
+      quickbooks: 3,
+    });
   });
 
   it("interleaves source jobs before applying the final result cap", async () => {

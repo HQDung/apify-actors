@@ -32,7 +32,12 @@ export const withTimeout = (operation, milliseconds) => {
 
 export const retryOperation = async (
   operation,
-  { attempts = 3, delayMs = 250, shouldRetry = isRetryableError } = {},
+  {
+    attempts = 3,
+    delayMs = 250,
+    shouldRetry = isRetryableError,
+    onRetry = async () => {},
+  } = {},
 ) => {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
@@ -44,6 +49,7 @@ export const retryOperation = async (
       const backoff = delayMs * 2 ** (attempt - 1);
       const jitter =
         backoff > 0 ? Math.floor(Math.random() * Math.max(1, delayMs)) : 0;
+      await onRetry({ error, attempt, nextAttempt: attempt + 1 });
       await wait(backoff + jitter);
     }
   }

@@ -11,7 +11,7 @@
     "summary": {
       "type": "string",
       "title": "Run summary",
-      "description": "Normalized effective locations plus directory search, profile, result, merge-reason, and source-failure counters.",
+      "description": "Normalized effective locations plus directory search, profile, partial-profile, result, merge-reason, source-failure, retry-attempt, and rendered-pagination counters.",
       "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
     }
   }
