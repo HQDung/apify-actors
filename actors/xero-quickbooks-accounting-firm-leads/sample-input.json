@@ -1,7 +1,7 @@
 {
   "locations": ["London, United Kingdom"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 14,
+  "maxResults": 20,
   "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,

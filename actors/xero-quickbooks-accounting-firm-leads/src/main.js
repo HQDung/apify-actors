@@ -3,6 +3,7 @@ import { setTimeout } from "node:timers/promises";
 import { Actor, log } from "apify";
 import { chromium } from "playwright";
 
+import { createWebsiteEnricher } from "./enrichment/website-enricher.js";
 import {
   createSourceDiagnostic,
   sanitizeError,
@@ -54,9 +55,13 @@ try {
       onDiagnostic,
     });
   }
+  const websiteEnricher = input.enrichWebsites
+    ? createWebsiteEnricher({ onDiagnostic })
+    : null;
   const { leads, summary } = await runPipeline({
     input,
     adapters,
+    websiteEnricher,
     onFailure: ({ source, location, stage, error }) =>
       onDiagnostic(createSourceDiagnostic({ source, location, stage, error })),
   });

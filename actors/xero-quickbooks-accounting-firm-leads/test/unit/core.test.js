@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { firmKeyFor } from "../../src/deduplication/firm-key.js";
 import { mergeFirms } from "../../src/deduplication/merge-firms.js";
+import { createWebsiteEnricher } from "../../src/enrichment/website-enricher.js";
 import { resolveLocation } from "../../src/location/locale-resolver.js";
 import {
   createSourceDiagnostic,
@@ -839,9 +840,9 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
-  it("rejects the unavailable website enrichment option", () => {
-    expect(() => validateInput({ enrichWebsites: true })).toThrow(
-      "Website enrichment is not implemented. Remove enrichWebsites or set it to false.",
+  it("accepts bounded website enrichment as an explicit opt-in", () => {
+    expect(validateInput({ enrichWebsites: true })).toEqual(
+      expect.objectContaining({ enrichWebsites: true }),
     );
   });
 
@@ -1170,5 +1171,375 @@ describe("accounting firm leads Phase 1", () => {
       "xero",
       "quickbooks",
     ]);
+  });
+
+  it("enriches one canonical public domain with bounded contact extraction", async () => {
+    const requestedUrls = [];
+    const homepage = await readFile(
+      new URL("../fixtures/website/example-home.html", import.meta.url),
+      "utf8",
+    );
+    const contactPage = await readFile(
+      new URL("../fixtures/website/example-contact.html", import.meta.url),
+      "utf8",
+    );
+    const responses = new Map([
+      [
+        "https://example.com",
+        new Response(homepage, {
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      ],
+      [
+        "https://example.com/contact",
+        new Response(contactPage, {
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      ],
+    ]);
+    const enricher = createWebsiteEnricher({
+      fetchImpl: async (url) => {
+        requestedUrls.push(url);
+        return responses.get(url) ?? new Response("missing", { status: 404 });
+      },
+      timeoutMs: 100,
+      delayMs: 0,
+    });
+    const record = lead({
+      website: "https://www.example.com/",
+      domain: "example.com",
+      sourceRecords: [{ source: "xero", profileUrl: "https://xero.test/a" }],
+    });
+
+    const enriched = await enricher.enrich([record]);
+    expect(enriched[0].emails).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          email: "jane.smith@example.com",
+          source: "website",
+        }),
+        expect.objectContaining({
+          email: "accounts@example.com",
+          source: "website",
+        }),
+      ]),
+    );
+    expect(enriched[0].phoneNumbers).toContain("+4402012345678");
+    expect(enriched[0].socialLinks.linkedin).toBe(
+      "https://linkedin.com/company/example",
+    );
+    expect(enriched[0].contacts).toEqual(
+      expect.arrayContaining([expect.objectContaining({ name: "Jane Smith" })]),
+    );
+    expect(enriched[0].sourceRecords).toEqual(
+      expect.arrayContaining([expect.objectContaining({ source: "website" })]),
+    );
+    expect(requestedUrls).toEqual([
+      "https://example.com",
+      "https://example.com/contact",
+    ]);
+    expect(enricher.getMetrics()).toEqual(
+      expect.objectContaining({
+        attempts: 1,
+        successes: 1,
+        failures: 0,
+        pagesFetched: 2,
+        contactsFound: 1,
+      }),
+    );
+  });
+
+  it("deduplicates domains and caps website pages at three", async () => {
+    const requestedUrls = [];
+    const html =
+      '<html><body><a href="/contact">Contact</a><a href="/about">About</a><a href="/team">Team</a><a href="/services">Services</a><p>hello@example.com</p></body></html>';
+    const enricher = createWebsiteEnricher({
+      fetchImpl: async (url) => {
+        requestedUrls.push(url);
+        return new Response(html, {
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      },
+      timeoutMs: 100,
+      delayMs: 0,
+    });
+    const records = [
+      lead({
+        firmName: "One",
+        website: "https://example.com",
+        domain: "example.com",
+      }),
+      lead({
+        firmName: "Two",
+        website: "https://www.example.com/",
+        domain: "example.com",
+      }),
+    ];
+
+    const enriched = await enricher.enrich(records);
+    expect(requestedUrls).toHaveLength(3);
+    expect(new Set(requestedUrls)).toEqual(
+      new Set([
+        "https://example.com",
+        "https://example.com/contact",
+        "https://example.com/about",
+      ]),
+    );
+    expect(enriched[0].emails).toEqual(enriched[1].emails);
+    expect(enricher.getMetrics()).toEqual(
+      expect.objectContaining({ attempts: 1, successes: 1, failures: 0 }),
+    );
+  });
+
+  it("retries transient website responses and reports failed domains", async () => {
+    let calls = 0;
+    const diagnostics = [];
+    const enricher = createWebsiteEnricher({
+      fetchImpl: async (url) => {
+        calls += 1;
+        if (url.includes("missing.example"))
+          return new Response("missing", { status: 404 });
+        if (calls === 1) return new Response("busy", { status: 503 });
+        return new Response("<html><body>ready</body></html>", {
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      },
+      timeoutMs: 100,
+      delayMs: 0,
+      onDiagnostic: (event) => diagnostics.push(event),
+    });
+    const enriched = await enricher.enrich([
+      lead({ website: "https://retry.example", domain: "retry.example" }),
+      lead({ website: "https://missing.example", domain: "missing.example" }),
+    ]);
+
+    expect(enriched).toHaveLength(2);
+    expect(calls).toBe(3);
+    expect(enricher.getMetrics()).toEqual(
+      expect.objectContaining({
+        attempts: 2,
+        successes: 1,
+        failures: 1,
+        retryAttempts: 1,
+      }),
+    );
+    expect(diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ source: "website", stage: "page" }),
+      ]),
+    );
+  });
+
+  it("runs the website phase before finalizing leads and exposes its metrics", async () => {
+    const adapter = {
+      source: "xero",
+      search: async () => [{ profileUrl: "https://xero.test/example" }],
+      fetchProfile: async (item) => item,
+      normalize: () =>
+        lead({
+          website: "https://example.com",
+          domain: "example.com",
+          sourcePlatforms: ["xero"],
+          sourceRecords: [
+            { source: "xero", profileUrl: "https://xero.test/example" },
+          ],
+        }),
+    };
+    const websiteEnricher = {
+      enrich: async (records) => {
+        return records.map((record) => ({
+          ...record,
+          descriptionOriginal: "Website description",
+        }));
+      },
+      getMetrics: () => ({
+        attempts: 1,
+        successes: 1,
+        failures: 0,
+        pagesFetched: 1,
+        contactsFound: 0,
+        retryAttempts: 0,
+      }),
+    };
+    const result = await runPipeline({
+      input: validateInput({
+        locations: ["London"],
+        sources: ["xero"],
+        enrichWebsites: true,
+      }),
+      adapters: { xero: adapter },
+      websiteEnricher,
+    });
+
+    expect(result.leads[0].descriptionOriginal).toBe("Website description");
+    expect(result.leads[0].completenessScore).toBeGreaterThan(25);
+    expect(result.summary).toEqual(
+      expect.objectContaining({
+        websitesEnriched: 1,
+        websiteAttempts: 1,
+        websiteSuccesses: 1,
+        websiteFailures: 0,
+        websitePagesFetched: 1,
+      }),
+    );
+  });
+
+  it("keeps the disabled website path directory-only", async () => {
+    const adapter = {
+      source: "xero",
+      search: async () => [{ profileUrl: "https://xero.test/example" }],
+      fetchProfile: async (item) => item,
+      normalize: () =>
+        lead({
+          website: "https://example.com",
+          domain: "example.com",
+          sourcePlatforms: ["xero"],
+          sourceRecords: [
+            { source: "xero", profileUrl: "https://xero.test/example" },
+          ],
+        }),
+    };
+    let called = false;
+    const result = await runPipeline({
+      input: validateInput({ locations: ["London"], sources: ["xero"] }),
+      adapters: { xero: adapter },
+      websiteEnricher: {
+        enrich: async () => {
+          called = true;
+          throw new Error("must not run");
+        },
+      },
+    });
+    expect(called).toBe(false);
+    expect(result.summary).toEqual(
+      expect.objectContaining({
+        websitesEnriched: 0,
+        websiteAttempts: 0,
+        websiteSuccesses: 0,
+        websiteFailures: 0,
+      }),
+    );
+    expect(result.summary.retryAttempts).toEqual({ xero: 0, quickbooks: 0 });
+  });
+
+  it("skips non-HTML responses and bounds website timeouts", async () => {
+    const diagnostics = [];
+    const nonHtml = createWebsiteEnricher({
+      fetchImpl: async () =>
+        new Response("{}", {
+          headers: { "content-type": "application/json" },
+        }),
+      timeoutMs: 10,
+      delayMs: 0,
+      onDiagnostic: (event) => diagnostics.push(event),
+    });
+    await nonHtml.enrich([
+      lead({ website: "https://json.example", domain: "json.example" }),
+    ]);
+    expect(nonHtml.getMetrics()).toEqual(
+      expect.objectContaining({
+        attempts: 1,
+        successes: 0,
+        failures: 1,
+        retryAttempts: 0,
+      }),
+    );
+
+    const timeout = createWebsiteEnricher({
+      fetchImpl: () => new Promise(() => {}),
+      timeoutMs: 1,
+      delayMs: 0,
+    });
+    await timeout.enrich([
+      lead({ website: "https://timeout.example", domain: "timeout.example" }),
+    ]);
+    expect(timeout.getMetrics()).toEqual(
+      expect.objectContaining({ attempts: 1, successes: 0, failures: 1 }),
+    );
+    expect(diagnostics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          source: "website",
+          stage: "page",
+          error: expect.any(String),
+        }),
+      ]),
+    );
+  });
+
+  it("rejects IP hosts, validates redirects, and ignores malformed entities", async () => {
+    let ipCalls = 0;
+    const ipEnricher = createWebsiteEnricher({
+      fetchImpl: async () => {
+        ipCalls += 1;
+        return new Response("<html></html>", {
+          headers: { "content-type": "text/html" },
+        });
+      },
+      delayMs: 0,
+    });
+    await ipEnricher.enrich([
+      lead({ website: "https://[::1]", domain: "[::1]" }),
+    ]);
+    expect(ipCalls).toBe(0);
+    expect(ipEnricher.getMetrics()).toEqual(
+      expect.objectContaining({ attempts: 0, successes: 0, failures: 0 }),
+    );
+
+    const redirectUrls = [];
+    const redirectEnricher = createWebsiteEnricher({
+      fetchImpl: async (url) => {
+        redirectUrls.push(url);
+        if (url === "https://example.com")
+          return new Response("", {
+            status: 302,
+            headers: { location: "/contact" },
+          });
+        return new Response(
+          "<html><body><p>&#x110000; ready 2025-2026</p></body></html>",
+          {
+            headers: { "content-type": "text/html" },
+          },
+        );
+      },
+      timeoutMs: 100,
+      delayMs: 0,
+    });
+    const redirectLeads = await redirectEnricher.enrich([
+      lead({ website: "https://example.com", domain: "example.com" }),
+    ]);
+    expect(redirectUrls).toEqual([
+      "https://example.com",
+      "https://example.com/contact",
+    ]);
+    expect(redirectEnricher.getMetrics()).toEqual(
+      expect.objectContaining({
+        attempts: 1,
+        successes: 1,
+        failures: 0,
+        pagesFetched: 1,
+      }),
+    );
+    expect(redirectLeads[0].phoneNumbers).toEqual([]);
+
+    let privateRedirectCalls = 0;
+    const privateRedirectEnricher = createWebsiteEnricher({
+      fetchImpl: async () => {
+        privateRedirectCalls += 1;
+        return new Response("", {
+          status: 302,
+          headers: { location: "https://[::1]/private" },
+        });
+      },
+      timeoutMs: 100,
+      delayMs: 0,
+    });
+    await privateRedirectEnricher.enrich([
+      lead({ website: "https://redirect.example", domain: "redirect.example" }),
+    ]);
+    expect(privateRedirectCalls).toBe(1);
+    expect(privateRedirectEnricher.getMetrics()).toEqual(
+      expect.objectContaining({ attempts: 1, successes: 0, failures: 1 }),
+    );
   });
 });
