@@ -17,6 +17,11 @@ import {
 } from "../../src/normalization/contact.js";
 import { canonicalizeUrl, domainFromUrl } from "../../src/normalization/url.js";
 import { runPipeline } from "../../src/pipeline/run.js";
+import {
+  isRetryableError,
+  retryOperation,
+  withTimeout,
+} from "../../src/reliability/retry.js";
 import { validateInput } from "../../src/schemas/validators.js";
 import { completenessScoreFor } from "../../src/scoring/completeness.js";
 import {
@@ -64,6 +69,99 @@ const lead = (overrides = {}) => ({
 });
 
 describe("accounting firm leads Phase 1", () => {
+  it("retries transient operations and stops on deterministic errors", async () => {
+    let attempts = 0;
+    await expect(
+      retryOperation(
+        async () => {
+          attempts += 1;
+          if (attempts < 3)
+            throw Object.assign(new Error("busy"), { status: 503 });
+          return "ok";
+        },
+        { attempts: 3, delayMs: 0 },
+      ),
+    ).resolves.toBe("ok");
+    expect(attempts).toBe(3);
+
+    expect(
+      isRetryableError(
+        Object.assign(new Error("bad request"), { status: 400 }),
+      ),
+    ).toBe(false);
+    expect(
+      isRetryableError(
+        Object.assign(new Error("rate limited"), { status: 429 }),
+      ),
+    ).toBe(true);
+  });
+
+  it("bounds operations that never settle", async () => {
+    await expect(withTimeout(() => new Promise(() => {}), 5)).rejects.toThrow(
+      "Operation timed out after 5ms.",
+    );
+  });
+
+  it("accepts multiple normalized global locations without a hidden result floor", () => {
+    expect(
+      validateInput({
+        locations: [
+          " London, United Kingdom ",
+          "Sydney, Australia",
+          "London, United Kingdom",
+        ],
+        sources: ["xero", "quickbooks"],
+        maxResults: 10,
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        locations: ["London, United Kingdom", "Sydney, Australia"],
+        maxResults: 10,
+      }),
+    );
+  });
+
+  it("rejects empty locations and accepts an unknown country best-effort", () => {
+    expect(() => validateInput({ locations: ["", "  "] })).toThrow(
+      "locations must contain at least one non-empty value.",
+    );
+    expect(
+      validateInput({ locations: ["Reykjavik, Iceland"] }).locations,
+    ).toEqual(["Reykjavik, Iceland"]);
+  });
+
+  it("resolves guaranteed global country routes", () => {
+    expect(resolveLocation("Sydney, Australia")).toEqual(
+      expect.objectContaining({
+        city: "Sydney",
+        country: "Australia",
+        countryCode: "AU",
+        locale: "au",
+        xeroSearchUrl: expect.stringContaining("xero.com/au/"),
+        quickBooksSearchUrl: expect.stringContaining("region=au"),
+      }),
+    );
+    expect(resolveLocation("New York, United States")).toEqual(
+      expect.objectContaining({
+        city: "New York",
+        country: "United States",
+        countryCode: "US",
+        locale: "us",
+        xeroSearchUrl: expect.stringContaining("xero.com/us/"),
+        quickBooksSearchUrl: expect.stringContaining("region=us"),
+      }),
+    );
+    expect(resolveLocation("Singapore")).toEqual(
+      expect.objectContaining({
+        country: "Singapore",
+        countryCode: "SG",
+        locale: "sg",
+        xeroSearchUrl: expect.stringContaining("xero.com/sg/"),
+        quickBooksSearchUrl: expect.stringContaining("region=sg"),
+      }),
+    );
+  });
+
   it("resolves London and UK locale routes", () => {
     expect(resolveLocation("London, United Kingdom")).toEqual({
       query: "London, United Kingdom",
@@ -208,6 +306,27 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
+  it("uses the requested global locale when normalizing an Xero profile", () => {
+    const normalized = normalizeXeroProfile(
+      {
+        firmName: "Sydney Advisory",
+        profileUrl: "https://www.xero.com/au/advisors/example/",
+        address: "1 George Street, Sydney NSW 2000",
+      },
+      {
+        locationQuery: "Sydney, Australia",
+        includeRawData: false,
+      },
+    );
+    expect(normalized.locations[0]).toEqual(
+      expect.objectContaining({
+        city: "Sydney",
+        country: "Australia",
+        countryCode: "AU",
+      }),
+    );
+  });
+
   it("uses the resolved London URL and reports safe Xero search metadata", async () => {
     const html = await readFile(
       new URL("../fixtures/xero/london-search.html", import.meta.url),
@@ -245,6 +364,28 @@ describe("accounting firm leads Phase 1", () => {
         error: null,
       }),
     ]);
+  });
+
+  it("retries a transient Xero search response", async () => {
+    const html = await readFile(
+      new URL("../fixtures/xero/london-search.html", import.meta.url),
+      "utf8",
+    );
+    let calls = 0;
+    const adapter = createXeroAdapter({
+      fetchImpl: async () => {
+        calls += 1;
+        if (calls === 1) return new Response("busy", { status: 503 });
+        return new Response(html, {
+          status: 200,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        });
+      },
+    });
+    await expect(
+      adapter.search({ location: "London, United Kingdom", limit: 10 }),
+    ).resolves.toHaveLength(1);
+    expect(calls).toBe(2);
   });
 
   it("parses and normalizes public QuickBooks search and profile fixtures", async () => {
@@ -350,6 +491,34 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
+  it("parses Australian and Singapore QuickBooks addresses", () => {
+    expect(
+      parseQuickBooksAddress(["1 George Street", "Sydney NSW 2000"], {
+        country: "Australia",
+        countryCode: "AU",
+      }),
+    ).toEqual({
+      address: "1 George Street, Sydney NSW 2000",
+      city: "Sydney",
+      region: "NSW",
+      postalCode: "2000",
+      country: "Australia",
+      countryCode: "AU",
+    });
+    expect(
+      parseQuickBooksAddress(["10 Example Road", "Singapore 048622"], {
+        country: "Singapore",
+        countryCode: "SG",
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        city: "Singapore",
+        postalCode: "048622",
+        countryCode: "SG",
+      }),
+    );
+  });
+
   it("uses the UK route and emits safe QuickBooks search diagnostics", async () => {
     const actions = [];
     const diagnostics = [];
@@ -411,6 +580,88 @@ describe("accounting firm leads Phase 1", () => {
     ]);
   });
 
+  it("retries a transient QuickBooks navigation timeout", async () => {
+    let calls = 0;
+    const response = {
+      status: () => 200,
+      headers: () => ({ "content-type": "text/html; charset=utf-8" }),
+    };
+    const page = {
+      setDefaultTimeout: () => {},
+      goto: async () => {
+        calls += 1;
+        if (calls === 1) throw new Error("navigation timeout");
+        return response;
+      },
+      locator: () => ({ fill: async () => {}, press: async () => {} }),
+      waitForSelector: async () => {},
+      $$eval: async () => [],
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({ newPage: async () => page }),
+    });
+    await expect(
+      adapter.search({ location: "London, United Kingdom", limit: 10 }),
+    ).resolves.toHaveLength(0);
+    expect(calls).toBe(2);
+  });
+
+  it("loads additional QuickBooks result pages until the limit", async () => {
+    let pageNumber = 0;
+    const response = { status: () => 200, headers: () => ({}) };
+    const page = {
+      setDefaultTimeout: () => {},
+      goto: async () => response,
+      locator: () => ({ fill: async () => {}, press: async () => {} }),
+      waitForSelector: async () => {},
+      $$eval: async () => {
+        pageNumber += 1;
+        return [
+          {
+            id: `advisor-${pageNumber}`,
+            firmName: `Firm ${pageNumber}`,
+            profileUrl: `https://proadvisor.intuit.com/app/accountant/search?searchId=${pageNumber}`,
+          },
+        ];
+      },
+      $: async () => (pageNumber < 3 ? { click: async () => {} } : null),
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({ newPage: async () => page }),
+    });
+    await expect(
+      adapter.search({ location: "London, United Kingdom", limit: 3 }),
+    ).resolves.toHaveLength(3);
+  });
+
+  it("stops QuickBooks pagination when a page repeats", async () => {
+    const response = { status: () => 200, headers: () => ({}) };
+    const page = {
+      setDefaultTimeout: () => {},
+      goto: async () => response,
+      locator: () => ({ fill: async () => {}, press: async () => {} }),
+      waitForSelector: async () => {},
+      $$eval: async () => [
+        {
+          id: "same-advisor",
+          firmName: "Same Firm",
+          profileUrl:
+            "https://proadvisor.intuit.com/app/accountant/search?searchId=same",
+        },
+      ],
+      $: async () => ({ click: async () => {} }),
+    };
+    const adapter = createQuickBooksAdapter({
+      browser: {},
+      createContext: async () => ({ newPage: async () => page }),
+    });
+    await expect(
+      adapter.search({ location: "London, United Kingdom", limit: 3 }),
+    ).resolves.toHaveLength(1);
+  });
+
   it("validates, trims, and deduplicates the public input", () => {
     expect(
       validateInput({
@@ -420,7 +671,7 @@ describe("accounting firm leads Phase 1", () => {
       }),
     ).toEqual(
       expect.objectContaining({
-        locations: ["London, United Kingdom"],
+        locations: ["Legacy location"],
         sources: ["xero"],
         maxResults: 25,
         enrichWebsites: false,
@@ -445,14 +696,14 @@ describe("accounting firm leads Phase 1", () => {
     );
   });
 
-  it("sets a combined-source minimum of 14 results", () => {
+  it("preserves the requested combined-source result cap", () => {
     expect(
       validateInput({
         locations: ["London"],
         sources: ["xero", "quickbooks"],
         maxResults: 10,
       }).maxResults,
-    ).toBe(14);
+    ).toBe(10);
   });
 
   it("preserves combined-source requests at the 14-result minimum", () => {
@@ -684,13 +935,14 @@ describe("accounting firm leads Phase 1", () => {
       }),
     );
     expect(result.summary.resultsPushed).toBe(1);
+    expect(result.summary.mergeReasons.domain).toBe(1);
     expect(xeroProfileContext).toEqual({
-      location: "London, United Kingdom",
+      location: "Legacy location",
     });
     expect(result.summary.effectiveInput).toEqual({
-      locations: ["London, United Kingdom"],
+      locations: ["Legacy location"],
       sources: ["xero", "quickbooks"],
-      maxResults: 14,
+      maxResults: 1,
       enrichWebsites: false,
       extractContacts: false,
       includeRawData: false,
@@ -706,5 +958,39 @@ describe("accounting firm leads Phase 1", () => {
     });
     expect(partial.leads).toHaveLength(1);
     expect(partial.summary.sourceFailures.quickbooks).toBe(1);
+  });
+
+  it("interleaves source jobs before applying the final result cap", async () => {
+    const makeAdapter = (source, names) => ({
+      source,
+      search: async () =>
+        names.map((firmName) => ({
+          firmName,
+          profileUrl: `https://${source}.test/${firmName}`,
+        })),
+      fetchProfile: async (item) => item,
+      normalize: (profile) =>
+        lead({
+          firmName: profile.firmName,
+          sourcePlatforms: [source],
+          sourceRecords: [{ source, profileUrl: profile.profileUrl }],
+        }),
+    });
+    const result = await runPipeline({
+      input: validateInput({
+        locations: ["London, United Kingdom"],
+        sources: ["xero", "quickbooks"],
+        maxResults: 2,
+        extractContacts: false,
+      }),
+      adapters: {
+        xero: makeAdapter("xero", ["Xero One", "Xero Two"]),
+        quickbooks: makeAdapter("quickbooks", ["QuickBooks One"]),
+      },
+    });
+    expect(result.leads.map((item) => item.sourcePlatforms[0])).toEqual([
+      "xero",
+      "quickbooks",
+    ]);
   });
 });

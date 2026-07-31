@@ -1,6 +1,8 @@
 {
+  "locations": ["London, United Kingdom", "Sydney, Australia"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 14,
+  "maxResults": 20,
+  "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,
   "proxyConfiguration": { "useApifyProxy": false }

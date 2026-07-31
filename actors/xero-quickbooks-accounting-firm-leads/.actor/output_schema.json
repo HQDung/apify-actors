@@ -1,17 +1,17 @@
 {
   "actorOutputSchemaVersion": 1,
-  "title": "London Xero & QuickBooks Accounting Firm Leads Output",
+  "title": "Global Xero & QuickBooks Accounting Firm Leads Output",
   "properties": {
     "dataset": {
       "type": "string",
       "title": "Lead dataset",
-      "description": "Deduplicated London, United Kingdom accounting firms with Xero and QuickBooks source provenance.",
+      "description": "Deduplicated accounting firms across requested locations with Xero and QuickBooks source provenance.",
       "template": "{{datasetUrl}}"
     },
     "summary": {
       "type": "string",
       "title": "Run summary",
-      "description": "Normalized effective London input plus directory search, profile, result, and source-failure counters.",
+      "description": "Normalized effective locations plus directory search, profile, result, merge-reason, and source-failure counters.",
       "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/OUTPUT"
     }
   }

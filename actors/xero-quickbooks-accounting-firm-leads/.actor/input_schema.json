@@ -1,9 +1,19 @@
 {
-  "title": "London Xero & QuickBooks Accounting Firm Leads",
-  "description": "Find public accounting firm and advisor profiles in London, United Kingdom, from Xero and QuickBooks directories. Website enrichment is not available.",
+  "title": "Global Xero & QuickBooks Accounting Firm Leads",
+  "description": "Find public accounting firm and advisor profiles worldwide from Xero and QuickBooks directories. Website enrichment is reserved for a later phase.",
   "type": "object",
   "schemaVersion": 1,
   "properties": {
+    "locations": {
+      "title": "Locations",
+      "type": "array",
+      "description": "Cities, regions, postcodes, or countries to search. UK, US, Australia, and Singapore routes are validated first; other locations are best-effort.",
+      "editor": "stringList",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "maxItems": 20,
+      "default": ["London, United Kingdom"]
+    },
     "sources": {
       "title": "Sources",
       "type": "array",
@@ -23,8 +33,8 @@
     "maxResults": {
       "title": "Maximum leads",
       "type": "integer",
-      "description": "Maximum number of final deduplicated London leads. When both Xero and QuickBooks are selected, values below 14 are normalized to a combined-source floor of 14; single-source runs are unchanged.",
-      "default": 14,
+      "description": "Maximum number of final deduplicated leads across all locations and sources.",
+      "default": 100,
       "minimum": 1,
       "maximum": 5000
     },
@@ -32,6 +42,12 @@
       "title": "Extract public contact people",
       "type": "boolean",
       "description": "Extract publicly listed accounting-firm contacts.",
+      "default": false
+    },
+    "enrichWebsites": {
+      "title": "Enrich company websites",
+      "type": "boolean",
+      "description": "Reserved for the website-enrichment phase. Keep disabled for the current directory-only implementation.",
       "default": false
     },
     "includeRawData": {
@@ -47,5 +63,6 @@
       "editor": "proxy",
       "default": { "useApifyProxy": false }
     }
-  }
+  },
+  "required": ["locations"]
 }

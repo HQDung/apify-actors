@@ -1,10 +1,10 @@
-# London Xero & QuickBooks Accounting Firm Leads
+# Global Xero & QuickBooks Accounting Firm Leads
 
-Find and normalize public accounting firm and advisor profiles from the Xero and QuickBooks directories in London, United Kingdom. The Actor is designed for accounting-software sales, fintech prospecting, partner research, recruitment, and market analysis.
+Find and normalize public accounting firm and advisor profiles from the Xero and QuickBooks directories worldwide. The Actor is designed for accounting-software sales, fintech prospecting, partner research, recruitment, and market analysis.
 
 ## Current checkpoint
 
-The Xero and QuickBooks adapters are live public-directory implementations. The location is fixed to London, United Kingdom and resolves to UK-specific routes: Xero parses the server-rendered advisor data and visits public profiles, while QuickBooks drives its JavaScript search UI and public GraphQL-backed results. Website enrichment is unavailable.
+The Xero and QuickBooks adapters are public-directory implementations. Locations are supplied by the user; UK, US, Australia, and Singapore routes are validated first, while other locations use best-effort routing. Xero parses server-rendered advisor data and visits public profiles, while QuickBooks drives its JavaScript search UI. Website enrichment is reserved for a later phase.
 
 ## Input
 
@@ -12,15 +12,17 @@ Use [sample-input.json](sample-input.json):
 
 ```json
 {
+  "locations": ["London, United Kingdom", "Sydney, Australia"],
   "sources": ["xero", "quickbooks"],
-  "maxResults": 14,
+  "maxResults": 20,
+  "enrichWebsites": false,
   "extractContacts": false,
   "includeRawData": false,
   "proxyConfiguration": { "useApifyProxy": false }
 }
 ```
 
-The Actor always searches London, United Kingdom; there is no public location input. Legacy API payloads that include `locations` are ignored and canonicalized to London. The Actor returns at most `maxResults` (1–5,000) final deduplicated leads. When both Xero and QuickBooks are selected, a `maxResults` value below 14 is automatically normalized to 14 so both directories can contribute; single-source runs use the configured value unchanged. `enrichWebsites: true` is rejected because website enrichment is unavailable.
+`locations` accepts 1–20 trimmed, unique cities, regions, postcodes, or countries. The Actor returns at most `maxResults` (1–5,000) final deduplicated leads across all requested jobs. Source jobs are interleaved before the final cap so one directory cannot monopolize the output. `enrichWebsites: true` is rejected until the bounded website-enrichment phase is implemented.
 
 ## Output fields
 
@@ -53,12 +55,12 @@ npm run build
 apify validate-schema
 ```
 
-Both sources have passed independent London live runs with directory items and profiles fetched. Website enrichment is unavailable, so these are directory-only results. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, and sanitized error. They never include cookies, tokens, full HTML, or sensitive headers.
+Both sources have passed independent London live runs with directory items and profiles fetched. The global contract and source behavior are covered by fixtures and unit tests; live validation for the initial UK/US/Australia/Singapore matrix remains the next benchmark checkpoint. Website enrichment is unavailable, so these are directory-only results. Source diagnostics report the source, location, stage, sanitized requested URL, HTTP status, content type, response size when available, parsed-item count, retry-safe errors, and merge reasons. They never include cookies, tokens, full HTML, or sensitive headers.
 
 ## Limitations and responsible use
 
-Coverage and fields are limited to what the London, United Kingdom directory routes publish. Xero's UK city page currently exposes five featured advisors; its full-results link returns 404. QuickBooks currently parses the first rendered result page; cursor pagination is not implemented. The QuickBooks UK directory requires JavaScript/browser interaction, a UK region parameter, a city-only location term, and a short debounced search wait; no cookie acceptance, authentication, or CAPTCHA bypass was required. Website enrichment is unavailable. The Actor processes public business data only, does not bypass authentication or CAPTCHA, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
+Coverage and fields are limited to what each public directory route publishes. Xero city pages may expose featured advisors only when their full-results route is unavailable. QuickBooks requires JavaScript/browser interaction and may vary by regional route; rendered pagination is bounded and stops on exhaustion or repeated cards. Network, 429/5xx, and navigation-timeout failures receive bounded retries. No authentication or CAPTCHA bypass is used. Website enrichment is unavailable. The Actor processes public business data only, does not guess emails, and does not infer certifications without explicit source evidence. Users must comply with applicable platform terms, privacy rules, and marketing laws.
 
 ## Tiếng Việt
 
-Actor chuẩn hóa hồ sơ công khai của công ty kế toán và chuyên gia tại London, United Kingdom từ danh bạ Xero và QuickBooks. Đây là đầu ra chỉ từ danh bạ; không có nhập địa điểm công khai và không có làm giàu website. Dữ liệu phân loại dùng ID tiếng Anh ổn định, còn nội dung gốc và nguồn dữ liệu được giữ lại. Không đoán email hoặc chứng chỉ; trường không chắc chắn được trả về `null` hoặc mảng rỗng.
+Actor chuẩn hóa hồ sơ công khai của công ty kế toán và chuyên gia theo các địa điểm người dùng cung cấp từ danh bạ Xero và QuickBooks. Đây là đầu ra chỉ từ danh bạ; làm giàu website chưa được bật. Dữ liệu phân loại dùng ID tiếng Anh ổn định, còn nội dung gốc và nguồn dữ liệu được giữ lại. Không đoán email hoặc chứng chỉ; trường không chắc chắn được trả về `null` hoặc mảng rỗng.

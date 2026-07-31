@@ -1,5 +1,6 @@
 import { resolveLocation } from "../../location/locale-resolver.js";
 import { createSourceDiagnostic } from "../../logging/source-diagnostics.js";
+import { retryOperation, withTimeout } from "../../reliability/retry.js";
 import {
   normalizeQuickBooksProfile,
   parseQuickBooksSearchCards,
@@ -34,6 +35,7 @@ export const createQuickBooksAdapter = ({
     if (!context) context = await createContext(browser);
     if (!page) page = await context.newPage();
     page.setDefaultTimeout(30_000);
+    page.setDefaultNavigationTimeout?.(30_000);
     return page;
   };
 
@@ -44,47 +46,79 @@ export const createQuickBooksAdapter = ({
       const { requestedUrl, searchTerm } = quickBooksSearchRequestFor(location);
       let response;
       try {
-        response = await activePage.goto(requestedUrl, {
-          waitUntil: "domcontentloaded",
-        });
-        const locationInput = activePage.locator("#idsTxtField1");
-        await locationInput.fill(searchTerm);
-        await locationInput.press("Enter");
-        await activePage.waitForSelector(
-          '[data-automation-id^="mm_srp_search_card_"]',
+        const items = await retryOperation(
+          async () => {
+            response = await activePage.goto(requestedUrl, {
+              waitUntil: "domcontentloaded",
+            });
+            const locationInput = activePage.locator("#idsTxtField1");
+            await locationInput.fill(searchTerm);
+            await locationInput.press("Enter");
+            await activePage.waitForSelector(
+              '[data-automation-id^="mm_srp_search_card_"]',
+            );
+            const readCards = () =>
+              activePage.$$eval(
+                '[data-automation-id^="mm_srp_search_card_"]',
+                (nodes) =>
+                  nodes.map((card) => {
+                    const text = (id) =>
+                      card
+                        .querySelector(`[data-automation-id="${id}"]`)
+                        ?.textContent?.trim() ?? null;
+                    const link = card.querySelector('a[href*="searchId="]');
+                    const profileUrl = link
+                      ? new URL(link.href, location.href).href
+                      : null;
+                    return {
+                      id: card
+                        .getAttribute("data-automation-id")
+                        ?.replace(/^mm_srp_search_card_/u, ""),
+                      fullName: text("mm_srp_full_name_read"),
+                      firmName: text("mm_srp_firm_name_read"),
+                      address: text("mm_srp_address_name_read"),
+                      description: text("mm_srp_description_read"),
+                      services: [
+                        ...card.querySelectorAll(
+                          '[data-automation-id="mm_srp_services_list"] li',
+                        ),
+                      ]
+                        .map((item) => item.textContent.trim())
+                        .filter(Boolean),
+                      profileUrl,
+                    };
+                  }),
+              );
+            const cards = [];
+            const seenIds = new Set();
+            while (cards.length < limit) {
+              const previousLength = cards.length;
+              const nextCards = await readCards();
+              for (const card of nextCards) {
+                const key = card.id ?? card.profileUrl;
+                if (!key || seenIds.has(key)) continue;
+                seenIds.add(key);
+                cards.push(card);
+              }
+              if (
+                cards.length >= limit ||
+                cards.length === previousLength ||
+                typeof activePage.$ !== "function"
+              )
+                break;
+              const nextButton = await activePage.$(
+                'button[aria-label*="next" i], [data-automation-id*="next" i]',
+              );
+              if (!nextButton) break;
+              await nextButton.click();
+              await activePage.waitForSelector(
+                '[data-automation-id^="mm_srp_search_card_"]',
+              );
+            }
+            return parseQuickBooksSearchCards(cards, limit);
+          },
+          { delayMs: 50 },
         );
-        const cards = await activePage.$$eval(
-          '[data-automation-id^="mm_srp_search_card_"]',
-          (nodes) =>
-            nodes.map((card) => {
-              const text = (id) =>
-                card
-                  .querySelector(`[data-automation-id="${id}"]`)
-                  ?.textContent?.trim() ?? null;
-              const link = card.querySelector('a[href*="searchId="]');
-              const profileUrl = link
-                ? new URL(link.href, location.href).href
-                : null;
-              return {
-                id: card
-                  .getAttribute("data-automation-id")
-                  ?.replace(/^mm_srp_search_card_/u, ""),
-                fullName: text("mm_srp_full_name_read"),
-                firmName: text("mm_srp_firm_name_read"),
-                address: text("mm_srp_address_name_read"),
-                description: text("mm_srp_description_read"),
-                services: [
-                  ...card.querySelectorAll(
-                    '[data-automation-id="mm_srp_services_list"] li',
-                  ),
-                ]
-                  .map((item) => item.textContent.trim())
-                  .filter(Boolean),
-                profileUrl,
-              };
-            }),
-        );
-        const items = parseQuickBooksSearchCards(cards, limit);
         onDiagnostic(
           createSourceDiagnostic({
             source: "quickbooks",
@@ -114,11 +148,23 @@ export const createQuickBooksAdapter = ({
       const activePage = await getPage();
       let response;
       try {
-        response = await activePage.goto(item.profileUrl, {
-          waitUntil: "domcontentloaded",
-        });
-        await activePage.waitForSelector(
-          '[data-automation-id="mm_full_name_read"]',
+        response = await retryOperation(
+          () =>
+            withTimeout(
+              () =>
+                activePage.goto(item.profileUrl, {
+                  waitUntil: "domcontentloaded",
+                }),
+              30_000,
+            ),
+          { delayMs: 50 },
+        );
+        await retryOperation(
+          () =>
+            activePage.waitForSelector(
+              '[data-automation-id="mm_full_name_read"]',
+            ),
+          { delayMs: 50 },
         );
         const profile = await activePage.evaluate(
           ({ id, profileUrl }) => {

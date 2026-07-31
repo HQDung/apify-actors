@@ -1,5 +1,6 @@
 import { resolveLocation } from "../../location/locale-resolver.js";
 import { createSourceDiagnostic } from "../../logging/source-diagnostics.js";
+import { retryOperation, withTimeout } from "../../reliability/retry.js";
 import { normalizeXeroProfile, parseXeroSearchHtml } from "./xero-parser.js";
 
 const responseSizeFrom = (headers) => {
@@ -23,6 +24,7 @@ export const createXeroAdapter = ({
     if (!context) context = await createContext(browser);
     if (!page) page = await context.newPage();
     page.setDefaultTimeout(30_000);
+    page.setDefaultNavigationTimeout?.(30_000);
     return page;
   };
 
@@ -37,20 +39,31 @@ export const createXeroAdapter = ({
       let response;
       let responseSize = null;
       try {
-        response = await fetchImpl(requestedUrl, {
-          headers: { accept: "text/html,application/xhtml+xml" },
-          redirect: "follow",
-        });
-        const html = await response.text();
-        responseSize = Buffer.byteLength(html);
-        if (!response.ok) {
-          throw new Error(`Xero search returned HTTP ${response.status}.`);
-        }
+        const items = await retryOperation(
+          async () => {
+            response = await fetchImpl(requestedUrl, {
+              headers: { accept: "text/html,application/xhtml+xml" },
+              redirect: "follow",
+            });
+            const html = await response.text();
+            responseSize = Buffer.byteLength(html);
+            if (!response.ok) {
+              throw Object.assign(
+                new Error(`Xero search returned HTTP ${response.status}.`),
+                { status: response.status },
+              );
+            }
+            const contentType = response.headers.get("content-type");
+            if (!contentType?.toLocaleLowerCase().includes("text/html")) {
+              throw new Error(
+                "Xero search returned an unexpected content type.",
+              );
+            }
+            return parseXeroSearchHtml(html, limit);
+          },
+          { delayMs: 50 },
+        );
         const contentType = response.headers.get("content-type");
-        if (!contentType?.toLocaleLowerCase().includes("text/html")) {
-          throw new Error("Xero search returned an unexpected content type.");
-        }
-        const items = parseXeroSearchHtml(html, limit);
         onDiagnostic(
           createSourceDiagnostic({
             source: "xero",
@@ -84,11 +97,21 @@ export const createXeroAdapter = ({
       const activePage = await getPage();
       let response;
       try {
-        response = await activePage.goto(item.profileUrl, {
-          waitUntil: "domcontentloaded",
-        });
+        response = await retryOperation(
+          () =>
+            withTimeout(
+              () =>
+                activePage.goto(item.profileUrl, {
+                  waitUntil: "domcontentloaded",
+                }),
+              30_000,
+            ),
+          { delayMs: 50 },
+        );
         const heading = activePage.locator("main h1");
-        await heading.waitFor({ state: "visible" });
+        await retryOperation(() => heading.waitFor({ state: "visible" }), {
+          delayMs: 50,
+        });
         const profile = await activePage.evaluate(
           ({ fallbackName }) => {
             const main = document.querySelector("main");
