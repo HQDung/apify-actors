@@ -2,6 +2,10 @@ export {
   ANALYSIS_SCHEMA_VERSION,
   validateAnalysisResult,
 } from "./contracts/analysis-result.js";
+export { analyzeFeedback } from "./analysis/analyze-feedback.js";
+export { buildAnalysisPrompt } from "./analysis/prompt.js";
+export { normalizeAnalysisConfidence, normalizeConfidence } from "./analysis/normalize-confidence.js";
+export { createUsageStats } from "./analysis/usage.js";
 export { validateAggregateReport } from "./contracts/aggregate-report.js";
 export { validateClusterRecord } from "./contracts/cluster-record.js";
 export {
