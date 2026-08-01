@@ -8,6 +8,7 @@ const MODES = new Set([
 ]);
 const GOOGLE_PLAY_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]+$/;
 const APP_STORE_ID_PATTERN = /^\d+$/;
+const ANALYSIS_OUTPUT_LANGUAGES = new Set(["english", "original"]);
 
 const invalid = (code, message) => {
   const error = new Error(`${code}: ${message}`);
@@ -257,6 +258,14 @@ export const normalizeInput = (input = {}) => {
       "analysis.enabled must be true for releaseComparison",
     );
 
+  const analysisInput = input.analysis ?? {};
+  const outputLanguage = analysisInput.outputLanguage ?? "english";
+  if (!ANALYSIS_OUTPUT_LANGUAGES.has(outputLanguage))
+    throw invalid(
+      "INVALID_INPUT",
+      `analysis.outputLanguage must be one of: ${[...ANALYSIS_OUTPUT_LANGUAGES].join(", ")}`,
+    );
+
   return {
     mode,
     products,
@@ -313,7 +322,28 @@ export const normalizeInput = (input = {}) => {
         true,
         "analysis.enabled",
       ),
-      outputLanguage: input.analysis?.outputLanguage ?? "english",
+      outputLanguage,
+      maxAttempts: bounded(
+        analysisInput.maxAttempts,
+        2,
+        1,
+        3,
+        "analysis.maxAttempts",
+      ),
+      maxReviewsToAnalyze: bounded(
+        analysisInput.maxReviewsToAnalyze,
+        1000,
+        1,
+        5000,
+        "analysis.maxReviewsToAnalyze",
+      ),
+      cacheMaxEntries: bounded(
+        analysisInput.cacheMaxEntries,
+        1000,
+        1,
+        5000,
+        "analysis.cacheMaxEntries",
+      ),
       includeSummary: booleanOrDefault(
         input.analysis?.includeSummary,
         true,

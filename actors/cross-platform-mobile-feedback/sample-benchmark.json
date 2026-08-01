@@ -17,7 +17,12 @@
   "maxReviewsPerPlatform": 1000,
   "requestTimeoutSecs": 30,
   "maxPagesPerPlatform": 10,
-  "analysis": { "enabled": true },
+  "analysis": {
+    "enabled": true,
+    "maxAttempts": 2,
+    "maxReviewsToAnalyze": 1000,
+    "cacheMaxEntries": 1000
+  },
   "comparison": { "enabled": true },
   "aggregation": { "enabled": true }
 }

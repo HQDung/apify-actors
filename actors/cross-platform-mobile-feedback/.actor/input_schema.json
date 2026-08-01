@@ -227,6 +227,33 @@
           "enum": ["english", "original"],
           "default": "english"
         },
+        "maxAttempts": {
+          "title": "Maximum provider attempts",
+          "description": "Maximum analysis provider attempts per review before fallback.",
+          "type": "integer",
+          "editor": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 3
+        },
+        "maxReviewsToAnalyze": {
+          "title": "Maximum reviews to analyze",
+          "description": "Cost cap for per-review analysis; raw reviews remain available beyond this limit.",
+          "type": "integer",
+          "editor": "number",
+          "default": 1000,
+          "minimum": 1,
+          "maximum": 5000
+        },
+        "cacheMaxEntries": {
+          "title": "Analysis cache entries",
+          "description": "Maximum in-memory analysis results retained during this run.",
+          "type": "integer",
+          "editor": "number",
+          "default": 1000,
+          "minimum": 1,
+          "maximum": 5000
+        },
         "includeSummary": {
           "title": "Include summary",
           "description": "Include analysis summaries.",

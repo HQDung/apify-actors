@@ -9,6 +9,7 @@
   "dependencies": {
     "apify": "^3.7.0",
     "@project/cross-platform-comparison-core": "file:vendor/project-cross-platform-comparison-core-1.0.0.tgz",
+    "@project/feedback-analysis-core": "file:vendor/project-feedback-analysis-core-1.0.0.tgz",
     "@project/mobile-feedback-source-adapters": "file:vendor/project-mobile-feedback-source-adapters-1.0.0.tgz"
   },
   "devDependencies": {

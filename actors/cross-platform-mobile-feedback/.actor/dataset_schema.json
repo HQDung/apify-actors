@@ -14,6 +14,13 @@
           "review.rating",
           "review.text",
           "review.createdAt",
+          "analysis.analysisStatus",
+          "analysis.primaryFeedbackType",
+          "analysis.sentiment",
+          "analysis.severity",
+          "analysis.topics",
+          "analysis.summary",
+          "analysis.actionabilityScore",
           "classification",
           "canonicalIssue",
           "androidMentions",
@@ -36,6 +43,22 @@
           "review.rating": { "label": "Rating", "format": "number" },
           "review.text": { "label": "Review", "format": "text" },
           "review.createdAt": { "label": "Created at", "format": "text" },
+          "analysis.analysisStatus": {
+            "label": "Analysis status",
+            "format": "text"
+          },
+          "analysis.primaryFeedbackType": {
+            "label": "Feedback type",
+            "format": "text"
+          },
+          "analysis.sentiment": { "label": "Sentiment", "format": "text" },
+          "analysis.severity": { "label": "Severity", "format": "text" },
+          "analysis.topics": { "label": "Topics", "format": "text" },
+          "analysis.summary": { "label": "Analysis summary", "format": "text" },
+          "analysis.actionabilityScore": {
+            "label": "Actionability",
+            "format": "number"
+          },
           "classification": { "label": "Classification", "format": "text" },
           "canonicalIssue": { "label": "Issue", "format": "text" },
           "androidMentions": {

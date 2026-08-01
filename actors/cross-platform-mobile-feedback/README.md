@@ -26,9 +26,11 @@ IDs take precedence over parsed URL values. The Actor rejects duplicate Google P
 
 ## Current phase output
 
-The collection phase writes normalized `review`, `sourceDiagnostic`, and platform-scoped `runError` dataset records, plus `NORMALIZED_INPUT` and `RUN_STATS`. A mapping error is stored as a scoped `RUN_ERROR` and the Actor fails fast; a source request failure preserves successful records from other platforms.
+The analysis phase writes normalized `review`, `reviewAnalysis`, `sourceDiagnostic`, and platform-scoped `runError` dataset records, plus `NORMALIZED_INPUT` and `RUN_STATS`. A mapping error is stored as a scoped `RUN_ERROR` and the Actor fails fast; source or analysis failures preserve raw reviews and successful records from other platforms.
 
 Source collection is bounded by `maxReviewsPerPlatform`, `requestTimeoutSecs`, and `maxPagesPerPlatform`. Google Play uses its public review HTML surface; Apple uses the public RSS/JSON customer-review feed. Store coverage, pagination, and rate limits are recorded in diagnostics.
+
+When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost.
 
 ## Limitations
 

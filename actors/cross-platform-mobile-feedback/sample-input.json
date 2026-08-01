@@ -17,6 +17,9 @@
   "analysis": {
     "enabled": true,
     "outputLanguage": "english",
+    "maxAttempts": 2,
+    "maxReviewsToAnalyze": 1000,
+    "cacheMaxEntries": 1000,
     "clusterSimilarIssues": true
   },
   "comparison": {

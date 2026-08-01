@@ -40,6 +40,9 @@ test("normalizes explicit product identity and gives IDs precedence over URLs", 
   assert.deepEqual(input.languages, ["en", "vi"]);
   assert.equal(input.requestTimeoutSecs, 30);
   assert.equal(input.maxPagesPerPlatform, 10);
+  assert.equal(input.analysis.maxAttempts, 2);
+  assert.equal(input.analysis.maxReviewsToAnalyze, 1000);
+  assert.equal(input.analysis.cacheMaxEntries, 1000);
 });
 
 test("normalizes bounded source collection controls", () => {
@@ -52,6 +55,28 @@ test("normalizes bounded source collection controls", () => {
   assert.equal(input.maxPagesPerPlatform, 4);
   assert.throws(
     () => normalizeInput({ products: [pair], requestTimeoutSecs: 0 }),
+    /INVALID_INPUT/,
+  );
+});
+
+test("validates analysis output language and cost controls", () => {
+  const input = normalizeInput({
+    products: [pair],
+    analysis: {
+      outputLanguage: "original",
+      maxAttempts: 1,
+      maxReviewsToAnalyze: 20,
+      cacheMaxEntries: 20,
+    },
+  });
+  assert.equal(input.analysis.outputLanguage, "original");
+  assert.equal(input.analysis.maxReviewsToAnalyze, 20);
+  assert.throws(
+    () =>
+      normalizeInput({
+        products: [pair],
+        analysis: { outputLanguage: "vietnamese" },
+      }),
     /INVALID_INPUT/,
   );
 });
