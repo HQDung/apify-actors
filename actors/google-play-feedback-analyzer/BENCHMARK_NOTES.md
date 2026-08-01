@@ -55,4 +55,9 @@ Phase 14 schema-readiness validation on 2026-08-01:
 - Apify input-schema validation passed; dataset views present: `overview`, `reviews`, `clusters`, `reports`, and `releaseImpact`.
 - No runtime behavior or pricing configuration changed in this phase.
 
+Phase 15 documentation validation on 2026-08-01:
+
+- README, Actor metadata, sample inputs, schemas, benchmark notes, and changelog were reconciled.
+- Store copy explicitly distinguishes source facts from analysis, states bounded coverage, and includes responsible-use and non-causal release-impact language.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

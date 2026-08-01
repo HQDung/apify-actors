@@ -12,4 +12,5 @@
 - Added per-app `APP_RELEASE_IMPACT_<app-id>` key-value reports.
 - Added a five-app operational benchmark, quality-review limitations, and cost accounting notes.
 - Added Store-ready dataset views for reviews, issue clusters, app reports, and release-impact reports, plus clearer output links and debug input documentation.
+- Updated Store-facing title, README positioning, FAQ, cost controls, SEO terms, and responsible-use limitations.
 - Browser expansion and external-provider analysis remain deferred.

@@ -1,4 +1,4 @@
-# Google Play Feedback Analyzer
+# Google Play Reviews & App Feedback Analyzer
 
 Collect bounded public Google Play review records for one or more Android apps. The current release uses the public Store HTML page, preserves locale and market parameters, emits source diagnostics, and attaches optional shared-core analysis without coupling analysis to collection.
 
@@ -13,6 +13,21 @@ Collect bounded public Google Play review records for one or more Android apps. 
 - One `APP_REPORT_<app-id>` report in key-value storage per processed app when aggregation is enabled.
 
 The public page currently exposes a bounded server-rendered sample, not complete review history. Browser expansion remains deferred; shared deterministic analysis and aggregation are enabled by default.
+
+## Who it is for
+
+Product managers, mobile QA teams, support teams, and app developers who need a bounded Google Play review sample converted into traceable product-feedback signals.
+
+## Key capabilities
+
+- Collect public Google Play reviews for multiple Android package IDs with language and country provenance.
+- Preserve source facts while adding validated normalized feedback and deterministic shared-core analysis.
+- Surface recurring actionable feedback as stable issue/feature clusters linked back to review IDs.
+- Produce one aggregate report per app and an optional before/after release-impact report.
+
+## Raw reviews versus analysis
+
+Review text, ratings, dates, helpful counts, replies, and source diagnostics are collected facts. `normalizedFeedback`, `analysis`, clusters, rankings, severity, and release-impact signals are analytical interpretations. Analytical issue labels are user-reported signals, not confirmed product defects.
 
 ## Input
 
@@ -107,6 +122,26 @@ In `releaseImpact` mode, the enriched report is also stored under `APP_RELEASE_I
 
 The dataset schema provides thematic views for Reviews, Issue clusters, App reports, and Release impact reports. The views are projections over the same dataset; `recordType` remains the authoritative discriminator.
 
+## Issue-cluster output
+
+`feedbackCluster` records contain a stable cluster ID, canonical issue or request title, feedback type, topics, mention counts, languages, countries, versions, severity estimate, confidence, and example/source review IDs. Clusters are partitioned by app and are emitted separately from raw reviews.
+
+## Aggregated app reports
+
+`productFeedbackReport` records summarize collection volume, analyzed volume, ratings, actionable feedback, top issues, feature requests, positive/negative topics, and language/country/version insights. The same per-app report is stored as `APP_REPORT_<app-id>`.
+
+## Release Impact
+
+`releaseImpact` mode compares non-overlapping review windows around a supplied release timestamp. It reports rating and volume changes, new/increasing/decreasing issue and feature-request signals, compatibility topics, and locale/version dimensions. It uses wording such as “possible regression” and “newly observed complaint”; timing alone is never treated as causal proof.
+
+## Language and country support
+
+English and Vietnamese parsing are covered by redacted fixtures. Release Impact can request multiple language/country combinations, while every output keeps the request provenance. Review availability and date/label formatting depend on Google Play’s public response for the selected market.
+
+## Cost controls
+
+Keep `maxReviewsPerApp` or `maxReviewsPerPeriod` bounded, request only required apps and locale combinations, and leave browser expansion disabled unless a later release explicitly supports it. The default deterministic fallback does not call an external model provider; external-provider and cloud billing costs are not included in the local benchmark.
+
 ## Local run
 
 ```bash
@@ -121,7 +156,7 @@ The local dataset and `RUN_STATS` key-value record are written under `storage/`.
 
 The Phase 13 five-app matrix processed 15 reviews with 15 deterministic analyses, 0 collection errors, 0 analysis failures, 5 aggregate reports, 6.56 MB of public response data, 1.889 seconds runtime, and 200 MiB reported process RSS. See [`BENCHMARK_NOTES.md`](BENCHMARK_NOTES.md), [`docs/BENCHMARK_REPORT.md`](docs/BENCHMARK_REPORT.md), [`docs/QUALITY_REVIEW.md`](docs/QUALITY_REVIEW.md), and [`docs/COST_REPORT.md`](docs/COST_REPORT.md) for scope and limitations. These are operational measurements, not human-labeled accuracy claims.
 
-## Source limitations
+## Known limitations
 
 - Google Play localizes markup labels and dates; parsing uses structural selectors and star classes rather than English-only labels.
 - Direct HTML normally contains a small sample. “See all reviews” browser expansion is a later phase.
@@ -129,6 +164,30 @@ The Phase 13 five-app matrix processed 15 reviews with 15 deterministic analyses
 - Public HTML is untrusted input; the Actor bounds requests, strips markup through Cheerio, validates ratings, deduplicates review IDs, and does not emit reviewer names or avatar URLs.
 - The authenticated Google Play Developer API is a separate app-owner source and is not used for arbitrary public apps.
 
+## Responsible use
+
+- Reviews are user opinions and may be incomplete, sarcastic, duplicated, or ambiguous.
+- Detected issues are not confirmed bugs; severity and actionability are estimates.
+- Device, operating-system, and app-version fields may be unavailable and remain nullable rather than inferred.
+- Release Impact shows correlation around a date, not proven causation.
+- Review important product decisions manually and respect Google’s terms, privacy expectations, and applicable law.
+
+## FAQ
+
+**Does this collect complete Google Play history?** No. The current public HTML path returns a bounded server-rendered sample.
+
+**Does it create Jira/Linear tickets or use the Developer API?** No. Those integrations are outside the first release, and the authenticated Developer API is not a public-app source.
+
+**Can I trust a cluster as a confirmed defect?** No. Use clusters as prioritization evidence and trace them to the underlying reviews.
+
+**How do I read reports?** Use the dataset views or read `APP_REPORT_<app-id>` and, for Release Impact, `APP_RELEASE_IMPACT_<app-id>` from the default key-value store.
+
+**What happens when a release window has too little data?** The report remains structured and includes `NO_REVIEWS` or `LIMITED_DATA` warnings.
+
+## Search terms
+
+Google Play reviews, Google Play review scraper, app review analyzer, mobile app feedback, app bug detector, feature request extractor, app sentiment analysis, release impact, Android app reviews, subscription complaints, app compatibility issues, mobile product feedback, app QA feedback, review clustering, Vietnamese app reviews.
+
 ## Roadmap
 
-Phase 12 adds explicit release-impact mode, multi-language/country request expansion, rating and issue deltas, and structured data-sufficiency warnings. Browser expansion and external-provider analysis remain deferred.
+Phase 16 runs the final publish-readiness matrix. Browser expansion, external-provider configuration, Apple App Store support, Reddit scraping, and automatic ticket creation remain deferred.
