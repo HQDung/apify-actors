@@ -28,6 +28,7 @@ The public page currently exposes a bounded server-rendered sample, not complete
 | `sort`                | no            | `mostRelevant` | `mostRelevant` or `newest`; recorded for diagnostics in the current HTML path.        |
 | `useBrowserFallback`  | no            | `false`        | Reserved for the later browser-expansion phase.                                       |
 | `requestTimeoutSecs`  | no            | `30`           | Per-request timeout, 5–120 seconds.                                                   |
+| `debug`               | no            | `false`        | Emit normalized-input details through debug logging for local troubleshooting.        |
 | `analysis`            | no            | enabled        | Shared analysis settings: `enabled`, `outputLanguage`, and `maxAttempts`.             |
 | `aggregation`         | no            | enabled        | Cluster and report settings, including optional observational release comparison.     |
 | `release`             | releaseImpact | —              | Release version and ISO `releasedAt` timestamp.                                       |
@@ -103,6 +104,8 @@ Release-impact example:
 Aggregate reports are also stored under `APP_REPORT_<app-id>` in the default key-value store. Reports tolerate partial analysis failures by counting only successful analyses in ranked intelligence while retaining collection counts.
 
 In `releaseImpact` mode, the enriched report is also stored under `APP_RELEASE_IMPACT_<app-id>`. Reviews exactly at `release.releasedAt` belong to the after window; reviews before it belong to the before window. Empty or small windows remain structured rather than being presented as proof of a regression.
+
+The dataset schema provides thematic views for Reviews, Issue clusters, App reports, and Release impact reports. The views are projections over the same dataset; `recordType` remains the authoritative discriminator.
 
 ## Local run
 

@@ -49,4 +49,10 @@ Phase 13 five-app benchmark matrix on 2026-08-01:
 - Total public response bytes: 6,563,254; runtime: 1,889 ms; reported process RSS: 209,715,200 bytes.
 - The benchmark measures operational behavior and deterministic fallback execution. It does not claim feedback-type/topic accuracy because no independent manual labels or external analysis provider were configured.
 
+Phase 14 schema-readiness validation on 2026-08-01:
+
+- Input, output, dataset, and all three sample JSON files parsed successfully.
+- Apify input-schema validation passed; dataset views present: `overview`, `reviews`, `clusters`, `reports`, and `releaseImpact`.
+- No runtime behavior or pricing configuration changed in this phase.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

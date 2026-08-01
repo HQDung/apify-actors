@@ -39,6 +39,7 @@ test('normalizes Google Play collection input with safe bounds', () => {
             sort: 'newest',
             useBrowserFallback: false,
             requestTimeoutSecs: 30,
+            debug: false,
             analysis: { enabled: true, outputLanguage: 'english', maxAttempts: 2 },
             aggregation: {
                 enabled: true,

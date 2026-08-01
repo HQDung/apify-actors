@@ -58,6 +58,7 @@ test('normalizes release-impact mode and array source dimensions', () => {
             sort: 'mostRelevant',
             useBrowserFallback: false,
             requestTimeoutSecs: 30,
+            debug: false,
             analysis: { enabled: true, outputLanguage: 'english', maxAttempts: 2 },
             aggregation: {
                 enabled: true,

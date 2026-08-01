@@ -11,4 +11,5 @@
 - Added `releaseImpact` mode with bounded before/after windows, multi-language/country collection, rating and issue deltas, and structured data-sufficiency warnings.
 - Added per-app `APP_RELEASE_IMPACT_<app-id>` key-value reports.
 - Added a five-app operational benchmark, quality-review limitations, and cost accounting notes.
+- Added Store-ready dataset views for reviews, issue clusters, app reports, and release-impact reports, plus clearer output links and debug input documentation.
 - Browser expansion and external-provider analysis remain deferred.

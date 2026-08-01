@@ -85,6 +85,13 @@
             "minimum": 5,
             "maximum": 120
         },
+        "debug": {
+            "title": "Debug logging",
+            "description": "Emit the normalized input in debug logs for local troubleshooting; do not enable unnecessarily in production.",
+            "type": "boolean",
+            "editor": "checkbox",
+            "default": false
+        },
         "release": {
             "title": "Release",
             "description": "Release metadata required by releaseImpact mode.",

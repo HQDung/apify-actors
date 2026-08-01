@@ -58,6 +58,7 @@ export const normalizeInput = (input = {}) => {
     if (!SORTS.has(sort)) throw invalidInput(`sort must be one of: ${[...SORTS].join(', ')}`);
     const mode = input.mode ?? 'reviews';
     if (!MODES.has(mode)) throw invalidInput(`mode must be one of: ${[...MODES].join(', ')}`);
+    if (input.debug !== undefined && typeof input.debug !== 'boolean') throw invalidInput('debug must be a boolean');
     const analysisInput = input.analysis ?? {};
     if (typeof analysisInput !== 'object' || Array.isArray(analysisInput))
         throw invalidInput('analysis must be an object');
@@ -138,6 +139,7 @@ export const normalizeInput = (input = {}) => {
         sort,
         useBrowserFallback: input.useBrowserFallback ?? false,
         requestTimeoutSecs: boundedInteger(input.requestTimeoutSecs, 30, 5, 120, 'requestTimeoutSecs'),
+        debug: input.debug ?? false,
         analysis: {
             enabled: analysisInput.enabled ?? true,
             outputLanguage: analysisOutputLanguage,

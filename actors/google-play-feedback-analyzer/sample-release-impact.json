@@ -10,6 +10,7 @@
     "daysBefore": 14,
     "daysAfter": 30,
     "maxReviewsPerPeriod": 3,
+    "debug": false,
     "analysis": {
         "enabled": true,
         "outputLanguage": "english",

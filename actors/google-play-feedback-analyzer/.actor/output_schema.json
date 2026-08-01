@@ -8,6 +8,18 @@
             "description": "Review, source-diagnostic, feedback-cluster, product-report, and observational impact records emitted by the Actor.",
             "template": "{{datasetUrl}}"
         },
+        "reports": {
+            "type": "string",
+            "title": "Per-app aggregate reports",
+            "description": "Open the default key-value store and read APP_REPORT_<app-id> records written for each processed app.",
+            "template": "{{keyValueStoreUrl}}"
+        },
+        "releaseImpactReports": {
+            "type": "string",
+            "title": "Release-impact reports",
+            "description": "In releaseImpact mode, read APP_RELEASE_IMPACT_<app-id> records from the default key-value store.",
+            "template": "{{keyValueStoreUrl}}"
+        },
         "runStatistics": {
             "type": "string",
             "title": "Run statistics",

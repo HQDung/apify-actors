@@ -15,6 +15,7 @@ const startedAt = Date.now();
 
 try {
     const input = normalizeInput((await Actor.getInput()) ?? {});
+    if (input.debug) log.debug('Google Play input normalized', input);
     const result = await runGooglePlayCollection({
         input,
         normalizeRecord: (record, diagnostics) => toNormalizedFeedback({ record, diagnostics }),

@@ -151,6 +151,186 @@
                     "generatedAt": { "label": "Generated at", "format": "text" }
                 }
             }
+        },
+        "reviews": {
+            "title": "Reviews",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "appId",
+                    "reviewId",
+                    "rating",
+                    "reviewDateText",
+                    "text",
+                    "helpfulCount",
+                    "developerReply",
+                    "source.language",
+                    "source.country",
+                    "normalizedFeedback",
+                    "analysis"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Record type", "format": "text" },
+                    "appId": { "label": "Package ID", "format": "text" },
+                    "reviewId": { "label": "Review ID", "format": "text" },
+                    "rating": { "label": "Stars", "format": "number" },
+                    "reviewDateText": { "label": "Review date", "format": "text" },
+                    "text": { "label": "Review text", "format": "text" },
+                    "helpfulCount": { "label": "Helpful count", "format": "number" },
+                    "developerReply": { "label": "Developer reply", "format": "text" },
+                    "source.language": { "label": "Language", "format": "text" },
+                    "source.country": { "label": "Country", "format": "text" },
+                    "normalizedFeedback": { "label": "Normalized feedback", "format": "text" },
+                    "analysis": { "label": "Shared analysis", "format": "text" }
+                }
+            }
+        },
+        "clusters": {
+            "title": "Issue clusters",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "product.productId",
+                    "clusterId",
+                    "canonicalIssue",
+                    "feedbackType",
+                    "topics",
+                    "mentionCount",
+                    "uniqueReviewCount",
+                    "languages",
+                    "countries",
+                    "affectedVersions",
+                    "severity",
+                    "clusterConfidence",
+                    "firstSeenAt",
+                    "latestSeenAt",
+                    "reviewIds"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Record type", "format": "text" },
+                    "product.productId": { "label": "App ID", "format": "text" },
+                    "clusterId": { "label": "Cluster ID", "format": "text" },
+                    "canonicalIssue": { "label": "Canonical issue", "format": "text" },
+                    "feedbackType": { "label": "Feedback type", "format": "text" },
+                    "topics": { "label": "Topics", "format": "array" },
+                    "mentionCount": { "label": "Mentions", "format": "number" },
+                    "uniqueReviewCount": { "label": "Unique reviews", "format": "number" },
+                    "languages": { "label": "Languages", "format": "array" },
+                    "countries": { "label": "Countries", "format": "array" },
+                    "affectedVersions": { "label": "Versions", "format": "array" },
+                    "severity": { "label": "Severity", "format": "text" },
+                    "clusterConfidence": { "label": "Confidence", "format": "number" },
+                    "firstSeenAt": { "label": "First seen", "format": "text" },
+                    "latestSeenAt": { "label": "Latest seen", "format": "text" },
+                    "reviewIds": { "label": "Review IDs", "format": "array" }
+                }
+            }
+        },
+        "reports": {
+            "title": "App reports",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "product.productId",
+                    "reviewWindow",
+                    "statistics.reviewsCollected",
+                    "statistics.reviewsAnalyzed",
+                    "statistics.actionableReviews",
+                    "statistics.averageRating",
+                    "topIssues",
+                    "topFeatureRequests",
+                    "topPositiveTopics",
+                    "topNegativeTopics",
+                    "languageInsights",
+                    "countryInsights",
+                    "versionInsights",
+                    "generatedAt"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Record type", "format": "text" },
+                    "product.productId": { "label": "App ID", "format": "text" },
+                    "reviewWindow": { "label": "Review window", "format": "text" },
+                    "statistics.reviewsCollected": { "label": "Reviews collected", "format": "number" },
+                    "statistics.reviewsAnalyzed": { "label": "Reviews analyzed", "format": "number" },
+                    "statistics.actionableReviews": { "label": "Actionable reviews", "format": "number" },
+                    "statistics.averageRating": { "label": "Average rating", "format": "number" },
+                    "topIssues": { "label": "Top issues", "format": "text" },
+                    "topFeatureRequests": { "label": "Top feature requests", "format": "text" },
+                    "topPositiveTopics": { "label": "Top positive topics", "format": "text" },
+                    "topNegativeTopics": { "label": "Top negative topics", "format": "text" },
+                    "languageInsights": { "label": "Language insights", "format": "text" },
+                    "countryInsights": { "label": "Country insights", "format": "text" },
+                    "versionInsights": { "label": "Version insights", "format": "text" },
+                    "generatedAt": { "label": "Generated at", "format": "text" }
+                }
+            }
+        },
+        "releaseImpact": {
+            "title": "Release impact reports",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "product.productId",
+                    "release.version",
+                    "release.releasedAt",
+                    "windows.before.from",
+                    "windows.before.to",
+                    "windows.after.from",
+                    "windows.after.to",
+                    "statistics.beforeReviews",
+                    "statistics.afterReviews",
+                    "statistics.beforeAverageRating",
+                    "statistics.afterAverageRating",
+                    "statistics.ratingChange",
+                    "topicChanges",
+                    "issueChanges",
+                    "newIssues",
+                    "newFeatureRequests",
+                    "countryChanges",
+                    "languageChanges",
+                    "versionChanges",
+                    "warnings",
+                    "disclaimer",
+                    "generatedAt"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Record type", "format": "text" },
+                    "product.productId": { "label": "App ID", "format": "text" },
+                    "release.version": { "label": "Release version", "format": "text" },
+                    "release.releasedAt": { "label": "Release timestamp", "format": "text" },
+                    "windows.before.from": { "label": "Before start", "format": "text" },
+                    "windows.before.to": { "label": "Before end", "format": "text" },
+                    "windows.after.from": { "label": "After start", "format": "text" },
+                    "windows.after.to": { "label": "After end", "format": "text" },
+                    "statistics.beforeReviews": { "label": "Before reviews", "format": "number" },
+                    "statistics.afterReviews": { "label": "After reviews", "format": "number" },
+                    "statistics.beforeAverageRating": { "label": "Before average", "format": "number" },
+                    "statistics.afterAverageRating": { "label": "After average", "format": "number" },
+                    "statistics.ratingChange": { "label": "Rating change", "format": "number" },
+                    "topicChanges": { "label": "Topic changes", "format": "text" },
+                    "issueChanges": { "label": "Issue changes", "format": "text" },
+                    "newIssues": { "label": "New issues", "format": "text" },
+                    "newFeatureRequests": { "label": "New feature requests", "format": "text" },
+                    "countryChanges": { "label": "Country changes", "format": "text" },
+                    "languageChanges": { "label": "Language changes", "format": "text" },
+                    "versionChanges": { "label": "Version changes", "format": "text" },
+                    "warnings": { "label": "Warnings", "format": "text" },
+                    "disclaimer": { "label": "Disclaimer", "format": "text" },
+                    "generatedAt": { "label": "Generated at", "format": "text" }
+                }
+            }
         }
     }
 }

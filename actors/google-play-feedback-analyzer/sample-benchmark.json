@@ -6,6 +6,7 @@
     "sort": "mostRelevant",
     "useBrowserFallback": false,
     "requestTimeoutSecs": 30,
+    "debug": false,
     "analysis": {
         "enabled": true,
         "outputLanguage": "english",
