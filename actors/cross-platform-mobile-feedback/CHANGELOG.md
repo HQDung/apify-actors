@@ -2,6 +2,7 @@
 
 ## 0.1.0
 
+- Completed Store-facing README, title/description, examples, output links, benchmark evidence, limitations, FAQ, and responsible-use documentation with conservative coverage claims.
 - Added a reproducible 100-review quality benchmark covering analysis validity, cluster coherence, shared matching precision/recall, platform-specific false positives, dimensions, release windows, runtime, memory, and fixture cost.
 - Added request-expansion limits, runtime output validators, predictable source-error output, and expanded output schema links.
 - Added staggered Android/iOS release-window reports with topic changes, new issues, rollout lag, sample warnings, and non-causal wording.

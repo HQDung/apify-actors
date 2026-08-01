@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 12 — README and Store preparation
+
+Store-facing title, description, README, examples, output links, cost controls, benchmark evidence, limitations, FAQ, and responsible-use language are synchronized. The listing uses conservative selected-dataset coverage claims and does not claim worldwide availability. No pricing or publication action is performed automatically.
+
 ## Phase 11 — Quality benchmark
 
 `npm run benchmark:quality` runs a deterministic 100-review fixture: 50 Android reviews, 50 iOS reviews, 25 known shared review pairs, 10 feature-request pairs, 50 labeled platform-specific examples, mixed English/Vietnamese country and language metadata, and staggered Android/iOS release dates. Current result: analysis-schema validity 100%, cluster coherence 100%, shared precision 100%, shared recall 100%, platform-specific false-positive rate 0%, rating/country/language/version accuracy 100%, release-window accuracy 100%, no cross-product matches, and an estimated fixture-provider cost of $0.02 per product comparison. This is a quality fixture, not a claim of live store coverage; the local sandbox source smoke recorded fetch failures as structured errors.

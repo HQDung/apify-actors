@@ -315,7 +315,7 @@
       "properties": {
         "enabled": {
           "title": "Enabled",
-          "description": "Enable cross-platform comparison in a later phase.",
+          "description": "Enable cross-platform matching and per-product comparison reports.",
           "type": "boolean",
           "editor": "checkbox",
           "default": true

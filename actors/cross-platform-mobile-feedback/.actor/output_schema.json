@@ -5,7 +5,7 @@
     "dataset": {
       "type": "string",
       "title": "Feedback dataset",
-      "description": "Normalized reviews, per-review analyses, platform clusters, cross-platform comparisons, reports, and run errors.",
+      "description": "Normalized reviews, per-review analyses, platform clusters, cross-platform comparisons, reports, diagnostics, and run errors.",
       "template": "{{datasetUrl}}"
     },
     "reports": {
@@ -35,7 +35,7 @@
     "runStatistics": {
       "type": "string",
       "title": "Run statistics",
-      "description": "Collection, analysis, cluster, comparison, report, request, error, usage, and runtime counts.",
+      "description": "Collection, analysis, cluster, comparison, report, request-budget, error, usage, and runtime counts.",
       "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
     }
   }

@@ -18,6 +18,8 @@
   "requestTimeoutSecs": 30,
   "maxPagesPerPlatform": 10,
   "maxRequestsPerRun": 1000,
+  "includeDeveloperReplies": true,
+  "includeReviewText": true,
   "analysis": {
     "enabled": true,
     "maxAttempts": 2,

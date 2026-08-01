@@ -3,7 +3,7 @@
   "actorSpecification": 1,
   "name": "cross-platform-mobile-feedback",
   "title": "Cross-Platform Mobile App Feedback Intelligence",
-  "description": "Compare explicitly mapped Google Play and Apple App Store feedback to identify shared issues, platform-specific findings, rating differences, and release signals.",
+  "description": "Compare Google Play and Apple App Store reviews to identify shared issues, Android-only and iOS-only bugs, feature requests, rating differences, and release-impact signals.",
   "categories": ["AI", "BUSINESS"],
   "version": "0.1",
   "buildTag": "latest",
