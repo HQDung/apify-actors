@@ -1,0 +1,14 @@
+{
+  "mode": "feedbackAnalysis",
+  "steamAppIds": ["730"],
+  "languages": ["english"],
+  "reviewFilter": "all",
+  "purchaseType": "all",
+  "dateRange": { "from": "", "to": "", "recentDays": 30 },
+  "maxReviewsPerGame": 20,
+  "includeReviewText": true,
+  "analysis": { "enabled": true },
+  "aggregation": { "enabled": true },
+  "proxyConfiguration": { "useApifyProxy": false },
+  "debug": false
+}

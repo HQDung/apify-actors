@@ -1,0 +1,63 @@
+{
+	"recordType": "review",
+	"game": {
+		"steamAppId": 730,
+		"name": "Counter-Strike 2",
+		"storeUrl": "https://store.steampowered.com/app/730/"
+	},
+	"review": {
+		"reviewId": "231785900",
+		"language": "english",
+		"text": "game eh but gamble",
+		"recommended": true,
+		"createdAt": "2026-08-01T02:24:40.000Z",
+		"updatedAt": "2026-08-01T02:24:40.000Z",
+		"votesHelpful": 0,
+		"votesFunny": 0,
+		"weightedVoteScore": 0.5,
+		"commentCount": 0,
+		"steamPurchase": true,
+		"receivedForFree": false,
+		"writtenDuringEarlyAccess": false,
+		"primarilySteamDeck": false
+	},
+	"author": {
+		"steamId": "76561199559476987",
+		"gamesOwned": 0,
+		"reviewsWritten": 21,
+		"playtimeForeverMinutes": 250,
+		"playtimeAtReviewMinutes": 245,
+		"playtimeLastTwoWeeksMinutes": 250,
+		"deckPlaytimeAtReviewMinutes": 0
+	},
+	"source": {
+		"platform": "steam",
+		"sourceType": "userReview",
+		"sourceUrl": "https://steamcommunity.com/app/730/reviews/",
+		"scrapedAt": "2026-08-01T03:42:55.406Z"
+	},
+	"analysis": {
+		"isActionableFeedback": false,
+		"actionabilityScore": 0.05,
+		"primaryFeedbackType": "nonActionable",
+		"feedbackTypes": [
+			"nonActionable"
+		],
+		"sentiment": "positive",
+		"severity": "unknown",
+		"topics": [],
+		"summary": "The review expresses a positive opinion without specific product details.",
+		"issue": null,
+		"featureRequest": null,
+		"positiveSignals": [],
+		"sourceLanguage": "english",
+		"analysisLanguage": "english",
+		"originalTextPreserved": true,
+		"modelMetadata": {
+			"provider": "deterministic-fallback",
+			"model": "steam-taxonomy-v1",
+			"schemaVersion": "1.0"
+		}
+	},
+	"analysisStatus": "success"
+}

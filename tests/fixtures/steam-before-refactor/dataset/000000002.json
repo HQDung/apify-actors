@@ -1,0 +1,73 @@
+{
+	"recordType": "review",
+	"game": {
+		"steamAppId": 730,
+		"name": "Counter-Strike 2",
+		"storeUrl": "https://store.steampowered.com/app/730/"
+	},
+	"review": {
+		"reviewId": "231787157",
+		"language": "english",
+		"text": "CHEATERS AND HACKERS...  GAME SUCKS BECAUSE THEY CANT SEEM TO BE ABLE TO FILTER THEM. \r\nYOU CHEAT ON 1 GAME AND GET COUGHT YOU SHOULD MULTI PLATFORM BANNED \r\nBAN STEAM ACCOUNTS AND CPU ID \r\nMAKE THE GAME NOT FREE OR FREE WITH A MINIMUM PURCHASE  SO THEY DONT CREATE FREE STEAM ACCOUNTS!!  DO SOMETHING!",
+		"recommended": false,
+		"createdAt": "2026-08-01T02:51:12.000Z",
+		"updatedAt": "2026-08-01T02:51:12.000Z",
+		"votesHelpful": 0,
+		"votesFunny": 0,
+		"weightedVoteScore": 0.5,
+		"commentCount": 0,
+		"steamPurchase": true,
+		"receivedForFree": false,
+		"writtenDuringEarlyAccess": false,
+		"primarilySteamDeck": false
+	},
+	"author": {
+		"steamId": "76561198416644850",
+		"gamesOwned": 0,
+		"reviewsWritten": 5,
+		"playtimeForeverMinutes": 16270,
+		"playtimeAtReviewMinutes": 16270,
+		"playtimeLastTwoWeeksMinutes": 285,
+		"deckPlaytimeAtReviewMinutes": 0
+	},
+	"source": {
+		"platform": "steam",
+		"sourceType": "userReview",
+		"sourceUrl": "https://steamcommunity.com/app/730/reviews/",
+		"scrapedAt": "2026-08-01T03:42:55.406Z"
+	},
+	"analysis": {
+		"isActionableFeedback": true,
+		"actionabilityScore": 0.76,
+		"primaryFeedbackType": "bugReport",
+		"feedbackTypes": [
+			"bugReport"
+		],
+		"sentiment": "negative",
+		"severity": "medium",
+		"topics": [
+			"antiCheat"
+		],
+		"summary": "The review reports reported cheating or anti-cheat concern.",
+		"issue": {
+			"title": "Reported cheating or anti-cheat concern",
+			"symptoms": [],
+			"triggerSignals": [],
+			"environmentSignals": [],
+			"workaroundSignals": [],
+			"reproductionConfidence": 0.35
+		},
+		"featureRequest": null,
+		"positiveSignals": [],
+		"sourceLanguage": "english",
+		"analysisLanguage": "english",
+		"originalTextPreserved": true,
+		"modelMetadata": {
+			"provider": "deterministic-fallback",
+			"model": "steam-taxonomy-v1",
+			"schemaVersion": "1.0"
+		},
+		"clusterId": "issue-730-bugreport-reported-cheating-or-anti-cheat-concern"
+	},
+	"analysisStatus": "success"
+}

@@ -1,0 +1,33 @@
+{
+	"recordType": "feedbackCluster",
+	"clusterId": "issue-730-bugreport-reported-cheating-or-anti-cheat-concern",
+	"game": {
+		"steamAppId": 730,
+		"name": "Counter-Strike 2",
+		"storeUrl": "https://store.steampowered.com/app/730/"
+	},
+	"canonicalIssue": "Reported cheating or anti-cheat concern",
+	"feedbackType": "bugReport",
+	"topics": [
+		"antiCheat"
+	],
+	"mentionCount": 3,
+	"uniqueReviewCount": 3,
+	"languages": [
+		"english"
+	],
+	"firstSeenAt": "2026-08-01T02:16:54.000Z",
+	"latestSeenAt": "2026-08-01T02:51:12.000Z",
+	"severity": "medium",
+	"clusterConfidence": 1,
+	"reviewIds": [
+		"231787157",
+		"231786380",
+		"231785567"
+	],
+	"exampleReviewIds": [
+		"231787157",
+		"231786380",
+		"231785567"
+	]
+}

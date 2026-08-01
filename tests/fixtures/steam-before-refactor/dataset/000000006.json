@@ -1,0 +1,76 @@
+{
+	"recordType": "review",
+	"game": {
+		"steamAppId": 730,
+		"name": "Counter-Strike 2",
+		"storeUrl": "https://store.steampowered.com/app/730/"
+	},
+	"review": {
+		"reviewId": "231786380",
+		"language": "english",
+		"text": "Love the game. Currently full of cheaters. Not worth spending a dime in it.",
+		"recommended": false,
+		"createdAt": "2026-08-01T02:34:37.000Z",
+		"updatedAt": "2026-08-01T02:34:37.000Z",
+		"votesHelpful": 1,
+		"votesFunny": 0,
+		"weightedVoteScore": 0.5,
+		"commentCount": 0,
+		"steamPurchase": true,
+		"receivedForFree": false,
+		"writtenDuringEarlyAccess": false,
+		"primarilySteamDeck": false
+	},
+	"author": {
+		"steamId": "76561198084004577",
+		"gamesOwned": 0,
+		"reviewsWritten": 3,
+		"playtimeForeverMinutes": 137760,
+		"playtimeAtReviewMinutes": 137760,
+		"playtimeLastTwoWeeksMinutes": 1526,
+		"deckPlaytimeAtReviewMinutes": 0
+	},
+	"source": {
+		"platform": "steam",
+		"sourceType": "userReview",
+		"sourceUrl": "https://steamcommunity.com/app/730/reviews/",
+		"scrapedAt": "2026-08-01T03:42:55.406Z"
+	},
+	"analysis": {
+		"isActionableFeedback": true,
+		"actionabilityScore": 0.76,
+		"primaryFeedbackType": "bugReport",
+		"feedbackTypes": [
+			"bugReport",
+			"positiveFeedback"
+		],
+		"sentiment": "positive",
+		"severity": "medium",
+		"topics": [
+			"antiCheat"
+		],
+		"summary": "The review reports reported cheating or anti-cheat concern.",
+		"issue": {
+			"title": "Reported cheating or anti-cheat concern",
+			"symptoms": [],
+			"triggerSignals": [],
+			"environmentSignals": [],
+			"workaroundSignals": [],
+			"reproductionConfidence": 0.35
+		},
+		"featureRequest": null,
+		"positiveSignals": [
+			"antiCheat"
+		],
+		"sourceLanguage": "english",
+		"analysisLanguage": "english",
+		"originalTextPreserved": true,
+		"modelMetadata": {
+			"provider": "deterministic-fallback",
+			"model": "steam-taxonomy-v1",
+			"schemaVersion": "1.0"
+		},
+		"clusterId": "issue-730-bugreport-reported-cheating-or-anti-cheat-concern"
+	},
+	"analysisStatus": "success"
+}

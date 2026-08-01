@@ -1,0 +1,14 @@
+{
+  "gamesRequested": 1,
+  "gamesProcessed": 1,
+  "gamesFailed": 0,
+  "reviewsRequested": 10,
+  "reviewsCollected": 10,
+  "reviewsPushed": 10,
+  "reviewsSkipped": 0,
+  "errors": 0,
+  "reviewsAnalyzed": 10,
+  "analysesSucceeded": 10,
+  "clustersPushed": 1,
+  "runtimeSeconds": 0.866
+}

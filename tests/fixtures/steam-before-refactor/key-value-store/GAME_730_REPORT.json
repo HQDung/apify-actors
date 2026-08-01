@@ -1,0 +1,51 @@
+{
+  "recordType": "gameFeedbackReport",
+  "game": {
+    "steamAppId": 730,
+    "name": "Counter-Strike 2",
+    "storeUrl": "https://store.steampowered.com/app/730/"
+  },
+  "reviewWindow": {
+    "from": "2026-08-01T02:16:54.000Z",
+    "to": "2026-08-01T02:54:44.000Z"
+  },
+  "statistics": {
+    "reviewsCollected": 10,
+    "reviewsAnalyzed": 10,
+    "positiveReviews": 5,
+    "negativeReviews": 5,
+    "actionableReviews": 3,
+    "languages": {
+      "english": 10
+    }
+  },
+  "topIssues": [
+    {
+      "clusterId": "issue-730-bugreport-reported-cheating-or-anti-cheat-concern",
+      "title": "Reported cheating or anti-cheat concern",
+      "mentionCount": 3,
+      "severity": "medium",
+      "trend": "unknown",
+      "reviewIds": [
+        "231787157",
+        "231786380",
+        "231785567"
+      ]
+    }
+  ],
+  "topFeatureRequests": [],
+  "topPositiveTopics": [
+    {
+      "topic": "antiCheat",
+      "mentionCount": 1
+    }
+  ],
+  "topNegativeTopics": [
+    {
+      "topic": "antiCheat",
+      "mentionCount": 2
+    }
+  ],
+  "localizationInsights": [],
+  "generatedAt": "2026-08-01T03:42:56.261Z"
+}
