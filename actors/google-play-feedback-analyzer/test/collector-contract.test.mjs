@@ -39,6 +39,7 @@ test('normalizes Google Play collection input with safe bounds', () => {
             sort: 'newest',
             useBrowserFallback: false,
             requestTimeoutSecs: 30,
+            analysis: { enabled: true, outputLanguage: 'english', maxAttempts: 2 },
         },
     );
 });
@@ -101,4 +102,18 @@ test('does not silently ignore the deferred browser fallback flag', async () => 
 
     assert.deepEqual(result.records, []);
     assert.equal(result.error.code, 'GOOGLE_PLAY_BROWSER_FALLBACK_DEFERRED');
+});
+
+test('normalizes shared-analysis settings without enabling an external provider', () => {
+    assert.deepEqual(
+        normalizeInput({
+            appIds: ['com.todoist'],
+            analysis: { enabled: false, outputLanguage: 'original', maxAttempts: 1 },
+        }).analysis,
+        {
+            enabled: false,
+            outputLanguage: 'original',
+            maxAttempts: 1,
+        },
+    );
 });

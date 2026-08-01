@@ -60,6 +60,35 @@
             "default": 30,
             "minimum": 5,
             "maximum": 120
+        },
+        "analysis": {
+            "title": "Shared analysis",
+            "description": "Run the shared deterministic analysis core. No external provider is configured in this phase.",
+            "editor": "json",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Enabled",
+                    "description": "Attach a shared-core analysis result to each review.",
+                    "type": "boolean",
+                    "default": true
+                },
+                "outputLanguage": {
+                    "title": "Output language",
+                    "description": "Use English summaries or preserve the original-language setting.",
+                    "type": "string",
+                    "enum": ["english", "original"],
+                    "default": "english"
+                },
+                "maxAttempts": {
+                    "title": "Provider attempts",
+                    "description": "Retry budget reserved for a future external provider.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3,
+                    "default": 2
+                }
+            }
         }
     },
     "required": ["appIds"]

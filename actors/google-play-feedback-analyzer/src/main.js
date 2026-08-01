@@ -1,15 +1,28 @@
 import { Actor, log } from 'apify';
 
+import { analyzeGooglePlayFeedback } from './analysis/google-play-analysis.js';
 import { toNormalizedFeedback } from './core/google-play-contract-adapter.js';
+import { normalizeInput } from './google-play/normalize-input.js';
 import { runGooglePlayCollection } from './google-play/run-collector.js';
 
 await Actor.init();
 const startedAt = Date.now();
 
 try {
+    const input = normalizeInput((await Actor.getInput()) ?? {});
     const result = await runGooglePlayCollection({
-        input: (await Actor.getInput()) ?? {},
+        input,
         normalizeRecord: (record, diagnostics) => toNormalizedFeedback({ record, diagnostics }),
+        analyzeRecord: input.analysis.enabled
+            ? (feedback) =>
+                  analyzeGooglePlayFeedback({
+                      feedback,
+                      options: {
+                          outputLanguage: input.analysis.outputLanguage,
+                          maxAttempts: input.analysis.maxAttempts,
+                      },
+                  })
+            : undefined,
         onRecord: (record) => Actor.pushData(record),
     });
     const finishedAt = Date.now();

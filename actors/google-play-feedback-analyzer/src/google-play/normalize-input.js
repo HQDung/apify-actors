@@ -1,5 +1,6 @@
 const PACKAGE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]+$/;
 const SORTS = new Set(['mostRelevant', 'newest']);
+const OUTPUT_LANGUAGES = new Set(['english', 'original']);
 
 const invalidInput = (message) => {
     const error = new Error(message);
@@ -44,6 +45,16 @@ export const normalizeInput = (input = {}) => {
 
     const sort = input.sort ?? 'mostRelevant';
     if (!SORTS.has(sort)) throw invalidInput(`sort must be one of: ${[...SORTS].join(', ')}`);
+    const analysisInput = input.analysis ?? {};
+    if (typeof analysisInput !== 'object' || Array.isArray(analysisInput))
+        throw invalidInput('analysis must be an object');
+    if (analysisInput.enabled !== undefined && typeof analysisInput.enabled !== 'boolean') {
+        throw invalidInput('analysis.enabled must be a boolean');
+    }
+    const analysisOutputLanguage = analysisInput.outputLanguage ?? 'english';
+    if (!OUTPUT_LANGUAGES.has(analysisOutputLanguage)) {
+        throw invalidInput(`analysis.outputLanguage must be one of: ${[...OUTPUT_LANGUAGES].join(', ')}`);
+    }
 
     return {
         appIds: normalizeAppIds(input),
@@ -53,5 +64,10 @@ export const normalizeInput = (input = {}) => {
         sort,
         useBrowserFallback: input.useBrowserFallback ?? false,
         requestTimeoutSecs: boundedInteger(input.requestTimeoutSecs, 30, 5, 120, 'requestTimeoutSecs'),
+        analysis: {
+            enabled: analysisInput.enabled ?? true,
+            outputLanguage: analysisOutputLanguage,
+            maxAttempts: boundedInteger(analysisInput.maxAttempts, 2, 1, 3, 'analysis.maxAttempts'),
+        },
     };
 };

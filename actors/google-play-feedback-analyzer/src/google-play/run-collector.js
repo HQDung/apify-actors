@@ -6,6 +6,7 @@ export const runGooglePlayCollection = async ({
     input,
     collect = collectGooglePlayReviews,
     normalizeRecord,
+    analyzeRecord,
     onRecord = async () => {},
 }) => {
     const normalizedInput = normalizeInput(input);
@@ -20,7 +21,23 @@ export const runGooglePlayCollection = async ({
 
     for (const appId of normalizedInput.appIds) {
         const collection = await collect({ ...normalizedInput, appId });
-        const records = toDatasetRecords({ appId, collection, normalizeRecord });
+        const normalizedFeedbackByReviewId = {};
+        const analysisByReviewId = {};
+        if (normalizeRecord) {
+            for (const record of collection.records) {
+                const normalizedFeedback = normalizeRecord(record, collection.diagnostics);
+                normalizedFeedbackByReviewId[record.reviewId] = normalizedFeedback;
+                if (analyzeRecord)
+                    analysisByReviewId[record.reviewId] = await analyzeRecord(normalizedFeedback, record);
+            }
+        }
+        const records = toDatasetRecords({
+            appId,
+            collection,
+            normalizeRecord,
+            normalizedFeedbackByReviewId,
+            analysisByReviewId,
+        });
         for (const record of records) await onRecord(record);
         stats.appsProcessed += 1;
         stats.reviewRecords += collection.records.length;

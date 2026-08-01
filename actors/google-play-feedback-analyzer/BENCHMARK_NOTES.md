@@ -2,7 +2,7 @@
 
 ## Phase 8 baseline
 
-The Phase 8 smoke target was `com.todoist` with `maxReviewsPerApp: 5`, HTTP-only collection, and no AI analysis. The Phase 9 smoke target uses `maxReviewsPerApp: 3` and additionally checks `normalizedFeedback` on each review.
+The Phase 8 smoke target was `com.todoist` with `maxReviewsPerApp: 5`, HTTP-only collection, and no AI analysis. The Phase 9 smoke target uses `maxReviewsPerApp: 3` and additionally checks `normalizedFeedback` on each review. The Phase 10 target keeps shared deterministic analysis enabled with English output.
 
 Observed local run on 2026-08-01:
 
@@ -18,5 +18,12 @@ Phase 9 normalized smoke on 2026-08-01:
 - HTTP 200; 1,290,633 response bytes; 3 parsed cards.
 - Every review record carried a core-validated `normalizedFeedback` object.
 - 0 errors; 4 total dataset records; runtime 568 ms.
+- Phase 10 adds one shared-core analysis object per review; no external provider is configured.
+
+Phase 10 analysis smoke on 2026-08-01:
+
+- 1 app requested and processed; 3 reviews, 3 shared-core analysis objects, and 1 diagnostic emitted.
+- HTTP 200; 1,290,655 response bytes; 0 errors; 4 total records.
+- All three analyses used `deterministic-fallback` from `feedback-core-v1`; runtime 444 ms.
 
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

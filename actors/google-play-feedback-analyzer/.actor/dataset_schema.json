@@ -22,7 +22,8 @@
                     "diagnostics.parsedReviewCount",
                     "diagnostics.collectionMode",
                     "error.code",
-                    "normalizedFeedback"
+                    "normalizedFeedback",
+                    "analysis"
                 ]
             },
             "display": {
@@ -44,7 +45,8 @@
                     "diagnostics.parsedReviewCount": { "label": "Parsed reviews", "format": "number" },
                     "diagnostics.collectionMode": { "label": "Collection mode", "format": "text" },
                     "error.code": { "label": "Error code", "format": "text" },
-                    "normalizedFeedback": { "label": "Normalized feedback", "format": "text" }
+                    "normalizedFeedback": { "label": "Normalized feedback", "format": "text" },
+                    "analysis": { "label": "Shared analysis", "format": "text" }
                 }
             }
         }

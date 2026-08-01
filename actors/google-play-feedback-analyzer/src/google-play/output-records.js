@@ -1,8 +1,22 @@
-export const toDatasetRecords = ({ appId, collection, normalizeRecord }) => {
+export const toDatasetRecords = ({
+    appId,
+    collection,
+    normalizeRecord,
+    normalizedFeedbackByReviewId = {},
+    analysisByReviewId = {},
+}) => {
     const reviewRecords = collection.records.map((record) => ({
         recordType: 'review',
         ...record,
-        ...(normalizeRecord ? { normalizedFeedback: normalizeRecord(record, collection.diagnostics) } : {}),
+        ...(normalizeRecord || Object.hasOwn(normalizedFeedbackByReviewId, record.reviewId)
+            ? {
+                  normalizedFeedback:
+                      normalizedFeedbackByReviewId[record.reviewId] ?? normalizeRecord(record, collection.diagnostics),
+              }
+            : {}),
+        ...(Object.hasOwn(analysisByReviewId, record.reviewId)
+            ? { analysis: analysisByReviewId[record.reviewId] }
+            : {}),
     }));
     const diagnostic = {
         recordType: 'sourceDiagnostic',

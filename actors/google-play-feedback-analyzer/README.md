@@ -1,6 +1,6 @@
 # Google Play Feedback Analyzer
 
-Collect bounded public Google Play review records for one or more Android apps. The current release uses the public Store HTML page, preserves locale and market parameters, and emits source diagnostics so later phases can add shared feedback analysis without coupling it to collection.
+Collect bounded public Google Play review records for one or more Android apps. The current release uses the public Store HTML page, preserves locale and market parameters, emits source diagnostics, and attaches optional shared-core analysis without coupling analysis to collection.
 
 ## What it collects
 
@@ -10,7 +10,7 @@ Collect bounded public Google Play review records for one or more Android apps. 
 - A machine-readable diagnostic record for every app, including HTTP status, response size, and parsed-card count.
 - A `normalizedFeedback` object on each review, validated by the shared source-neutral feedback contract.
 
-The public page currently exposes a bounded server-rendered sample, not complete review history. The browser expansion path and analysis engine are intentionally deferred to later phases.
+The public page currently exposes a bounded server-rendered sample, not complete review history. Browser expansion remains deferred; shared deterministic analysis is enabled by default.
 
 ## Input
 
@@ -23,6 +23,7 @@ The public page currently exposes a bounded server-rendered sample, not complete
 | `sort`               | no       | `mostRelevant` | `mostRelevant` or `newest`; recorded for diagnostics in the current HTML path. |
 | `useBrowserFallback` | no       | `false`        | Reserved for the later browser-expansion phase.                                |
 | `requestTimeoutSecs` | no       | `30`           | Per-request timeout, 5–120 seconds.                                            |
+| `analysis`           | no       | enabled        | Shared analysis settings: `enabled`, `outputLanguage`, and `maxAttempts`.      |
 
 Example:
 
@@ -58,6 +59,7 @@ Example:
 | `diagnostics.collectionMode`    | Current value is `html`.                                  |
 | `error.code`                    | Machine-readable source error code when collection fails. |
 | `normalizedFeedback`            | Source-neutral feedback object validated by shared core.  |
+| `analysis`                      | Shared-core analysis result, when analysis is enabled.    |
 
 ## Local run
 

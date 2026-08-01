@@ -25,3 +25,30 @@ test('collects each requested app and publishes review plus diagnostic records',
         totalRecords: 4,
     });
 });
+
+test('propagates normalized feedback and shared analysis into review output', async () => {
+    const published = [];
+    await runGooglePlayCollection({
+        input: { appIds: ['com.one'] },
+        collect: async () => ({
+            records: [{ reviewId: 'review-1', appId: 'com.one', rating: 2, text: 'Issue' }],
+            diagnostics: { httpStatus: 200, collectionMode: 'html' },
+        }),
+        normalizeRecord: (record) => ({ sourceRecordId: record.reviewId }),
+        analyzeRecord: async (normalized) => ({
+            analysisStatus: 'success',
+            sentiment: normalized.sourceRecordId === 'review-1' ? 'negative' : 'neutral',
+        }),
+        onRecord: async (record) => published.push(record),
+    });
+
+    assert.deepEqual(published[0], {
+        recordType: 'review',
+        reviewId: 'review-1',
+        appId: 'com.one',
+        rating: 2,
+        text: 'Issue',
+        normalizedFeedback: { sourceRecordId: 'review-1' },
+        analysis: { analysisStatus: 'success', sentiment: 'negative' },
+    });
+});

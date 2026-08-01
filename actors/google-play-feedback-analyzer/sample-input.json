@@ -5,5 +5,10 @@
     "maxReviewsPerApp": 3,
     "sort": "mostRelevant",
     "useBrowserFallback": false,
-    "requestTimeoutSecs": 30
+    "requestTimeoutSecs": 30,
+    "analysis": {
+        "enabled": true,
+        "outputLanguage": "english",
+        "maxAttempts": 2
+    }
 }
