@@ -1,0 +1,187 @@
+{
+  "title": "Apple App Store Feedback Analyzer Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "mode": {
+      "title": "Run mode",
+      "description": "Collect review records or compare feedback around an Apple release.",
+      "type": "string",
+      "editor": "select",
+      "enum": ["reviews", "releaseImpact"],
+      "default": "reviews"
+    },
+    "appIds": {
+      "title": "Apple App Store app IDs",
+      "description": "Numeric Apple App Store application IDs.",
+      "type": "array",
+      "editor": "stringList",
+      "maxItems": 20,
+      "items": { "type": "string", "pattern": "^[0-9]+$" }
+    },
+    "appStoreUrls": {
+      "title": "Apple App Store URLs",
+      "description": "Public App Store URLs containing an /id<number> segment. Explicit app IDs are preserved and take precedence over duplicate URL IDs.",
+      "type": "array",
+      "editor": "stringList",
+      "maxItems": 20,
+      "items": { "type": "string" }
+    },
+    "country": {
+      "title": "Apple storefront country",
+      "description": "Two-letter storefront code used by the public RSS feed.",
+      "type": "string",
+      "editor": "textfield",
+      "default": "US",
+      "pattern": "^[A-Za-z]{2}$"
+    },
+    "language": {
+      "title": "Requested feed locale",
+      "description": "Locale hint sent to the public feed. Apple does not expose a guaranteed reviewer-language field in this feed; unknown language must remain unknown in downstream comparisons.",
+      "type": "string",
+      "editor": "textfield",
+      "default": "en",
+      "pattern": "^[A-Za-z]{2,3}$"
+    },
+    "maxReviewsPerApp": {
+      "title": "Maximum reviews per app",
+      "description": "Hard cap after pagination and review-ID deduplication.",
+      "type": "integer",
+      "editor": "number",
+      "default": 50,
+      "minimum": 1,
+      "maximum": 500
+    },
+    "maxPagesPerApp": {
+      "title": "Maximum feed pages per app",
+      "description": "Apple public feed pagination is bounded; the Actor caps this value at 10 pages.",
+      "type": "integer",
+      "editor": "number",
+      "default": 10,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "requestTimeoutSecs": {
+      "title": "Request timeout seconds",
+      "description": "Timeout for each public Apple feed request.",
+      "type": "integer",
+      "editor": "number",
+      "default": 30,
+      "minimum": 5,
+      "maximum": 120
+    },
+    "analysis": {
+      "title": "Shared analysis",
+      "description": "Run the shared deterministic feedback-analysis core.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "description": "Attach shared analysis to collected reviews.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "outputLanguage": {
+          "title": "Output language",
+          "description": "Language for analysis summaries.",
+          "type": "string",
+          "editor": "select",
+          "enum": ["english", "original"],
+          "default": "english"
+        },
+        "maxAttempts": {
+          "title": "Provider attempts",
+          "description": "Retry budget reserved for a future external provider.",
+          "type": "integer",
+          "editor": "number",
+          "minimum": 1,
+          "maximum": 3,
+          "default": 2
+        }
+      }
+    },
+    "aggregation": {
+      "title": "Clustering and reports",
+      "description": "Create platform-level clusters and per-app reports.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "description": "Emit clusters and aggregate reports.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "minimumClusterSize": {
+          "title": "Minimum cluster size",
+          "description": "Minimum actionable reviews required for a cluster.",
+          "type": "integer",
+          "editor": "number",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 2
+        }
+      }
+    },
+    "release": {
+      "title": "Release metadata",
+      "description": "Release metadata required by releaseImpact mode.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "version": {
+          "title": "Version",
+          "description": "Optional released app version for report context.",
+          "type": "string",
+          "editor": "textfield",
+          "default": ""
+        },
+        "releasedAt": {
+          "title": "Released at",
+          "description": "ISO date-time used as the release boundary.",
+          "type": "string",
+          "editor": "textfield",
+          "default": ""
+        }
+      }
+    },
+    "daysBefore": {
+      "title": "Days before release",
+      "description": "Calendar days collected before the release boundary.",
+      "type": "integer",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 365,
+      "default": 14
+    },
+    "daysAfter": {
+      "title": "Days after release",
+      "description": "Calendar days collected after the release boundary.",
+      "type": "integer",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 365,
+      "default": 14
+    },
+    "maxReviewsPerPeriod": {
+      "title": "Maximum reviews per release period",
+      "description": "Hard cap applied to each release comparison collection.",
+      "type": "integer",
+      "editor": "number",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 100
+    },
+    "debug": {
+      "title": "Debug logging",
+      "description": "Enable additional local diagnostic logging.",
+      "type": "boolean",
+      "editor": "checkbox",
+      "default": false
+    }
+  },
+  "required": []
+}

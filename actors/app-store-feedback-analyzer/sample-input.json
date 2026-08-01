@@ -1,0 +1,14 @@
+{
+  "appIds": ["123456789"],
+  "country": "US",
+  "language": "en",
+  "maxReviewsPerApp": 50,
+  "maxPagesPerApp": 10,
+  "analysis": {
+    "enabled": true,
+    "outputLanguage": "english",
+    "maxAttempts": 2
+  },
+  "aggregation": { "enabled": true, "minimumClusterSize": 2 },
+  "debug": false
+}

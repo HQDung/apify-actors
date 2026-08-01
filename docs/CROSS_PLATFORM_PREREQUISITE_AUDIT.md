@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | Shared feedback-analysis core | `packages/feedback-analysis-core` | Ready for source integration, with scope limits | 10/10 core tests pass; contracts, taxonomy, deterministic fallback, clustering, aggregation, and window comparison are present |
 | Google Play source Actor | `actors/google-play-feedback-analyzer` | Available and locally regression-tested | 27/27 Actor tests pass; normalized adapter, collection, analysis attachment, clustering, aggregation, and release-impact tests are present |
-| Apple App Store source Actor | No repository directory found under `actors/` | **Blocking prerequisite missing** | No Apple source adapter, schema, fixture set, or regression suite exists |
+| Apple App Store source Actor | `actors/app-store-feedback-analyzer` | Available and locally regression-tested | 13 Apple tests pass, including RSS parsing, pagination, deduplication, normalized English/Vietnamese contracts, shared analysis wiring, partial failure, multi-app aggregation, release windows, and Docker packaging |
 | Cross-platform comparison core | No repository package found | Not started | Correctly deferred until both source contracts are stable |
 
 ## Verification evidence
@@ -21,6 +21,9 @@ Commands run from the repository root:
 - `node --test actors/google-play-feedback-analyzer/test/*.test.mjs actors/google-play-feedback-analyzer/tests/technical-spike-fixtures.test.mjs` — 27 passed, 0 failed.
 - `node --test tests/contracts/*.test.js tests/regression/*.test.js` — 8 passed, 1 intentional network smoke skipped, 0 failed.
 - `node --test test/core-packaging.test.js` — 1 passed, 0 failed.
+- `node --test actors/app-store-feedback-analyzer/test/*.test.mjs` — 13 passed, 0 failed.
+- `npm run lint` and `npm run format:check` in `actors/app-store-feedback-analyzer` — clean.
+- `apify validate-schema` in `actors/app-store-feedback-analyzer` — input schema valid.
 - `apify --help` — CLI installed, version `1.7.1`.
 - `apify info` — unable to reach `api.apify.com` from the current sandbox (`ENOTFOUND`); no cloud readiness claim is made from this command.
 
@@ -39,4 +42,4 @@ This is evidence of the current Google path only; it is not evidence of cross-pl
 
 ## Audit conclusion
 
-The shared core and Google source are sufficiently stable to serve as inputs to an Apple adapter, subject to the contract gaps documented in `docs/NORMALIZED_CONTRACT_GAPS.md`. The project must implement and validate the Apple App Store source before Phase 1 comparison contracts can be treated as executable across both platforms.
+The shared core, Google source, and Apple source now produce the same current source-neutral contract shape and pass their local regression suites. The public Apple feed smoke was attempted but returned `fetch failed` in the current sandbox; this is recorded in `docs/PHASE_0B_APP_STORE_REPORT.md` and is not treated as cloud coverage evidence. Phase 1 comparison contracts may now begin, subject to the deliberate field decisions in `docs/NORMALIZED_CONTRACT_GAPS.md`.

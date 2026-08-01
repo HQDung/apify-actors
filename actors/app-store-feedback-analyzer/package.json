@@ -1,0 +1,26 @@
+{
+  "name": "app-store-feedback-analyzer",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Collect public Apple App Store review records for feedback analysis.",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "apify": "^3.7.0",
+    "@project/feedback-analysis-core": "file:vendor/project-feedback-analysis-core-1.0.0.tgz"
+  },
+  "devDependencies": {
+    "@apify/eslint-config": "^2.0.0",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.5.3"
+  },
+  "scripts": {
+    "start": "node ./src/main.js",
+    "format:check": "prettier --check .",
+    "lint": "eslint src test"
+  },
+  "author": "Project",
+  "license": "ISC"
+}

@@ -1,0 +1,22 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Apple App Store feedback analyzer output",
+  "properties": {
+    "dataset": {
+      "type": "string",
+      "title": "Apple App Store review dataset",
+      "description": "Review, source diagnostic, cluster, aggregate report, and release-impact records.",
+      "template": "{{datasetUrl}}"
+    },
+    "reports": {
+      "type": "string",
+      "title": "Per-app aggregate reports",
+      "template": "{{keyValueStoreUrl}}"
+    },
+    "runStatistics": {
+      "type": "string",
+      "title": "Run statistics",
+      "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
+    }
+  }
+}

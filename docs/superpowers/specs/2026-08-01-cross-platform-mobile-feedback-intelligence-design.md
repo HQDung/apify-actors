@@ -10,6 +10,6 @@
 
 **Phase gates:** Each phase must end with tests, documentation, an acceptance report, and an isolated Git checkpoint. No comparison implementation proceeds until Phase 0 confirms the source prerequisites or documents and resolves their blockers.
 
-**Current prerequisite finding:** The repository currently contains `actors/google-play-feedback-analyzer` and `packages/feedback-analysis-core`, but no Apple App Store source Actor. Therefore Phase 0 can validate the existing core and Google source, while Apple collection and its regression contract remain a blocking prerequisite for cross-platform comparison.
+**Initial prerequisite finding:** Phase 0 found only `actors/google-play-feedback-analyzer` and `packages/feedback-analysis-core`. Phase 0B subsequently added and validated `actors/app-store-feedback-analyzer`; comparison work remains gated by the explicit contract decisions and live-cloud smoke evidence documented in the phase reports.
 
 **Verification:** Use the repository’s Node test suites and `apify validate-schema` for Actor schemas. Cloud commands remain separately authorized; this execution does not publish automatically or change pricing.

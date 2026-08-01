@@ -1,0 +1,114 @@
+{
+  "actorSpecification": 1,
+  "title": "Apple App Store reviews, feedback clusters, and reports",
+  "views": {
+    "overview": {
+      "title": "Apple App Store records",
+      "transformation": {
+        "fields": [
+          "recordType",
+          "appId",
+          "reviewId",
+          "rating",
+          "title",
+          "text",
+          "reviewDateText",
+          "appVersion",
+          "helpfulCount",
+          "source.country",
+          "source.language",
+          "diagnostics.httpStatus",
+          "diagnostics.pagesFetched",
+          "diagnostics.parsedReviewCount",
+          "error.code",
+          "normalizedFeedback",
+          "analysis",
+          "product.productId",
+          "clusterId",
+          "canonicalIssue",
+          "feedbackType",
+          "topics",
+          "mentionCount",
+          "severity",
+          "clusterConfidence",
+          "statistics.reviewsCollected",
+          "statistics.averageRating",
+          "release.version",
+          "release.releasedAt",
+          "windows.before.from",
+          "windows.after.from",
+          "topicChanges",
+          "newIssues",
+          "warnings",
+          "disclaimer",
+          "generatedAt"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "recordType": { "label": "Record type", "format": "text" },
+          "appId": { "label": "Apple app ID", "format": "text" },
+          "reviewId": { "label": "Review ID", "format": "text" },
+          "rating": { "label": "Stars", "format": "number" },
+          "title": { "label": "Title", "format": "text" },
+          "text": { "label": "Review text", "format": "text" },
+          "reviewDateText": { "label": "Review date", "format": "text" },
+          "appVersion": { "label": "App version", "format": "text" },
+          "helpfulCount": { "label": "Helpful votes", "format": "number" },
+          "source.country": { "label": "Country", "format": "text" },
+          "source.language": { "label": "Feed locale", "format": "text" },
+          "diagnostics.httpStatus": {
+            "label": "HTTP status",
+            "format": "number"
+          },
+          "diagnostics.pagesFetched": {
+            "label": "Pages fetched",
+            "format": "number"
+          },
+          "diagnostics.parsedReviewCount": {
+            "label": "Parsed reviews",
+            "format": "number"
+          },
+          "error.code": { "label": "Error code", "format": "text" },
+          "normalizedFeedback": {
+            "label": "Normalized feedback",
+            "format": "text"
+          },
+          "analysis": { "label": "Shared analysis", "format": "text" },
+          "product.productId": { "label": "Report app ID", "format": "text" },
+          "clusterId": { "label": "Cluster ID", "format": "text" },
+          "canonicalIssue": { "label": "Canonical issue", "format": "text" },
+          "feedbackType": { "label": "Feedback type", "format": "text" },
+          "topics": { "label": "Topics", "format": "array" },
+          "mentionCount": { "label": "Mentions", "format": "number" },
+          "severity": { "label": "Severity", "format": "text" },
+          "clusterConfidence": {
+            "label": "Cluster confidence",
+            "format": "number"
+          },
+          "statistics.reviewsCollected": {
+            "label": "Reviews collected",
+            "format": "number"
+          },
+          "statistics.averageRating": {
+            "label": "Average rating",
+            "format": "number"
+          },
+          "release.version": { "label": "Release version", "format": "text" },
+          "release.releasedAt": {
+            "label": "Release timestamp",
+            "format": "text"
+          },
+          "windows.before.from": { "label": "Before window", "format": "text" },
+          "windows.after.from": { "label": "After window", "format": "text" },
+          "topicChanges": { "label": "Topic changes", "format": "text" },
+          "newIssues": { "label": "New issues", "format": "text" },
+          "warnings": { "label": "Warnings", "format": "text" },
+          "disclaimer": { "label": "Disclaimer", "format": "text" },
+          "generatedAt": { "label": "Generated at", "format": "text" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "mode": "releaseImpact",
+  "appIds": ["123456789"],
+  "country": "US",
+  "language": "en",
+  "release": { "version": "4.2.0", "releasedAt": "2026-07-20T00:00:00.000Z" },
+  "daysBefore": 14,
+  "daysAfter": 14,
+  "maxReviewsPerPeriod": 100,
+  "analysis": {
+    "enabled": true,
+    "outputLanguage": "english",
+    "maxAttempts": 2
+  },
+  "aggregation": { "enabled": true, "minimumClusterSize": 2 },
+  "debug": false
+}

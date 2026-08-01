@@ -6,9 +6,9 @@
 
 | Risk | Why it blocks | Exit criterion |
 | --- | --- | --- |
-| Apple App Store source is absent | There is no second source to collect, normalize, or regression-test | Add an Apple source Actor/client with schema, fixtures, normalized adapter, partial-failure behavior, and a green regression suite |
+| Apple public-feed coverage is environment-limited | The source Actor is implemented and fixture-tested, but the current sandbox cannot complete a live Apple feed request | Run an authorized cloud smoke with a real app ID before publishing any Apple coverage claim |
 | No cross-platform source contract | The current Google contract uses `source.platform` and platform IDs as product IDs; the handoff requires explicit product mapping | Approve and test Phase 1 contracts for product identity, platform identity, review envelope, cluster records, comparison records, and warnings |
-| No bilingual Apple evidence | English/Vietnamese compatibility cannot be assessed across both stores | Add representative English and Vietnamese Apple fixtures and contract tests |
+| Apple reviewer-language attribution is unavailable in the public feed | The requested locale is not guaranteed to be the reviewer’s original language | Preserve the requested locale as a collection dimension, use `unknown` when source language is absent, and disclose the limitation |
 
 ## High risks
 
@@ -30,8 +30,8 @@
 
 ## Deferred work after Phase 0
 
-1. Build and validate the Apple App Store source prerequisite.
-2. Define Phase 1 comparison contracts around the actual source capabilities.
+1. Define Phase 1 comparison contracts around the actual source capabilities.
+2. Run an authorized cloud Apple smoke with a real app ID before Store claims.
 3. Only then implement the comparison Actor and matching/aggregation layers.
 
 No production comparison code is authorized by this phase report.

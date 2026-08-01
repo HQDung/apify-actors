@@ -1,0 +1,15 @@
+{
+  "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+  "actorSpecification": 1,
+  "name": "app-store-feedback-analyzer",
+  "title": "Apple App Store Reviews & App Feedback Analyzer",
+  "description": "Collect bounded public Apple App Store reviews and turn them into structured feedback, issue clusters, aggregate reports, and cautious release-impact signals.",
+  "categories": ["AI", "BUSINESS"],
+  "version": "0.1",
+  "buildTag": "latest",
+  "meta": {
+    "templateId": "js-empty",
+    "generatedBy": "Codex with GPT-5"
+  },
+  "dockerfile": "../Dockerfile"
+}
