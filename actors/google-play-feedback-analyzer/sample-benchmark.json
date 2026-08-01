@@ -1,0 +1,24 @@
+{
+    "appIds": ["com.google.android.youtube", "com.todoist", "com.zing.zalo", "com.spotify.music", "com.duolingo"],
+    "language": "en",
+    "country": "US",
+    "maxReviewsPerApp": 3,
+    "sort": "mostRelevant",
+    "useBrowserFallback": false,
+    "requestTimeoutSecs": 30,
+    "analysis": {
+        "enabled": true,
+        "outputLanguage": "english",
+        "maxAttempts": 2
+    },
+    "aggregation": {
+        "enabled": true,
+        "minimumClusterSize": 2,
+        "comparison": {
+            "enabled": false,
+            "releasedAt": "",
+            "daysBefore": 14,
+            "daysAfter": 14
+        }
+    }
+}

@@ -10,4 +10,5 @@
 - Added per-app aggregate report key-value records and dataset schema fields for cluster/report outputs.
 - Added `releaseImpact` mode with bounded before/after windows, multi-language/country collection, rating and issue deltas, and structured data-sufficiency warnings.
 - Added per-app `APP_RELEASE_IMPACT_<app-id>` key-value reports.
+- Added a five-app operational benchmark, quality-review limitations, and cost accounting notes.
 - Browser expansion and external-provider analysis remain deferred.

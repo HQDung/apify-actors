@@ -41,4 +41,12 @@ Phase 12 release-impact smoke on 2026-08-01:
 - HTTP 200; 1,291,510 response bytes; runtime 684 ms on the local macOS development environment.
 - The impact report was written to `APP_RELEASE_IMPACT_com_todoist` and included structured `NO_REVIEWS`/`LIMITED_DATA` warnings.
 
+Phase 13 five-app benchmark matrix on 2026-08-01:
+
+- Matrix: `com.google.android.youtube` (global-large), `com.todoist` (subscription/productivity), `com.zing.zalo` (Vietnam-focused), `com.spotify.music` (subscription/audio), and `com.duolingo` (mixed subscription/advertising study case).
+- 5/5 app requests succeeded; 15 reviews, 15 analysis objects, 5 diagnostics, and 5 aggregate reports were emitted.
+- 0 collection errors and 0 analysis failures; 25 total dataset records (`collectionRecords: 20`, `aggregationRecords: 5`).
+- Total public response bytes: 6,563,254; runtime: 1,889 ms; reported process RSS: 209,715,200 bytes.
+- The benchmark measures operational behavior and deterministic fallback execution. It does not claim feedback-type/topic accuracy because no independent manual labels or external analysis provider were configured.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

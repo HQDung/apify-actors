@@ -114,6 +114,10 @@ apify run --purge --input-file sample-input.json
 
 The local dataset and `RUN_STATS` key-value record are written under `storage/`. They are local verification artifacts and are not published automatically.
 
+## Benchmark evidence
+
+The Phase 13 five-app matrix processed 15 reviews with 15 deterministic analyses, 0 collection errors, 0 analysis failures, 5 aggregate reports, 6.56 MB of public response data, 1.889 seconds runtime, and 200 MiB reported process RSS. See [`BENCHMARK_NOTES.md`](BENCHMARK_NOTES.md), [`docs/BENCHMARK_REPORT.md`](docs/BENCHMARK_REPORT.md), [`docs/QUALITY_REVIEW.md`](docs/QUALITY_REVIEW.md), and [`docs/COST_REPORT.md`](docs/COST_REPORT.md) for scope and limitations. These are operational measurements, not human-labeled accuracy claims.
+
 ## Source limitations
 
 - Google Play localizes markup labels and dates; parsing uses structural selectors and star classes rather than English-only labels.
