@@ -329,6 +329,15 @@
           "minimum": 1,
           "maximum": 1000
         },
+        "minimumDimensionReviews": {
+          "title": "Minimum dimension sample",
+          "description": "Minimum reviews per platform before country/language/version differences are marked sufficient.",
+          "type": "integer",
+          "editor": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10000
+        },
         "includeCountryComparison": {
           "title": "Include country comparison",
           "description": "Compare country dimensions when supported.",

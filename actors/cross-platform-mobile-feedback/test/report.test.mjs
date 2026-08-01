@@ -94,7 +94,7 @@ test("builds a validated report with platform statistics and comparisons", () =>
         reviewId: "ios-1",
         rating: 4,
         language: "vi",
-        country: "VN",
+        country: "US",
         version: "4.2.0",
       }),
     ],
@@ -129,6 +129,7 @@ test("builds a validated report with platform statistics and comparisons", () =>
       googlePlayReviewsCollected: 1,
       appleAppStoreReviewsCollected: 1,
     },
+    minimumDimensionReviews: 1,
     dateRange: { from: null, to: null },
     generatedAt: "2026-08-01T00:00:00.000Z",
   });
@@ -144,6 +145,11 @@ test("builds a validated report with platform statistics and comparisons", () =>
   assert.equal(report.sharedIssues.length, 1);
   assert.equal(report.platformDifferences.ratingDifference, -2);
   assert.deepEqual(report.warnings, []);
+  assert.equal(report.countryInsights[0].evidenceStatus, "sufficient");
+  assert.equal(
+    report.languageInsights[0].languageAttribution,
+    "requested_store_locale_not_reviewer_origin",
+  );
 });
 
 test("warns when one platform has no collected reviews", () => {
@@ -172,4 +178,5 @@ test("warns when one platform has no collected reviews", () => {
   });
   assert.ok(report.warnings.some((warning) => warning.platform === "ios"));
   assert.equal(report.statistics.appleAppStoreAverageRating, null);
+  assert.equal(report.countryInsights[0].evidenceStatus, "limited");
 });

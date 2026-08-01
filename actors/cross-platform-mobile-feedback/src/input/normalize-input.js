@@ -399,6 +399,13 @@ export const normalizeInput = (input = {}) => {
         1000,
         "comparison.minimumPlatformSpecificMentions",
       ),
+      minimumDimensionReviews: bounded(
+        input.comparison?.minimumDimensionReviews,
+        5,
+        1,
+        10000,
+        "comparison.minimumDimensionReviews",
+      ),
       includeCountryComparison: booleanOrDefault(
         input.comparison?.includeCountryComparison,
         true,

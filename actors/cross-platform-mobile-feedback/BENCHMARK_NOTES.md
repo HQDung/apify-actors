@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 8 — Country and language comparisons
+
+The local benchmark covers country/language/version dimension records, platform-separated counts and ratings, negative-topic/actionability signals, configurable minimum dimension samples, limited-evidence labeling, and explicit requested-locale attribution. Country and language are kept as separate dimensions.
+
 ## Phase 7 — Per-product reports and aggregate summaries
 
 The local benchmark covers validated per-product report generation, platform review/actionability/rating statistics, shared and platform-specific comparison placement, rating/volume differences, country/language/version dimensions, key-value report storage, and missing-source warnings.

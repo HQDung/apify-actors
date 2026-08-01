@@ -23,6 +23,6 @@
     "maxReviewsToAnalyze": 1000,
     "cacheMaxEntries": 1000
   },
-  "comparison": { "enabled": true },
+  "comparison": { "enabled": true, "minimumDimensionReviews": 5 },
   "aggregation": { "enabled": true }
 }

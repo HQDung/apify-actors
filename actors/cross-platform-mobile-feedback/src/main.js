@@ -72,6 +72,9 @@ try {
   const comparisons = [];
   if (input.comparison.enabled) {
     for (const product of input.products) {
+      const productReviews = collection.reviews.filter(
+        (review) => review.product.productId === product.productId,
+      );
       const result = comparePlatformClusters({
         product,
         clusters: clustering.clusters,
@@ -79,7 +82,14 @@ try {
           input.comparison.minimumSharedClusterConfidence,
         minimumPlatformSpecificMentions:
           input.comparison.minimumPlatformSpecificMentions,
-        platformEvidence: collection.stats,
+        platformEvidence: {
+          googlePlayReviewsCollected: productReviews.filter(
+            (review) => review.platform.id === "googlePlay",
+          ).length,
+          appleAppStoreReviewsCollected: productReviews.filter(
+            (review) => review.platform.id === "appleAppStore",
+          ).length,
+        },
       });
       comparisons.push(...result.comparisons);
     }
@@ -89,19 +99,29 @@ try {
   const reports = [];
   if (input.comparison.enabled && input.aggregation.enabled) {
     for (const product of input.products) {
+      const productReviews = collection.reviews.filter(
+        (review) => review.product.productId === product.productId,
+      );
+      const productAnalysisRecords = analysis.analysisRecords.filter(
+        (entry) => entry.review.product.productId === product.productId,
+      );
       const report = buildCrossPlatformReport({
         product,
-        reviews: collection.reviews.filter(
-          (review) => review.product.productId === product.productId,
-        ),
-        analysisRecords: analysis.analysisRecords.filter(
-          (entry) => entry.review.product.productId === product.productId,
-        ),
+        reviews: productReviews,
+        analysisRecords: productAnalysisRecords,
         comparisons: comparisons.filter(
           (comparison) => comparison.product.productId === product.productId,
         ),
-        platformEvidence: collection.stats,
+        platformEvidence: {
+          googlePlayReviewsCollected: productReviews.filter(
+            (review) => review.platform.id === "googlePlay",
+          ).length,
+          appleAppStoreReviewsCollected: productReviews.filter(
+            (review) => review.platform.id === "appleAppStore",
+          ).length,
+        },
         dateRange: input.dateRange,
+        minimumDimensionReviews: input.comparison.minimumDimensionReviews,
         sourceErrors: collection.errors.filter(
           (error) => error.productId === product.productId,
         ),

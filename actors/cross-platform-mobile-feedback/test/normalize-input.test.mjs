@@ -43,6 +43,7 @@ test("normalizes explicit product identity and gives IDs precedence over URLs", 
   assert.equal(input.analysis.maxAttempts, 2);
   assert.equal(input.analysis.maxReviewsToAnalyze, 1000);
   assert.equal(input.analysis.cacheMaxEntries, 1000);
+  assert.equal(input.comparison.minimumDimensionReviews, 5);
 });
 
 test("normalizes bounded source collection controls", () => {
@@ -68,9 +69,11 @@ test("validates analysis output language and cost controls", () => {
       maxReviewsToAnalyze: 20,
       cacheMaxEntries: 20,
     },
+    comparison: { minimumDimensionReviews: 2 },
   });
   assert.equal(input.analysis.outputLanguage, "original");
   assert.equal(input.analysis.maxReviewsToAnalyze, 20);
+  assert.equal(input.comparison.minimumDimensionReviews, 2);
   assert.throws(
     () =>
       normalizeInput({

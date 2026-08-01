@@ -25,7 +25,8 @@
   "comparison": {
     "enabled": true,
     "minimumSharedClusterConfidence": 0.75,
-    "minimumPlatformSpecificMentions": 2
+    "minimumPlatformSpecificMentions": 2,
+    "minimumDimensionReviews": 5
   },
   "aggregation": {
     "enabled": true,

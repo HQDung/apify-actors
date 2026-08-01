@@ -26,11 +26,11 @@ IDs take precedence over parsed URL values. The Actor rejects duplicate Google P
 
 ## Current phase output
 
-The comparison phase writes normalized `review`, `reviewAnalysis`, `feedbackCluster`, `crossPlatformComparison`, `sourceDiagnostic`, and platform-scoped `runError` dataset records, plus `NORMALIZED_INPUT`, `CLUSTER_INDEX`, `CROSS_PLATFORM_COMPARISONS`, and `RUN_STATS`. Clusters are created separately for Android and iOS; comparison matches are restricted to the same explicit product and use cautious collected-sample wording.
+The comparison phase writes normalized `review`, `reviewAnalysis`, `feedbackCluster`, `crossPlatformComparison`, `sourceDiagnostic`, and platform-scoped `runError` dataset records, plus `NORMALIZED_INPUT`, `CLUSTER_INDEX`, `CROSS_PLATFORM_COMPARISONS`, and `RUN_STATS`. Clusters are created separately for Android and iOS; comparison matches are restricted to the same explicit product and use cautious collected-sample wording. Reports include country/language/version dimensions with per-platform counts and explicit small-sample status.
 
 Source collection is bounded by `maxReviewsPerPlatform`, `requestTimeoutSecs`, and `maxPagesPerPlatform`. Google Play uses its public review HTML surface; Apple uses the public RSS/JSON customer-review feed. Store coverage, pagination, and rate limits are recorded in diagnostics.
 
-When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost. Reports are observational summaries and disclose missing-platform or partial-source evidence.
+When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost. Reports are observational summaries and disclose missing-platform or partial-source evidence. Language dimensions represent requested store locale, not guaranteed reviewer-origin language.
 
 ## Limitations
 

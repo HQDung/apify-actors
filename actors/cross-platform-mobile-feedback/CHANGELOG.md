@@ -2,6 +2,7 @@
 
 ## 0.1.0
 
+- Added configurable country/language/version dimension insights with platform-separated statistics, negative-topic signals, and limited-sample warnings.
 - Added validated per-product cross-platform reports, platform statistics, comparison summaries, dimension insights, partial-source warnings, and report key-value storage.
 - Added same-product cross-platform cluster matching with shared, platform-specific, dominant, and insufficient-evidence classifications.
 - Added platform-partitioned issue clusters with deterministic IDs, review links, platform dimensions, and cluster index storage.
