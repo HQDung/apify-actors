@@ -10,6 +10,7 @@ import {
 } from "./discovery/google-maps.js";
 import {
   buildSearchJobs,
+  deduplicatePlaceCards,
   deduplicateRestaurants,
   normalizeRestaurantCandidate,
   restaurantIdFor,
@@ -57,30 +58,42 @@ try {
     maxPlacesPerJob: input.maxRestaurants,
   });
   statistics.set("rawPlacesDiscovered", cards.length);
+  const detailCandidates = deduplicatePlaceCards(cards, input.maxRestaurants);
+  statistics.set("placeCardsForDetails", detailCandidates.length);
+  log.info(
+    `Discovery complete: ${cards.length} raw place cards; ${detailCandidates.length} unique detail candidates after the ${input.maxRestaurants}-restaurant cap.`,
+  );
 
   let detailFailures = 0;
-  const detailed = await mapInBatches(cards, browserBatchSize, async (card) => {
-    try {
-      return await extractPlaceDetails({
-        browser,
-        createContext: async (instance) => instance.newContext(),
-        place: card,
-      });
-    } catch (error) {
-      detailFailures++;
-      log.warning(
-        `Place detail skipped for ${card.sourceUrl}: ${error.message}`,
-      );
-      return {
-        ...card,
-        warning: {
-          code: "DISCOVERY_FAILED",
-          message: error.message,
-          sourceUrl: card.sourceUrl,
-        },
-      };
-    }
-  });
+  const detailed = await mapInBatches(
+    detailCandidates,
+    browserBatchSize,
+    async (card) => {
+      try {
+        return await extractPlaceDetails({
+          browser,
+          createContext: async (instance) => instance.newContext(),
+          place: card,
+        });
+      } catch (error) {
+        detailFailures++;
+        log.warning(
+          `Place detail skipped for ${card.sourceUrl}: ${error.message}`,
+        );
+        return {
+          ...card,
+          warning: {
+            code: "DISCOVERY_FAILED",
+            message: error.message,
+            sourceUrl: card.sourceUrl,
+          },
+        };
+      }
+    },
+  );
+  log.info(
+    `Detail extraction complete: ${detailed.length} candidates processed; ${detailFailures} detail failures.`,
+  );
 
   const normalized = detailed.map((candidate) => {
     const record = normalizeRestaurantCandidate(candidate, input.location);
@@ -90,6 +103,9 @@ try {
   });
   const restaurants = deduplicateRestaurants(normalized, input.maxRestaurants);
   statistics.set("restaurantsAfterDeduplication", restaurants.length);
+  log.info(
+    `Restaurant deduplication complete: ${restaurants.length} restaurants selected for enrichment.`,
+  );
 
   let menuPagesCrawled = 0;
   let rawMenuItems = 0;
@@ -301,6 +317,9 @@ try {
         };
       }
     },
+  );
+  log.info(
+    `Website and menu enrichment complete: ${enriched.length} restaurants processed.`,
   );
 
   statistics.set("restaurantsProcessed", enriched.length);

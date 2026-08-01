@@ -28,7 +28,7 @@
     "maxRestaurants": {
       "title": "Maximum restaurants",
       "type": "integer",
-      "description": "Maximum number of unique restaurants returned after discovery deduplication.",
+      "description": "Maximum number of unique restaurants returned after discovery deduplication. The Actor also bounds Google Maps detail extraction to this cap after lightweight place-card deduplication.",
       "editor": "number",
       "default": 30,
       "minimum": 1,

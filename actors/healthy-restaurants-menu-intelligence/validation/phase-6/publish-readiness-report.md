@@ -1,6 +1,6 @@
 # Phase 6 Publish-Readiness Report
 
-Date: 2026-07-30
+Date: 2026-08-01
 
 ## Executive summary
 
@@ -8,7 +8,7 @@ Phase 6 hardened the Healthy Restaurants & Menu Intelligence Actor without addin
 
 The final local benchmarks completed successfully. The small run pushed 10 of 10 schema-valid records. The standard run pushed 30 of 30 schema-valid records and retained 117 deduplicated menu items across three extracted menus. A regression found during the standard run—an undefined internal `sourceEvidenceText` field reintroduced by duplicate menu-item merging—was fixed with a regression test and confirmed by the post-fix rerun.
 
-The authenticated Apify account is valid and contains the pushed private Actor `ItLJs9pHV9h1Ysiyt` at build `0.1.1` (`Kw1f0vkx6MCFxiQhg`). Three authorized cloud smoke runs completed successfully without publishing or pricing changes. They produced 40 schema-valid records, zero duplicate restaurant IDs, 326.034 seconds of runtime, 0.362260 compute units, and $0.074536 total reported usage.
+The authenticated Apify account is valid and the updated public Actor is running build `0.1.2` (`2kIHjvFljTbAaIdhO`). The exact five-keyword Store test completed successfully in 202.394 seconds with 30 schema-valid records. Discovery found 150 raw cards, reduced them to 30 detail candidates, and completed detail extraction with zero failures.
 
 ## Phase 5 prerequisite
 
@@ -27,6 +27,8 @@ The authenticated Apify account is valid and contains the pushed private Actor `
 - Skipped malformed records rather than pushing them; the validator now reports contract paths for diagnosis.
 - Fixed duplicate menu-item merging so internal evidence fields are never exposed as `undefined` output properties.
 - Added aggregate `Run summary` metrics for discovery, websites, menus, items, classifications, messages, pushed results, and runtime.
+- Added lightweight place-card deduplication and a detail-candidate cap equal to `maxRestaurants` before browser detail extraction.
+- Added discovery, detail, deduplication, and enrichment phase-boundary logs for timeout diagnosis.
 
 ## Runtime settings
 
@@ -46,19 +48,23 @@ The authenticated Apify account is valid and contains the pushed private Actor `
 
 ## Commands and results
 
-| Command                                                             | Exit | Result                                                         |
-| ------------------------------------------------------------------- | ---: | -------------------------------------------------------------- |
-| `rg -n "READY_FOR_PHASE_6" validation/phase-5/validation-report.md` |    0 | Phase 5 gate confirmed.                                        |
-| `apify --help`                                                      |    0 | Apify CLI available.                                           |
-| `npm run build`                                                     |    0 | JavaScript syntax check passed.                                |
-| `npm run lint`                                                      |    0 | ESLint passed.                                                 |
-| `npm test`                                                          |    0 | 168 tests passed; 1 gated live test skipped.                   |
-| `npm run format:check`                                              |    0 | Prettier passed.                                               |
-| `npm test -- --run test/integration`                                |    0 | Fixture integrations passed; live-gated test remained skipped. |
-| `npx apify validate-schema`                                         |    0 | Input, dataset, and output schemas valid.                      |
-| `git diff --check`                                                  |    0 | No whitespace errors.                                          |
-| `apify actors start ...` + `apify runs wait ...` (3 cloud inputs)   |    0 | Three cloud runs succeeded on build `0.1.1`.                   |
-| Cloud dataset validator (3 datasets)                                |    0 | 40/40 records passed `isRestaurantOutput`; 0 duplicate IDs.    |
+| Command                                                             |    Exit | Result                                                         |
+| ------------------------------------------------------------------- | ------: | -------------------------------------------------------------- |
+| `rg -n "READY_FOR_PHASE_6" validation/phase-5/validation-report.md` |       0 | Phase 5 gate confirmed.                                        |
+| `apify --help`                                                      |       0 | Apify CLI available.                                           |
+| `npm run build`                                                     |       0 | JavaScript syntax check passed.                                |
+| `npm run lint`                                                      |       0 | ESLint passed.                                                 |
+| `npm test`                                                          |       0 | 170 tests passed; 1 gated live test skipped.                   |
+| `npm run format:check`                                              |       0 | Prettier passed.                                               |
+| `npm test -- --run test/integration`                                |       0 | Fixture integrations passed; live-gated test remained skipped. |
+| `npx apify validate-schema`                                         |       0 | Input, dataset, and output schemas valid.                      |
+| `git diff --check`                                                  |       0 | No whitespace errors.                                          |
+| `apify actors start ...` + `apify runs wait ...` (3 cloud inputs)   |       0 | Three cloud runs succeeded on build `0.1.1`.                   |
+| Cloud dataset validator (3 datasets)                                |       0 | 40/40 records passed `isRestaurantOutput`; 0 duplicate IDs.    |
+| Default Store test (`n1FcQL167xP16MSpk`)                            | timeout | Build `0.1.1` reached 300s after 138 raw cards; dataset empty. |
+| `npm test` after timeout fix                                        |       0 | 170 tests passed; 1 gated live test skipped.                   |
+| Default Store test after fix (`vdhtUALI6V2fE0BYh`)                  |       0 | Build `0.1.2` succeeded in 202.394s with 30 records.           |
+| Cloud dataset validator (post-fix dataset)                          |       0 | 30/30 records passed `isRestaurantOutput`; 0 duplicate IDs.    |
 
 No type-check command is configured in `package.json`; no unconfigured type-check command was invented.
 
@@ -88,16 +94,19 @@ The live menu coverage is limited by redirects, blocked pages, missing menus, an
 
 ## Cloud benchmark
 
-Full measured data is in [cloud-benchmark-results.json](./cloud-benchmark-results.json). The private Actor `ItLJs9pHV9h1Ysiyt` ran build `0.1.1` successfully for all three inputs.
+Full measured data is in [cloud-benchmark-results.json](./cloud-benchmark-results.json). The updated public Actor `ItLJs9pHV9h1Ysiyt` ran build `0.1.2` successfully for the exact default Store test and returned 30 schema-valid records.
 
-| Input                          | Records | Schema-valid | Duplicate IDs | Menu statuses                                   |      Runtime | Compute units |         Usage |
-| ------------------------------ | ------: | -----------: | ------------: | ----------------------------------------------- | -----------: | ------------: | ------------: |
-| Menu enabled, 10 restaurants   |      10 |         100% |             0 | 4 unreachable, 2 not found, 1 missing, 3 failed |      70.259s |      0.078066 |     $0.016020 |
-| Menu disabled, 10 restaurants  |      10 |         100% |             0 | 10 not requested                                |      49.688s |      0.055209 |     $0.011354 |
-| Three keywords, 20 restaurants |      20 |         100% |             0 | 9 unreachable, 3 not found, 1 missing, 7 failed |     206.087s |      0.228986 |     $0.047162 |
-| **Total**                      |  **40** |     **100%** |         **0** | **40 successful records; 0 menu items**         | **326.034s** |  **0.362260** | **$0.074536** |
+| Input                              | Records | Schema-valid | Duplicate IDs | Menu statuses                                                 |      Runtime | Compute units |         Usage |
+| ---------------------------------- | ------: | -----------: | ------------: | ------------------------------------------------------------- | -----------: | ------------: | ------------: |
+| Menu enabled, 10 restaurants       |      10 |         100% |             0 | 4 unreachable, 2 not found, 1 missing, 3 failed               |      70.259s |      0.078066 |     $0.016020 |
+| Menu disabled, 10 restaurants      |      10 |         100% |             0 | 10 not requested                                              |      49.688s |      0.055209 |     $0.011354 |
+| Three keywords, 20 restaurants     |      20 |         100% |             0 | 9 unreachable, 3 not found, 1 missing, 7 failed               |     206.087s |      0.228986 |     $0.047162 |
+| Default Store test, 30 restaurants |      30 |         100% |             0 | 12 unreachable, 6 not found, 3 missing, 7 failed, 2 extracted |     202.394s |      0.224882 |     $0.046289 |
+| **Total**                          |  **70** |     **100%** |         **0** | **70 successful records; 78 menu items**                      | **528.428s** |  **0.587142** | **$0.120824** |
 
 The menu-disabled run confirmed that `includeMenu: false` emits `not_requested` for all records. The menu-enabled samples produced four restaurant-level dietary-option records but no menu items or published nutrition values; the live results remain source-page limited and are not parser-recall measurements.
+
+The failed build `0.1.1` test used five keywords, `maxRestaurants: 30`, and `includeMenu: true`; it discovered 138 raw cards and timed out before emitting records. Build `0.1.2` now logs each phase boundary, processed 150 raw cards as 30 deduplicated detail candidates, completed enrichment, and emitted 30 records within the 300-second limit.
 
 ## Output-quality review
 
@@ -121,7 +130,8 @@ The final standard run also manually confirmed three extracted-menu records with
 ## Known limitations and remaining risks
 
 - Google Maps and restaurant websites can redirect, block, rate-limit, or omit usable menu links; valid partial records are preserved, but live item coverage remains source-dependent.
-- Cloud coverage is limited to the three London smoke inputs and the private Actor build tested here; it is not a production-scale accuracy study.
+- Cloud coverage is limited to the four London smoke inputs and the public Actor build tested here; it is not a production-scale accuracy study.
+- The exact default Store test passed on build `0.1.2`; broader production-scale accuracy remains outside this smoke test.
 - Local runs do not expose Apify compute cost, while the cloud runs reported $0.074536 total usage across three inputs.
 - PDF/image/OCR, third-party ordering pages, nutrition estimation, allergen-safety guarantees, reviews/social, delivery platforms, multi-location support, monitoring, alerts, and new discovery sources remain out of scope.
 - The labelled Phase 5 fixture sample is smaller than production-scale accuracy targets; it must not be generalized beyond supported deterministic patterns.
@@ -130,4 +140,4 @@ The final standard run also manually confirmed three extracted-menu records with
 
 `READY_TO_PUBLISH`
 
-The local and cloud verification criteria pass: all three cloud runs succeeded on the pushed build, all 40 cloud records passed the output validator, duplicate IDs were zero, menu-disabled behavior was confirmed, and runtime/cost fields were captured. The live samples remain source-dependent and contain no extracted menu items, so Phase 5 deterministic fixtures remain the evidence for positive item-level dietary and nutrition extraction. No publishing or pricing change was performed by this validation pass.
+The updated build passes the exact default 300-second Store test: 30/30 records are schema-valid, duplicate IDs are zero, detail extraction completes with zero failures, and the run finishes in 202.394 seconds. The targeted cloud smokes and local verification also pass. Live menu coverage remains source-dependent, and no pricing change was performed by this validation pass.

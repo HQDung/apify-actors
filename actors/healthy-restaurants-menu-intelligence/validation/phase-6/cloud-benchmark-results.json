@@ -1,6 +1,6 @@
 {
   "available": true,
-  "measuredAt": "2026-07-30",
+  "measuredAt": "2026-08-01",
   "accountCheck": {
     "command": "apify info",
     "exitCode": 0,
@@ -13,9 +13,9 @@
     "exitCode": 0,
     "actorId": "ItLJs9pHV9h1Ysiyt",
     "actorName": "healthy-restaurants-menu-intelligence",
-    "isPublic": false,
-    "sourceVersion": "0.1.1",
-    "buildId": "Kw1f0vkx6MCFxiQhg",
+    "isPublic": true,
+    "sourceVersion": "0.1.2",
+    "buildId": "2kIHjvFljTbAaIdhO",
     "buildStatus": "SUCCEEDED"
   },
   "runs": [
@@ -96,24 +96,78 @@
       "menuItems": 0,
       "recordsWithDietaryOptions": 4,
       "recordsWithPublishedNutrition": 0
+    },
+    {
+      "name": "default-store-test-after-timeout-fix",
+      "inputFile": "default Store test input",
+      "runId": "vdhtUALI6V2fE0BYh",
+      "status": "SUCCEEDED",
+      "exitCode": 0,
+      "startedAt": "2026-08-01T03:09:48.771Z",
+      "finishedAt": "2026-08-01T03:13:11.264Z",
+      "runtimeSeconds": 202.394,
+      "computeUnits": 0.22488222222222223,
+      "usageTotalUsd": 0.04628854079053965,
+      "buildId": "2kIHjvFljTbAaIdhO",
+      "buildNumber": "0.1.2",
+      "datasetId": "vzgqUXL0GkVwHSQAc",
+      "records": 30,
+      "schemaValidRecords": 30,
+      "schemaValidityRate": 1,
+      "uniqueRestaurantIds": 30,
+      "duplicateRestaurantIds": 0,
+      "menuStatuses": {
+        "website_unreachable": 12,
+        "menu_not_found": 6,
+        "website_missing": 3,
+        "extraction_failed": 7,
+        "extracted": 2
+      },
+      "menuItems": 78,
+      "recordsWithDietaryOptions": 6,
+      "recordsWithPublishedNutrition": 0
     }
   ],
   "aggregate": {
-    "runs": 3,
-    "successfulRuns": 3,
-    "records": 40,
-    "schemaValidRecords": 40,
+    "runs": 4,
+    "successfulRuns": 4,
+    "records": 70,
+    "schemaValidRecords": 70,
     "schemaValidityRate": 1,
     "duplicateRestaurantIds": 0,
-    "runtimeSeconds": 326.034,
-    "computeUnits": 0.36226,
-    "usageTotalUsd": 0.07453553169687093,
-    "menuItems": 0,
+    "runtimeSeconds": 528.428,
+    "computeUnits": 0.5871422222222222,
+    "usageTotalUsd": 0.12082407248741059,
+    "menuItems": 78,
     "recordsWithPublishedNutrition": 0
+  },
+  "timeoutInvestigation": {
+    "runId": "n1FcQL167xP16MSpk",
+    "status": "TIMED-OUT",
+    "buildId": "Kw1f0vkx6MCFxiQhg",
+    "buildNumber": "0.1.1",
+    "timeoutSeconds": 300,
+    "runtimeSeconds": 300.083,
+    "input": {
+      "location": "London, United Kingdom",
+      "keywords": [
+        "healthy restaurant",
+        "high protein restaurant",
+        "healthy meal prep",
+        "salad bar",
+        "clean eating restaurant"
+      ],
+      "maxRestaurants": 30,
+      "includeMenu": true
+    },
+    "rawPlacesDiscovered": 138,
+    "datasetItemCount": 0,
+    "lastLog": "Search job clean eating restaurant completed; no detail or enrichment completion log was emitted before timeout.",
+    "rootCause": "All raw place cards were detail-crawled before deduplication and before maxRestaurants was applied."
   },
   "limitations": [
     "These runs are live London observations and do not measure parser recall for unsupported or unavailable menu pages.",
     "No menu items or published nutrition values were returned in the three cloud samples; deterministic Phase 5 fixtures remain the evidence source for positive item-level extraction paths.",
-    "The Actor is private in the authenticated account; no publishing or pricing change was performed by this validation pass."
+    "The Actor is published in the authenticated account; no pricing change was performed by this validation pass."
   ]
 }

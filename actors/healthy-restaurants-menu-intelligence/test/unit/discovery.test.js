@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildSearchJobs,
+  deduplicatePlaceCards,
   deduplicateRestaurants,
   normalizeRestaurantCandidate,
 } from "../../src/discovery/restaurants.js";
@@ -126,5 +127,52 @@ describe("restaurant discovery deduplication", () => {
         1,
       ),
     ).toHaveLength(1);
+  });
+});
+
+describe("place-card deduplication", () => {
+  it("merges duplicate cards before detail extraction and preserves keywords", () => {
+    const cards = deduplicatePlaceCards([
+      {
+        name: "Green Kitchen",
+        sourceUrl:
+          "https://www.google.com/maps/place/Green+Kitchen/data=!1splace-1",
+        placeId: "place-1",
+        matchedKeywords: ["healthy restaurant"],
+      },
+      {
+        name: "Green Kitchen",
+        sourceUrl:
+          "https://www.google.com/maps/place/Green+Kitchen/data=!1splace-1",
+        placeId: "place-1",
+        matchedKeywords: ["salad bar"],
+      },
+    ]);
+
+    expect(cards).toEqual([
+      expect.objectContaining({
+        placeId: "place-1",
+        matchedKeywords: ["healthy restaurant", "salad bar"],
+      }),
+    ]);
+  });
+
+  it("caps detail candidates after deduplication", () => {
+    const cards = deduplicatePlaceCards(
+      Array.from({ length: 5 }, (_, index) => ({
+        name: `Restaurant ${index}`,
+        sourceUrl: `https://www.google.com/maps/place/restaurant-${index}`,
+        placeId: `place-${index}`,
+        matchedKeywords: ["healthy restaurant"],
+      })),
+      3,
+    );
+
+    expect(cards).toHaveLength(3);
+    expect(cards.map((card) => card.placeId)).toEqual([
+      "place-0",
+      "place-1",
+      "place-2",
+    ]);
   });
 });

@@ -6,7 +6,7 @@ This Apify Actor is intended to discover healthy-focused restaurants in one loca
 
 Version 1 discovers public restaurant listings in one requested location, then optionally crawls bounded official websites and supported HTML menu pages. It extracts deterministic menu sections, items, descriptions, prices, explicit dietary labels, and restaurant-published nutrition. It also emits explainable healthy-positioning signals with bounded confidence. London is the tested initial market; the contracts are global-first for future countries, languages, and currencies.
 
-Phase 6 hardens retries, timeouts, redirects, concurrency, resource cleanup, error isolation, and aggregate run statistics. The Actor preserves valid partial records when websites or menu pages fail. Current measured benchmark results are recorded in [BENCHMARK_LONDON.md](./BENCHMARK_LONDON.md) and [validation/phase-6/](./validation/phase-6/).
+Phase 6 hardens retries, timeouts, redirects, concurrency, resource cleanup, error isolation, bounded discovery detail work, and aggregate run statistics. The Actor preserves valid partial records when websites or menu pages fail. Current measured benchmark results are recorded in [BENCHMARK_LONDON.md](./BENCHMARK_LONDON.md) and [validation/phase-6/](./validation/phase-6/).
 
 ## Supported and unsupported menu formats
 
@@ -18,14 +18,14 @@ The public input has exactly eight fields:
 
 - `location` (required string): one city, region, or country. Example: `London, United Kingdom`.
 - `keywords` (optional string array): healthy-restaurant search phrases. Defaults to `healthy restaurant`, `high protein restaurant`, `healthy meal prep`, `salad bar`, and `clean eating restaurant`.
-- `maxRestaurants` (optional integer, 1–100, default `30`): maximum unique restaurants after discovery deduplication.
+- `maxRestaurants` (optional integer, 1–100, default `30`): maximum unique restaurants after discovery deduplication. Lightweight Google Maps place cards are deduplicated and detail extraction is bounded to this cap before website enrichment.
 - `includeMenu` (optional boolean, default `true`): whether later phases should crawl official menu pages.
 - `normalizedOutputLanguage` (optional string, currently only `en`, default `en`): language for normalized output.
 - `preserveOriginalText` (optional boolean, default `true`): retain source-language names and descriptions beside normalized values.
 - `maxMenuPagesPerRestaurant` (optional integer, 1–10, default `3`): cap on official pages considered per restaurant.
 - `maxMenuItemsPerRestaurant` (optional integer, 1–1000, default `200`): cap on nested items stored for each restaurant.
 
-The Actor applies conservative internal runtime limits: four Playwright discovery/detail workers, three website workers, a 60-second Google Maps navigation timeout, 30-second website/menu request and body-processing timeout, three redirects, two total attempts for transient network responses, and a 2,000,000-character response-body limit. These settings are intentionally not exposed as advanced public controls.
+The Actor applies conservative internal runtime limits: four Playwright discovery/detail workers, three website workers, lightweight place-card deduplication before detail extraction, a detail-candidate cap equal to `maxRestaurants`, a 60-second Google Maps navigation timeout, 30-second website/menu request and body-processing timeout, three redirects, two total attempts for transient network responses, and a 2,000,000-character response-body limit. These settings are intentionally not exposed as advanced public controls.
 
 Examples: [sample-input.json](./sample-input.json) and [sample-input-phase5.json](./sample-input-phase5.json).
 
@@ -108,7 +108,7 @@ The final 2026-07-29 local measurements were:
 | Small, 10 restaurants    |          10 |                  4 |          9 |          0 |         100% |  54.46s |
 | Standard, 30 restaurants |          30 |                 13 |         31 |        117 |         100% | 255.19s |
 
-These values are source-dependent observations, not completeness guarantees. The pushed private cloud build `0.1.1` was smoke-tested with menu enabled, menu disabled, and three keywords: 40/40 records were schema-valid with 0 duplicate IDs across 326.034 seconds, 0.362260 compute units, and $0.074536 total reported usage. The menu-disabled run returned `not_requested` for all 10 records; the menu-enabled cloud samples returned no menu items or published nutrition values because live source pages were unavailable or failed. See [validation/phase-6/cloud-benchmark-results.json](./validation/phase-6/cloud-benchmark-results.json) for run IDs and per-input measurements.
+These values are source-dependent observations, not completeness guarantees. The updated public cloud build `0.1.2` passed the exact default five-keyword Store test: 30/30 records were schema-valid with 0 duplicate IDs in 202.394 seconds, using 0.224882 compute units and $0.046289 reported usage. It discovered 150 raw cards, bounded detail extraction to 30 candidates, and returned 78 menu items. See [validation/phase-6/cloud-benchmark-results.json](./validation/phase-6/cloud-benchmark-results.json) for all run IDs and measurements.
 
 ## Roadmap
 

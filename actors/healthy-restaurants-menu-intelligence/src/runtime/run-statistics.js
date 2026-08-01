@@ -2,6 +2,7 @@ export const RUN_STATISTIC_KEYS = [
   "searchJobs",
   "searchJobsFailed",
   "rawPlacesDiscovered",
+  "placeCardsForDetails",
   "restaurantsAfterDeduplication",
   "restaurantsProcessed",
   "websitesAvailable",

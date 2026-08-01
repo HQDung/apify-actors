@@ -17,6 +17,45 @@ export const buildSearchJobs = ({ location, keywords }) =>
     query: `${keyword} in ${location}`,
   }));
 
+const placeCardsMatch = (left, right) => {
+  if (left.placeId && right.placeId && left.placeId === right.placeId)
+    return true;
+  const leftUrl = normalizeGoogleMapsUrl(left.sourceUrl);
+  const rightUrl = normalizeGoogleMapsUrl(right.sourceUrl);
+  return Boolean(leftUrl && rightUrl && leftUrl === rightUrl);
+};
+
+export const deduplicatePlaceCards = (cards, maxCards = Infinity) => {
+  const output = [];
+  for (const card of cards) {
+    const matchingIndex = output.findIndex((existing) =>
+      placeCardsMatch(existing, card),
+    );
+    if (matchingIndex === -1) {
+      output.push({
+        ...card,
+        matchedKeywords: [...new Set(card.matchedKeywords ?? [])],
+      });
+      continue;
+    }
+    const existing = output[matchingIndex];
+    output[matchingIndex] = {
+      ...existing,
+      name: existing.name ?? card.name,
+      sourceUrl: existing.sourceUrl ?? card.sourceUrl,
+      canonicalUrl: existing.canonicalUrl ?? card.canonicalUrl,
+      placeId: existing.placeId ?? card.placeId,
+      matchedKeywords: [
+        ...new Set([
+          ...(existing.matchedKeywords ?? []),
+          ...(card.matchedKeywords ?? []),
+        ]),
+      ],
+    };
+  }
+  return output.slice(0, maxCards);
+};
+
 const addressOf = (candidate) => cleanText(candidate.address);
 const domainOfCandidate = (candidate) => domainOf(candidate.website);
 

@@ -5,7 +5,7 @@
     "dataset": {
       "type": "string",
       "title": "Restaurant dataset",
-      "description": "One restaurant record per dataset item. Phase 5 adds explicit dietary tags, restaurant-published nutrition, provenance, confidence, and explainable healthy-positioning signals to bounded HTML menu extraction; estimated nutrition, PDF/image OCR, and third-party content remain excluded.",
+      "description": "One restaurant record per dataset item. Discovery deduplicates lightweight place cards and bounds Google Maps detail extraction by maxRestaurants before enrichment. Phase 5 adds explicit dietary tags, restaurant-published nutrition, provenance, confidence, and explainable healthy-positioning signals to bounded HTML menu extraction; estimated nutrition, PDF/image OCR, and third-party content remain excluded.",
       "template": "{{datasetUrl}}"
     }
   }
