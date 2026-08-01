@@ -130,3 +130,16 @@ test('reports rating, issue, feature, locale, version, and data sufficiency chan
     assert.ok(report.warnings.some((warning) => warning.code === 'LIMITED_DATA'));
     assert.match(report.disclaimer, /not a causal confirmation/);
 });
+
+test('warns when the release timestamp is in the future', () => {
+    const report = compareGooglePlayReleaseImpact({
+        product: { productType: 'app', productId: 'com.example.app', name: null },
+        release: { version: null, releasedAt: '2026-08-02T00:00:00.000Z' },
+        windows: buildReleaseImpactWindows({ releasedAt: '2026-08-02T00:00:00.000Z' }),
+        beforeRecords: [],
+        afterRecords: [],
+        generatedAt: '2026-08-01T00:00:00.000Z',
+    });
+
+    assert.ok(report.warnings.some((warning) => warning.code === 'FUTURE_RELEASE_DATE'));
+});

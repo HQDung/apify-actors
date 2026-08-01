@@ -13,4 +13,5 @@
 - Added a five-app operational benchmark, quality-review limitations, and cost accounting notes.
 - Added Store-ready dataset views for reviews, issue clusters, app reports, and release-impact reports, plus clearer output links and debug input documentation.
 - Updated Store-facing title, README positioning, FAQ, cost controls, SEO terms, and responsible-use limitations.
+- Completed the final local publish-readiness matrix; publishing remains gated by explicit authorization and missing human-labeled accuracy/cloud-cost evidence.
 - Browser expansion and external-provider analysis remain deferred.

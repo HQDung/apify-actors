@@ -60,4 +60,11 @@ Phase 15 documentation validation on 2026-08-01:
 - README, Actor metadata, sample inputs, schemas, benchmark notes, and changelog were reconciled.
 - Store copy explicitly distinguishes source facts from analysis, states bounded coverage, and includes responsible-use and non-causal release-impact language.
 
+Phase 16 final readiness smoke on 2026-08-01:
+
+- Standard sample: 1 app, 3 reviews, 1 diagnostic, 1 aggregate report, 0 errors, 5 dataset records, `analysisRecords: 3`, `analysisFailures: 0`, and `reportsStored: 1`.
+- Runtime: 675 ms; reported process RSS: 176,832,512 bytes.
+- Google Play tests: 26 passing; shared-core tests: 10 passing; Steam regression tests: 8 passing and 1 intentionally skipped network smoke; core packaging test: 1 passing.
+- Actor-specific input-schema validation and all JSON/schema parsing checks passed. The repository’s generic validator was not applicable because it requires template-only `src/niche-config.js` and generated storage input files.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

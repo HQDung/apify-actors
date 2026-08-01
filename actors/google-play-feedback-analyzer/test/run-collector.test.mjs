@@ -76,3 +76,27 @@ test('expands release-impact collection across app, language, and country reques
     assert.equal(result.stats.requestsProcessed, 4);
     assert.equal(result.stats.diagnosticRecords, 4);
 });
+
+test('keeps a valid app when another syntactically valid app returns a source error', async () => {
+    const published = [];
+    const result = await runGooglePlayCollection({
+        input: { appIds: ['com.valid', 'com.missing'], analysis: { enabled: false } },
+        collect: async ({ appId }) =>
+            appId === 'com.valid'
+                ? {
+                      records: [{ reviewId: 'valid-review', appId, rating: 5, text: 'Good' }],
+                      diagnostics: { httpStatus: 200, collectionMode: 'html' },
+                  }
+                : {
+                      records: [],
+                      diagnostics: { httpStatus: 404, collectionMode: 'html' },
+                      error: { code: 'GOOGLE_PLAY_HTTP_ERROR', httpStatus: 404 },
+                  },
+        onRecord: async (record) => published.push(record),
+    });
+
+    assert.equal(published.filter((record) => record.recordType === 'review').length, 1);
+    assert.equal(published.filter((record) => record.recordType === 'sourceDiagnostic').length, 2);
+    assert.equal(result.stats.appsProcessed, 2);
+    assert.equal(result.stats.errors, 1);
+});

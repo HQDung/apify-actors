@@ -81,40 +81,80 @@ Release-impact example:
 
 ## Output fields
 
-| Field                                                   | Description                                                                                          |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `recordType`                                            | `review`, `sourceDiagnostic`, `feedbackCluster`, `productFeedbackReport`, or `feedbackImpactReport`. |
-| `appId`                                                 | Android package ID.                                                                                  |
-| `reviewId`                                              | Public Google Play review ID, for review records.                                                    |
-| `rating`                                                | Integer star rating from 1 to 5.                                                                     |
-| `reviewDateText`                                        | Locale-preserved date text from the public page.                                                     |
-| `text`                                                  | Public review text, for review records.                                                              |
-| `helpfulCount`                                          | Helpful count when exposed, otherwise `null`.                                                        |
-| `developerReply`                                        | Optional reply object with presence, date text, and text.                                            |
-| `source.language`                                       | Language request parameter.                                                                          |
-| `source.country`                                        | Country request parameter.                                                                           |
-| `diagnostics.httpStatus`                                | HTTP status for the Store response.                                                                  |
-| `diagnostics.responseBytes`                             | Response size in bytes.                                                                              |
-| `diagnostics.collectedAt`                               | Collection timestamp for the source response.                                                        |
-| `diagnostics.parsedReviewCount`                         | Number of unique review cards parsed before the cap.                                                 |
-| `diagnostics.collectionMode`                            | Current value is `html`.                                                                             |
-| `error.code`                                            | Machine-readable source error code when collection fails.                                            |
-| `normalizedFeedback`                                    | Source-neutral feedback object validated by shared core.                                             |
-| `analysis`                                              | Shared-core analysis result, when analysis is enabled.                                               |
-| `product.productId`                                     | App ID on aggregate and impact records.                                                              |
-| `clusterId`                                             | Stable cluster ID on feedback-cluster records.                                                       |
-| `canonicalIssue`                                        | Canonical issue or request title for a cluster.                                                      |
-| `feedbackType`                                          | Cluster feedback type, such as `bugReport`.                                                          |
-| `mentionCount`                                          | Number of reviews in a cluster.                                                                      |
-| `statistics`                                            | Counts, rating, language, country, and version summaries.                                            |
-| `topIssues` / `topFeatureRequests`                      | Ranked app-level issue and request summaries.                                                        |
-| `topicChanges` / `possibleRegressions`                  | Observed before/after topic changes when enabled.                                                    |
-| `release` / `windows`                                   | Release metadata and exact non-overlapping comparison windows.                                       |
-| `statistics.ratingChange`                               | Difference between before and after average ratings when both exist.                                 |
-| `issueChanges` / `featureRequestChanges`                | New, increasing, decreasing, and unchanged analytical signals.                                       |
-| `countryChanges` / `languageChanges` / `versionChanges` | Dimension-specific review volume changes.                                                            |
-| `warnings`                                              | Structured `NO_REVIEWS`, `LIMITED_DATA`, or future-release warnings.                                 |
-| `disclaimer`                                            | Caution that release comparisons are observational, not causal proof.                                |
+| Field                            | Description                                                                                          |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `recordType`                     | `review`, `sourceDiagnostic`, `feedbackCluster`, `productFeedbackReport`, or `feedbackImpactReport`. |
+| `appId`                          | Android package ID.                                                                                  |
+| `reviewId`                       | Public Google Play review ID, for review records.                                                    |
+| `rating`                         | Integer star rating from 1 to 5.                                                                     |
+| `reviewDateText`                 | Locale-preserved date text from the public page.                                                     |
+| `text`                           | Public review text, for review records.                                                              |
+| `helpfulCount`                   | Helpful count when exposed, otherwise `null`.                                                        |
+| `developerReply`                 | Optional reply object with presence, date text, and text.                                            |
+| `source.language`                | Language request parameter.                                                                          |
+| `source.country`                 | Country request parameter.                                                                           |
+| `diagnostics.httpStatus`         | HTTP status for the Store response.                                                                  |
+| `diagnostics.responseBytes`      | Response size in bytes.                                                                              |
+| `diagnostics.collectedAt`        | Collection timestamp for the source response.                                                        |
+| `diagnostics.parsedReviewCount`  | Number of unique review cards parsed before the cap.                                                 |
+| `diagnostics.collectionMode`     | Current value is `html`.                                                                             |
+| `error.code`                     | Machine-readable source error code when collection fails.                                            |
+| `normalizedFeedback`             | Source-neutral feedback object validated by shared core.                                             |
+| `analysis`                       | Shared-core analysis result, when analysis is enabled.                                               |
+| `product.productId`              | App ID on aggregate and impact records.                                                              |
+| `product.productType`            | Neutral product type; `app` for Google Play aggregate records.                                       |
+| `clusterId`                      | Stable cluster ID on feedback-cluster records.                                                       |
+| `canonicalIssue`                 | Canonical issue or request title for a cluster.                                                      |
+| `feedbackType`                   | Cluster feedback type, such as `bugReport`.                                                          |
+| `topics`                         | Topics attached to a cluster or release-impact comparison.                                           |
+| `mentionCount`                   | Number of reviews in a cluster.                                                                      |
+| `uniqueReviewCount`              | Number of distinct source review IDs in a cluster.                                                   |
+| `languages`                      | Languages represented in a cluster.                                                                  |
+| `countries`                      | Countries represented in a cluster.                                                                  |
+| `affectedVersions`               | App versions represented in a cluster.                                                               |
+| `firstSeenAt`                    | Earliest source date represented in a cluster.                                                       |
+| `latestSeenAt`                   | Latest source date represented in a cluster.                                                         |
+| `severity`                       | Analytical severity estimate.                                                                        |
+| `clusterConfidence`              | Bounded cluster confidence estimate.                                                                 |
+| `statistics`                     | Counts, rating, language, country, and version summaries.                                            |
+| `statistics.reviewsCollected`    | Collection count in an app report.                                                                   |
+| `statistics.reviewsAnalyzed`     | Successful-analysis count in an app report.                                                          |
+| `statistics.actionableReviews`   | Actionable-review count in an app report.                                                            |
+| `statistics.averageRating`       | Average source rating in an app report.                                                              |
+| `statistics.beforeReviews`       | Before-window review count.                                                                          |
+| `statistics.afterReviews`        | After-window review count.                                                                           |
+| `statistics.beforeAverageRating` | Before-window average when ratings are available.                                                    |
+| `statistics.afterAverageRating`  | After-window average when ratings are available.                                                     |
+| `statistics.ratingChange`        | After-window average minus before-window average.                                                    |
+| `topIssues`                      | Ranked app-level issue summaries.                                                                    |
+| `topFeatureRequests`             | Ranked app-level feature-request summaries.                                                          |
+| `topPositiveTopics`              | Ranked positive topic summaries.                                                                     |
+| `topNegativeTopics`              | Ranked negative topic summaries.                                                                     |
+| `languageInsights`               | App-level language summary.                                                                          |
+| `countryInsights`                | App-level country summary.                                                                           |
+| `versionInsights`                | App-level version summary.                                                                           |
+| `topicChanges`                   | Observed before/after topic changes.                                                                 |
+| `possibleRegressions`            | Topic increases worded as possible regressions, never causal proof.                                  |
+| `release` / `windows`            | Release metadata and exact non-overlapping comparison windows.                                       |
+| `release.version`                | Release version supplied to Release Impact.                                                          |
+| `release.releasedAt`             | Release timestamp supplied to Release Impact.                                                        |
+| `windows.before.from`            | Before-window ISO start.                                                                             |
+| `windows.before.to`              | Before-window ISO end.                                                                               |
+| `windows.after.from`             | After-window ISO start.                                                                              |
+| `windows.after.to`               | After-window ISO end.                                                                                |
+| `issueChanges`                   | Issue signals across the release boundary.                                                           |
+| `featureRequestChanges`          | Feature-request signals across the release boundary.                                                 |
+| `newIssues`                      | Issue signals first observed in the after window.                                                    |
+| `increasingIssues`               | Issue signals with increased after-window mentions.                                                  |
+| `decreasingIssues`               | Issue signals with decreased after-window mentions.                                                  |
+| `newFeatureRequests`             | Feature requests first observed in the after window.                                                 |
+| `compatibilityChanges`           | Compatibility-topic changes.                                                                         |
+| `countryChanges`                 | Country-dimension review volume changes.                                                             |
+| `languageChanges`                | Language-dimension review volume changes.                                                            |
+| `versionChanges`                 | Version-dimension review volume changes.                                                             |
+| `warnings`                       | Structured `NO_REVIEWS`, `LIMITED_DATA`, or future-release warnings.                                 |
+| `generatedAt`                    | Timestamp when a report or comparison was generated.                                                 |
+| `disclaimer`                     | Caution that release comparisons are observational, not causal proof.                                |
 
 Aggregate reports are also stored under `APP_REPORT_<app-id>` in the default key-value store. Reports tolerate partial analysis failures by counting only successful analyses in ranked intelligence while retaining collection counts.
 
