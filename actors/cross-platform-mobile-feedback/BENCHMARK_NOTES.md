@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 5 — Platform-level issue clustering
+
+The local benchmark covers platform-partitioned clustering, product isolation, minimum cluster size, successful-analysis filtering, canonical cluster IDs, and source review links with country/language/version dimensions. Cross-platform matching is intentionally deferred to its own phase.
+
 ## Phase 4 — Shared per-review analysis
 
 The local benchmark covers the source-neutral adapter, one common taxonomy for Android/iOS, English and Vietnamese source-language preservation, provider success, invalid-provider fallback, bounded in-memory caching, optional native-fetch provider configuration, and raw-review retention when analysis fails. No API key or billable provider call is required for the fallback tests.

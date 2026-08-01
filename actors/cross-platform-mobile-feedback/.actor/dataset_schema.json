@@ -21,6 +21,13 @@
           "analysis.topics",
           "analysis.summary",
           "analysis.actionabilityScore",
+          "clusterId",
+          "canonicalIssue",
+          "feedbackType",
+          "topics",
+          "mentionCount",
+          "uniqueReviewCount",
+          "reviewIds",
           "classification",
           "canonicalIssue",
           "androidMentions",
@@ -59,6 +66,16 @@
             "label": "Actionability",
             "format": "number"
           },
+          "clusterId": { "label": "Cluster ID", "format": "text" },
+          "canonicalIssue": { "label": "Issue", "format": "text" },
+          "feedbackType": { "label": "Cluster type", "format": "text" },
+          "topics": { "label": "Cluster topics", "format": "text" },
+          "mentionCount": { "label": "Mentions", "format": "number" },
+          "uniqueReviewCount": {
+            "label": "Unique reviews",
+            "format": "number"
+          },
+          "reviewIds": { "label": "Review IDs", "format": "text" },
           "classification": { "label": "Classification", "format": "text" },
           "canonicalIssue": { "label": "Issue", "format": "text" },
           "androidMentions": {

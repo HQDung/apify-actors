@@ -2,6 +2,7 @@ import { Actor, log } from "apify";
 
 import { analyzeCollectedReviews } from "./analysis/cross-platform-analysis.js";
 import { createOpenAiProvider } from "./analysis/openai-provider.js";
+import { clusterPlatformFeedback } from "./clustering/platform-clustering.js";
 import { collectMappedProductReviews } from "./collection/collect-products.js";
 import { normalizeInput } from "./input/normalize-input.js";
 import { createInitialRunStats } from "./runtime/run-stats.js";
@@ -54,25 +55,35 @@ try {
       cacheHit: entry.cacheHit,
     });
   }
+  const clustering =
+    input.analysis.clusterSimilarIssues && input.aggregation.enabled
+      ? clusterPlatformFeedback({
+          analysisRecords: analysis.analysisRecords,
+          minimumClusterSize: input.aggregation.minimumClusterSize,
+        })
+      : { clusters: [], reviewClusterIds: {} };
+  for (const cluster of clustering.clusters) await Actor.pushData(cluster);
+  await Actor.setValue("CLUSTER_INDEX", clustering.reviewClusterIds);
   const finishedAt = Date.now();
   await Actor.setValue("RUN_STATS", {
     ...createInitialRunStats({ productCount: input.products.length }),
     ...collection.stats,
     reviewsAnalyzed: analysis.analysisRecords.length,
+    platformClustersCreated: clustering.clusters.length,
     analysisFailures: analysis.analysisRecords.filter(
       (entry) => entry.analysis.analysisStatus === "failed",
     ).length,
     analysisSkipped: collection.reviews.length - reviewsForAnalysis.length,
     analysisProvider: provider ? "openai-compatible" : "deterministic-fallback",
     analysisUsage: analysis.usage,
-    phase: "analysis",
+    phase: "clustering",
     startedAt: new Date(startedAt).toISOString(),
     finishedAt: new Date(finishedAt).toISOString(),
     runtimeMs: finishedAt - startedAt,
-    note: "Raw collection and per-review analysis completed; platform clustering and comparison are later phases.",
+    note: "Raw collection, per-review analysis, and platform-level clustering completed; cross-platform comparison is a later phase.",
   });
   await Actor.setValue("NORMALIZED_INPUT", input);
-  log.info("Cross-platform collection and analysis completed", {
+  log.info("Cross-platform collection, analysis, and clustering completed", {
     products: input.products.length,
     mode: input.mode,
   });
