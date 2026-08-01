@@ -1,0 +1,9 @@
+{
+  "name": "@project/cross-platform-comparison-core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source-neutral contracts for cross-platform mobile feedback comparison.",
+  "files": ["src"],
+  "exports": { ".": "./src/index.js" }
+}
