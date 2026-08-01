@@ -14,6 +14,12 @@
       "description": "Per-product report records in the default key-value store.",
       "template": "{{keyValueStoreUrl}}"
     },
+    "releaseReports": {
+      "type": "string",
+      "title": "Release comparison reports",
+      "description": "Observational before/after release-window reports stored per product.",
+      "template": "{{keyValueStoreUrl}}"
+    },
     "normalizedInput": {
       "type": "string",
       "title": "Normalized input",

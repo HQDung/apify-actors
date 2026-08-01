@@ -38,6 +38,13 @@
           "reasons",
           "evidenceStatus",
           "observedOnlyInCollectedSample",
+          "release",
+          "windows",
+          "rolloutTiming",
+          "topicChanges",
+          "newIssues",
+          "possibleRegressions",
+          "disclaimer",
           "classification",
           "canonicalIssue",
           "androidMentions",
@@ -105,6 +112,16 @@
             "label": "Observed only in sample",
             "format": "boolean"
           },
+          "release": { "label": "Release", "format": "text" },
+          "windows": { "label": "Release windows", "format": "text" },
+          "rolloutTiming": { "label": "Rollout timing", "format": "text" },
+          "topicChanges": { "label": "Topic changes", "format": "text" },
+          "newIssues": { "label": "New issues", "format": "text" },
+          "possibleRegressions": {
+            "label": "Possible regressions",
+            "format": "text"
+          },
+          "disclaimer": { "label": "Disclaimer", "format": "text" },
           "classification": { "label": "Classification", "format": "text" },
           "canonicalIssue": { "label": "Issue", "format": "text" },
           "androidMentions": {

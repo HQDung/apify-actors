@@ -412,6 +412,15 @@
       "minimum": 1,
       "maximum": 365
     },
+    "minimumReleaseReviews": {
+      "title": "Minimum release-window reviews",
+      "description": "Minimum reviews per release window before release differences are marked sufficient.",
+      "type": "integer",
+      "editor": "number",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10000
+    },
     "debug": {
       "title": "Debug logging",
       "description": "Enable additional local diagnostic logging.",

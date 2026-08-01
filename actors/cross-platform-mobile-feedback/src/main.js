@@ -6,6 +6,7 @@ import { clusterPlatformFeedback } from "./clustering/platform-clustering.js";
 import { collectMappedProductReviews } from "./collection/collect-products.js";
 import { comparePlatformClusters } from "./comparison/compare-platform-clusters.js";
 import { normalizeInput } from "./input/normalize-input.js";
+import { buildReleaseComparisonReport } from "./release/build-release-comparison-report.js";
 import {
   buildCrossPlatformReport,
   reportKeyForProduct,
@@ -132,6 +133,27 @@ try {
     }
   }
   await Actor.setValue("CROSS_PLATFORM_REPORTS", reports);
+  const releaseReports = [];
+  if (input.mode === "releaseComparison" && input.aggregation.enabled) {
+    for (const product of input.products) {
+      const releaseReport = buildReleaseComparisonReport({
+        product,
+        analysisRecords: analysis.analysisRecords.filter(
+          (entry) => entry.review.product.productId === product.productId,
+        ),
+        daysBefore: input.daysBefore,
+        daysAfter: input.daysAfter,
+        minimumReleaseReviews: input.minimumReleaseReviews,
+      });
+      releaseReports.push(releaseReport);
+      await Actor.pushData(releaseReport);
+      await Actor.setValue(
+        `CROSS_PLATFORM_RELEASE_REPORT_${product.productId}`,
+        releaseReport,
+      );
+    }
+  }
+  await Actor.setValue("CROSS_PLATFORM_RELEASE_REPORTS", releaseReports);
   const finishedAt = Date.now();
   await Actor.setValue("RUN_STATS", {
     ...createInitialRunStats({ productCount: input.products.length }),
@@ -140,13 +162,14 @@ try {
     platformClustersCreated: clustering.clusters.length,
     crossPlatformComparisonsCreated: comparisons.length,
     reportsStored: reports.length,
+    releaseReportsStored: releaseReports.length,
     analysisFailures: analysis.analysisRecords.filter(
       (entry) => entry.analysis.analysisStatus === "failed",
     ).length,
     analysisSkipped: collection.reviews.length - reviewsForAnalysis.length,
     analysisProvider: provider ? "openai-compatible" : "deterministic-fallback",
     analysisUsage: analysis.usage,
-    phase: "reporting",
+    phase: releaseReports.length > 0 ? "release-reporting" : "reporting",
     startedAt: new Date(startedAt).toISOString(),
     finishedAt: new Date(finishedAt).toISOString(),
     runtimeMs: finishedAt - startedAt,

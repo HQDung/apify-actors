@@ -24,5 +24,6 @@
     "cacheMaxEntries": 1000
   },
   "comparison": { "enabled": true, "minimumDimensionReviews": 5 },
-  "aggregation": { "enabled": true }
+  "aggregation": { "enabled": true },
+  "minimumReleaseReviews": 5
 }

@@ -33,5 +33,6 @@
     "minimumClusterSize": 2,
     "maxExampleReviewsPerCluster": 3
   },
+  "minimumReleaseReviews": 5,
   "debug": false
 }

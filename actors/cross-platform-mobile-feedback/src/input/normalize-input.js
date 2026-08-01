@@ -445,6 +445,13 @@ export const normalizeInput = (input = {}) => {
     },
     daysBefore: bounded(input.daysBefore, 14, 1, 365, "daysBefore"),
     daysAfter: bounded(input.daysAfter, 14, 1, 365, "daysAfter"),
+    minimumReleaseReviews: bounded(
+      input.minimumReleaseReviews,
+      5,
+      1,
+      10000,
+      "minimumReleaseReviews",
+    ),
     debug: booleanOrDefault(input.debug, false, "debug"),
   };
 };

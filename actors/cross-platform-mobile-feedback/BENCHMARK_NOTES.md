@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 9 — Version and release-window comparisons
+
+The local benchmark covers non-overlapping platform-specific before/after windows, staggered release dates, topic changes, newly observed issues, possible regressions, missing app-version warnings, minimum release-window samples, rollout lag, and observational disclaimers.
+
 ## Phase 8 — Country and language comparisons
 
 The local benchmark covers country/language/version dimension records, platform-separated counts and ratings, negative-topic/actionability signals, configurable minimum dimension samples, limited-evidence labeling, and explicit requested-locale attribution. Country and language are kept as separate dimensions.
