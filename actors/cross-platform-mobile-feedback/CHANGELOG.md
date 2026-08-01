@@ -2,6 +2,7 @@
 
 ## 0.1.0
 
+- Added request-expansion limits, runtime output validators, predictable source-error output, and expanded output schema links.
 - Added staggered Android/iOS release-window reports with topic changes, new issues, rollout lag, sample warnings, and non-causal wording.
 - Added configurable country/language/version dimension insights with platform-separated statistics, negative-topic signals, and limited-sample warnings.
 - Added validated per-product cross-platform reports, platform statistics, comparison summaries, dimension insights, partial-source warnings, and report key-value storage.

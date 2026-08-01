@@ -14,6 +14,7 @@
   "maxReviewsPerPlatform": 500,
   "requestTimeoutSecs": 30,
   "maxPagesPerPlatform": 10,
+  "maxRequestsPerRun": 1000,
   "analysis": {
     "enabled": true,
     "outputLanguage": "english",

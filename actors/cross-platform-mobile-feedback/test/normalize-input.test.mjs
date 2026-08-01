@@ -40,6 +40,8 @@ test("normalizes explicit product identity and gives IDs precedence over URLs", 
   assert.deepEqual(input.languages, ["en", "vi"]);
   assert.equal(input.requestTimeoutSecs, 30);
   assert.equal(input.maxPagesPerPlatform, 10);
+  assert.equal(input.maxRequestsPerRun, 1000);
+  assert.equal(input.requestsPlanned, 8);
   assert.equal(input.analysis.maxAttempts, 2);
   assert.equal(input.analysis.maxReviewsToAnalyze, 1000);
   assert.equal(input.analysis.cacheMaxEntries, 1000);
@@ -57,6 +59,19 @@ test("normalizes bounded source collection controls", () => {
   assert.throws(
     () => normalizeInput({ products: [pair], requestTimeoutSecs: 0 }),
     /INVALID_INPUT/,
+  );
+});
+
+test("rejects expanded source request explosions before collection", () => {
+  assert.throws(
+    () =>
+      normalizeInput({
+        products: [pair],
+        countries: ["US", "VN"],
+        languages: ["en", "vi"],
+        maxRequestsPerRun: 3,
+      }),
+    /REQUEST_LIMIT_EXCEEDED/,
   );
 });
 

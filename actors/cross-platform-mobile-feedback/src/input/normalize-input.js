@@ -258,6 +258,40 @@ export const normalizeInput = (input = {}) => {
       "analysis.enabled must be true for releaseComparison",
     );
 
+  const countries = normalizeCodeList(
+    input.countries,
+    ["US"],
+    /^[A-Z]{2}$/,
+    "countries",
+    (value) => value.toUpperCase(),
+  );
+  const languages = normalizeCodeList(
+    input.languages,
+    ["en"],
+    /^[a-z]{2,3}$/,
+    "languages",
+    (value) => value.toLowerCase(),
+  );
+  const maxRequestsPerRun = bounded(
+    input.maxRequestsPerRun,
+    1000,
+    1,
+    10000,
+    "maxRequestsPerRun",
+  );
+  const requestsPlanned =
+    products.reduce(
+      (total, product) => total + Object.keys(product.platforms).length,
+      0,
+    ) *
+    countries.length *
+    languages.length;
+  if (requestsPlanned > maxRequestsPerRun)
+    throw invalid(
+      "REQUEST_LIMIT_EXCEEDED",
+      `${requestsPlanned} source requests exceed maxRequestsPerRun ${maxRequestsPerRun}`,
+    );
+
   const analysisInput = input.analysis ?? {};
   const outputLanguage = analysisInput.outputLanguage ?? "english";
   if (!ANALYSIS_OUTPUT_LANGUAGES.has(outputLanguage))
@@ -269,20 +303,10 @@ export const normalizeInput = (input = {}) => {
   return {
     mode,
     products,
-    countries: normalizeCodeList(
-      input.countries,
-      ["US"],
-      /^[A-Z]{2}$/,
-      "countries",
-      (value) => value.toUpperCase(),
-    ),
-    languages: normalizeCodeList(
-      input.languages,
-      ["en"],
-      /^[a-z]{2,3}$/,
-      "languages",
-      (value) => value.toLowerCase(),
-    ),
+    countries,
+    languages,
+    maxRequestsPerRun,
+    requestsPlanned,
     ratings: [...new Set(ratings)],
     dateRange: normalizeDateRange(input.dateRange),
     maxReviewsPerPlatform: bounded(

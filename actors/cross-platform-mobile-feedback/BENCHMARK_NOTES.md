@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 10 — Schemas, errors, and runtime safeguards
+
+The local benchmark covers input expansion caps, runtime statistics validation, source diagnostic/run-error validation, dataset/output schema artifacts, predictable report keys, source-error key-value output, and vendored runtime package packaging. No publish or pricing action is performed.
+
 ## Phase 9 — Version and release-window comparisons
 
 The local benchmark covers non-overlapping platform-specific before/after windows, staggered release dates, topic changes, newly observed issues, possible regressions, missing app-version warnings, minimum release-window samples, rollout lag, and observational disclaimers.

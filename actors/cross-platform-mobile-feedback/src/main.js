@@ -12,6 +12,11 @@ import {
   reportKeyForProduct,
 } from "./report/build-cross-platform-report.js";
 import { createInitialRunStats } from "./runtime/run-stats.js";
+import {
+  validateRunError,
+  validateRunStats,
+  validateSourceDiagnostic,
+} from "./runtime/validate-output.js";
 
 await Actor.init();
 const startedAt = Date.now();
@@ -21,18 +26,23 @@ try {
   const collection = await collectMappedProductReviews({ input });
   for (const review of collection.reviews) await Actor.pushData(review);
   for (const diagnostic of collection.diagnostics) {
-    await Actor.pushData({ recordType: "sourceDiagnostic", ...diagnostic });
+    const record = { recordType: "sourceDiagnostic", ...diagnostic };
+    validateSourceDiagnostic(record);
+    await Actor.pushData(record);
   }
   for (const entry of collection.errors) {
-    await Actor.pushData({
+    const record = {
       recordType: "runError",
       productId: entry.productId,
       platform: entry.platform,
       appId: entry.appId,
       ...entry.error,
       generatedAt: new Date().toISOString(),
-    });
+    };
+    validateRunError(record);
+    await Actor.pushData(record);
   }
+  await Actor.setValue("SOURCE_ERRORS", collection.errors);
   const reviewsForAnalysis = input.analysis.enabled
     ? collection.reviews.slice(0, input.analysis.maxReviewsToAnalyze)
     : [];
@@ -155,7 +165,7 @@ try {
   }
   await Actor.setValue("CROSS_PLATFORM_RELEASE_REPORTS", releaseReports);
   const finishedAt = Date.now();
-  await Actor.setValue("RUN_STATS", {
+  const runStats = {
     ...createInitialRunStats({ productCount: input.products.length }),
     ...collection.stats,
     reviewsAnalyzed: analysis.analysisRecords.length,
@@ -174,7 +184,9 @@ try {
     finishedAt: new Date(finishedAt).toISOString(),
     runtimeMs: finishedAt - startedAt,
     note: "Raw collection, analysis, platform clustering, comparison, and per-product reporting completed.",
-  });
+  };
+  validateRunStats(runStats);
+  await Actor.setValue("RUN_STATS", runStats);
   await Actor.setValue("NORMALIZED_INPUT", input);
   log.info(
     "Cross-platform collection, analysis, clustering, and reporting completed",

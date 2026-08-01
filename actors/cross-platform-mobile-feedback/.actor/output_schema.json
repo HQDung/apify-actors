@@ -20,6 +20,12 @@
       "description": "Observational before/after release-window reports stored per product.",
       "template": "{{keyValueStoreUrl}}"
     },
+    "sourceErrors": {
+      "type": "string",
+      "title": "Source errors",
+      "description": "Platform-scoped source collection errors preserved for partial runs.",
+      "template": "{{keyValueStoreUrl}}"
+    },
     "normalizedInput": {
       "type": "string",
       "title": "Normalized input",
@@ -29,7 +35,7 @@
     "runStatistics": {
       "type": "string",
       "title": "Run statistics",
-      "description": "Collection, analysis, cluster, comparison, error, and runtime counts.",
+      "description": "Collection, analysis, cluster, comparison, report, request, error, usage, and runtime counts.",
       "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
     }
   }
