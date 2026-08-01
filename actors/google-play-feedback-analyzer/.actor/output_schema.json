@@ -1,0 +1,18 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Google Play feedback analyzer output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Google Play review dataset",
+            "description": "Review and source-diagnostic records emitted by the Actor.",
+            "template": "{{datasetUrl}}"
+        },
+        "runStatistics": {
+            "type": "string",
+            "title": "Run statistics",
+            "description": "Machine-readable collection counters and runtime summary.",
+            "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
+        }
+    }
+}

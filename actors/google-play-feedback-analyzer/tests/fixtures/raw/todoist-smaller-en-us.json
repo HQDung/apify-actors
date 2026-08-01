@@ -1,26 +1,55 @@
 {
-  "fixture": "todoist-smaller-en-us",
-  "capturedAt": "2026-08-01",
-  "request": {
-    "method": "GET",
-    "url": "https://play.google.com/store/apps/details?id=com.todoist&hl=en&gl=US",
-    "status": 200,
-    "appId": "com.todoist",
-    "hl": "en",
-    "gl": "US"
-  },
-  "page": {
-    "httpResponseBytes": 1292348,
-    "htmlReviewHeaderMarkers": 6,
-    "reviewCardHeadersObserved": 3,
-    "uniqueReviewCards": 3,
-    "seeAllReviewsEnglish": true,
-    "reviewSort": "Most relevant (observed in English dialog)"
-  },
-  "reviews": [
-    { "reviewId": "515ec419-cce5-41da-aaff-5779f2031805", "rating": 2, "reviewDate": "June 16, 2026", "textLength": 436, "textSha256": "sha256:bdf0f323fb74f5b73ada32411056fb9e6acadeefe1b471c2af0a4f8ed8d20478", "helpfulCount": 9, "developerReply": { "present": true, "textLength": 263 } },
-    { "reviewId": "e366df6a-da00-4e0a-8363-1a0a5bb00440", "rating": 5, "reviewDate": "December 21, 2024", "textLength": 496, "textSha256": "sha256:0b2f41738327854f261cee51a63e78402bc838474f599245277e6eeeb617b512", "helpfulCount": 56, "developerReply": { "present": true, "textLength": 148 } },
-    { "reviewId": "a676cc0e-0e50-431f-bc05-d513d627e208", "rating": 1, "reviewDate": "March 18, 2021", "textLength": 487, "textSha256": "sha256:e7e2185d7b51cc497ad68dea335a0db6e5674b6270428638bfc7c7420b9a9d35", "helpfulCount": 62, "developerReply": null }
-  ],
-  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+    "fixture": "todoist-smaller-en-us",
+    "capturedAt": "2026-08-01",
+    "request": {
+        "method": "GET",
+        "url": "https://play.google.com/store/apps/details?id=com.todoist&hl=en&gl=US",
+        "status": 200,
+        "appId": "com.todoist",
+        "hl": "en",
+        "gl": "US"
+    },
+    "page": {
+        "httpResponseBytes": 1292348,
+        "htmlReviewHeaderMarkers": 6,
+        "reviewCardHeadersObserved": 3,
+        "uniqueReviewCards": 3,
+        "seeAllReviewsEnglish": true,
+        "reviewSort": "Most relevant (observed in English dialog)"
+    },
+    "reviews": [
+        {
+            "reviewId": "515ec419-cce5-41da-aaff-5779f2031805",
+            "rating": 2,
+            "reviewDate": "June 16, 2026",
+            "textLength": 436,
+            "textSha256": "sha256:bdf0f323fb74f5b73ada32411056fb9e6acadeefe1b471c2af0a4f8ed8d20478",
+            "helpfulCount": 9,
+            "developerReply": { "present": true, "textLength": 263 }
+        },
+        {
+            "reviewId": "e366df6a-da00-4e0a-8363-1a0a5bb00440",
+            "rating": 5,
+            "reviewDate": "December 21, 2024",
+            "textLength": 496,
+            "textSha256": "sha256:0b2f41738327854f261cee51a63e78402bc838474f599245277e6eeeb617b512",
+            "helpfulCount": 56,
+            "developerReply": { "present": true, "textLength": 148 }
+        },
+        {
+            "reviewId": "a676cc0e-0e50-431f-bc05-d513d627e208",
+            "rating": 1,
+            "reviewDate": "March 18, 2021",
+            "textLength": 487,
+            "textSha256": "sha256:e7e2185d7b51cc497ad68dea335a0db6e5674b6270428638bfc7c7420b9a9d35",
+            "helpfulCount": 62,
+            "developerReply": null
+        }
+    ],
+    "redaction": {
+        "authorNames": "omitted",
+        "reviewText": "omitted; lengths and SHA-256 digests retained",
+        "avatarUrls": "omitted",
+        "rawHtml": "not stored"
+    }
 }

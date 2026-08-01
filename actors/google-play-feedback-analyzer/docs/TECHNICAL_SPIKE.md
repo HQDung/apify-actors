@@ -2,11 +2,11 @@
 
 Captured 2026-08-01 against the public Google Play Store page for three representative apps:
 
-| App class | Package | Markets tested | Direct HTML result | Review fields observed |
-| --- | --- | --- | --- | --- |
-| Global large | `com.google.android.youtube` | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.30–1.34 MB | ID, star rating, localized date, text, helpful count |
-| Vietnam-focused | `com.zing.zalo` | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.29 MB | Same fields; locale changes visible review text/date |
-| Smaller global | `com.todoist` | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.28–1.29 MB | Same fields plus developer replies in sampled cards |
+| App class       | Package                      | Markets tested            | Direct HTML result             | Review fields observed                               |
+| --------------- | ---------------------------- | ------------------------- | ------------------------------ | ---------------------------------------------------- |
+| Global large    | `com.google.android.youtube` | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.30–1.34 MB | ID, star rating, localized date, text, helpful count |
+| Vietnam-focused | `com.zing.zalo`              | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.29 MB      | Same fields; locale changes visible review text/date |
+| Smaller global  | `com.todoist`                | `en-US`, `vi-VN`, `en-GB` | HTTP 200; roughly 1.28–1.29 MB | Same fields plus developer replies in sampled cards  |
 
 ## Collection paths tested
 

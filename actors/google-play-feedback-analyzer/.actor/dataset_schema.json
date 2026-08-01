@@ -1,0 +1,48 @@
+{
+    "actorSpecification": 1,
+    "title": "Google Play raw reviews and source diagnostics",
+    "views": {
+        "overview": {
+            "title": "Google Play records",
+            "transformation": {
+                "fields": [
+                    "recordType",
+                    "appId",
+                    "reviewId",
+                    "rating",
+                    "reviewDateText",
+                    "text",
+                    "helpfulCount",
+                    "developerReply",
+                    "source.language",
+                    "source.country",
+                    "diagnostics.httpStatus",
+                    "diagnostics.responseBytes",
+                    "diagnostics.parsedReviewCount",
+                    "diagnostics.collectionMode",
+                    "error.code"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "recordType": { "label": "Record type", "format": "text" },
+                    "appId": { "label": "Package ID", "format": "text" },
+                    "reviewId": { "label": "Review ID", "format": "text" },
+                    "rating": { "label": "Stars", "format": "number" },
+                    "reviewDateText": { "label": "Review date", "format": "text" },
+                    "text": { "label": "Review text", "format": "text" },
+                    "helpfulCount": { "label": "Helpful count", "format": "number" },
+                    "developerReply": { "label": "Developer reply", "format": "text" },
+                    "source.language": { "label": "Language", "format": "text" },
+                    "source.country": { "label": "Country", "format": "text" },
+                    "diagnostics.httpStatus": { "label": "HTTP status", "format": "number" },
+                    "diagnostics.responseBytes": { "label": "Response bytes", "format": "number" },
+                    "diagnostics.parsedReviewCount": { "label": "Parsed reviews", "format": "number" },
+                    "diagnostics.collectionMode": { "label": "Collection mode", "format": "text" },
+                    "error.code": { "label": "Error code", "format": "text" }
+                }
+            }
+        }
+    }
+}

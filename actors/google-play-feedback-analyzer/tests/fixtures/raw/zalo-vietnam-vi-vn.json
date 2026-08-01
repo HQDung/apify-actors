@@ -1,26 +1,55 @@
 {
-  "fixture": "zalo-vietnam-vi-vn",
-  "capturedAt": "2026-08-01",
-  "request": {
-    "method": "GET",
-    "url": "https://play.google.com/store/apps/details?id=com.zing.zalo&hl=vi&gl=VN",
-    "status": 200,
-    "appId": "com.zing.zalo",
-    "hl": "vi",
-    "gl": "VN"
-  },
-  "page": {
-    "httpResponseBytes": 1288598,
-    "htmlReviewHeaderMarkers": 6,
-    "reviewCardHeadersObserved": 3,
-    "uniqueReviewCards": 3,
-    "seeAllReviewsEnglish": false,
-    "reviewSort": "Most relevant (observed in English dialog)"
-  },
-  "reviews": [
-    { "reviewId": "3a22754f-b940-4072-9d79-3cedb5b6571d", "rating": 1, "reviewDate": "30 tháng 7, 2026", "textLength": 166, "textSha256": "sha256:4f0ce59a6f6a6bea6008ace1fc3e1efbcea5fedf05599aa765996d549900289d", "helpfulCount": 1, "developerReply": null },
-    { "reviewId": "27bda5ea-5f45-4fe1-a8f8-1d4503db22dc", "rating": 1, "reviewDate": "29 tháng 7, 2026", "textLength": 137, "textSha256": "sha256:20fd9d3740cac13a08316cb551ec7c39277e6767720bfacbba0377107ead6859", "helpfulCount": 1, "developerReply": null },
-    { "reviewId": "8642c998-2146-4387-8332-70e01e703da1", "rating": 1, "reviewDate": "21 tháng 7, 2026", "textLength": 174, "textSha256": "sha256:9c9b000ee7ce580420f6b7ef96602ca1d7c8065ee54628161c43b53561d61c97", "helpfulCount": 5, "developerReply": null }
-  ],
-  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+    "fixture": "zalo-vietnam-vi-vn",
+    "capturedAt": "2026-08-01",
+    "request": {
+        "method": "GET",
+        "url": "https://play.google.com/store/apps/details?id=com.zing.zalo&hl=vi&gl=VN",
+        "status": 200,
+        "appId": "com.zing.zalo",
+        "hl": "vi",
+        "gl": "VN"
+    },
+    "page": {
+        "httpResponseBytes": 1288598,
+        "htmlReviewHeaderMarkers": 6,
+        "reviewCardHeadersObserved": 3,
+        "uniqueReviewCards": 3,
+        "seeAllReviewsEnglish": false,
+        "reviewSort": "Most relevant (observed in English dialog)"
+    },
+    "reviews": [
+        {
+            "reviewId": "3a22754f-b940-4072-9d79-3cedb5b6571d",
+            "rating": 1,
+            "reviewDate": "30 tháng 7, 2026",
+            "textLength": 166,
+            "textSha256": "sha256:4f0ce59a6f6a6bea6008ace1fc3e1efbcea5fedf05599aa765996d549900289d",
+            "helpfulCount": 1,
+            "developerReply": null
+        },
+        {
+            "reviewId": "27bda5ea-5f45-4fe1-a8f8-1d4503db22dc",
+            "rating": 1,
+            "reviewDate": "29 tháng 7, 2026",
+            "textLength": 137,
+            "textSha256": "sha256:20fd9d3740cac13a08316cb551ec7c39277e6767720bfacbba0377107ead6859",
+            "helpfulCount": 1,
+            "developerReply": null
+        },
+        {
+            "reviewId": "8642c998-2146-4387-8332-70e01e703da1",
+            "rating": 1,
+            "reviewDate": "21 tháng 7, 2026",
+            "textLength": 174,
+            "textSha256": "sha256:9c9b000ee7ce580420f6b7ef96602ca1d7c8065ee54628161c43b53561d61c97",
+            "helpfulCount": 5,
+            "developerReply": null
+        }
+    ],
+    "redaction": {
+        "authorNames": "omitted",
+        "reviewText": "omitted; lengths and SHA-256 digests retained",
+        "avatarUrls": "omitted",
+        "rawHtml": "not stored"
+    }
 }

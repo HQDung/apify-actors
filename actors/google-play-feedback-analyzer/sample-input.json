@@ -1,0 +1,9 @@
+{
+    "appIds": ["com.todoist"],
+    "language": "en",
+    "country": "US",
+    "maxReviewsPerApp": 5,
+    "sort": "mostRelevant",
+    "useBrowserFallback": false,
+    "requestTimeoutSecs": 30
+}

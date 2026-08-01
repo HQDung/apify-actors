@@ -1,0 +1,57 @@
+const PACKAGE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]+$/;
+const SORTS = new Set(['mostRelevant', 'newest']);
+
+const invalidInput = (message) => {
+    const error = new Error(message);
+    error.code = 'GOOGLE_PLAY_INVALID_INPUT';
+    return error;
+};
+
+const normalizeAppIds = (input) => {
+    const values = input.appIds ?? (input.appId ? [input.appId] : []);
+    if (!Array.isArray(values) || values.length < 1 || values.length > 20) {
+        throw invalidInput('appIds must contain between 1 and 20 package IDs');
+    }
+
+    const appIds = [...new Set(values.map((value) => String(value).trim()))];
+    if (appIds.some((value) => !PACKAGE_ID_PATTERN.test(value))) {
+        throw invalidInput('appIds contains an invalid Android package ID');
+    }
+    return appIds;
+};
+
+const boundedInteger = (value, fallback, minimum, maximum, name) => {
+    const result = value === undefined ? fallback : Number(value);
+    if (!Number.isInteger(result) || result < minimum || result > maximum) {
+        throw invalidInput(`${name} must be an integer between ${minimum} and ${maximum}`);
+    }
+    return result;
+};
+
+export const normalizeInput = (input = {}) => {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        throw invalidInput('Actor input must be a JSON object');
+    }
+
+    const language = String(input.language ?? 'en')
+        .trim()
+        .toLowerCase();
+    const country = String(input.country ?? 'US')
+        .trim()
+        .toUpperCase();
+    if (!/^[a-z]{2,3}$/.test(language)) throw invalidInput('language must be a two- or three-letter code');
+    if (!/^[A-Z]{2}$/.test(country)) throw invalidInput('country must be a two-letter ISO country code');
+
+    const sort = input.sort ?? 'mostRelevant';
+    if (!SORTS.has(sort)) throw invalidInput(`sort must be one of: ${[...SORTS].join(', ')}`);
+
+    return {
+        appIds: normalizeAppIds(input),
+        language,
+        country,
+        maxReviewsPerApp: boundedInteger(input.maxReviewsPerApp, 50, 1, 500, 'maxReviewsPerApp'),
+        sort,
+        useBrowserFallback: input.useBrowserFallback ?? false,
+        requestTimeoutSecs: boundedInteger(input.requestTimeoutSecs, 30, 5, 120, 'requestTimeoutSecs'),
+    };
+};

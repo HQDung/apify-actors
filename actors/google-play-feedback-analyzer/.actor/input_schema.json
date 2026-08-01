@@ -1,0 +1,66 @@
+{
+    "title": "Google Play Feedback Analyzer Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "appIds": {
+            "title": "Android package IDs",
+            "description": "One or more public Google Play Android package IDs.",
+            "type": "array",
+            "editor": "stringList",
+            "minItems": 1,
+            "maxItems": 20,
+            "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$" }
+        },
+        "language": {
+            "title": "Review language",
+            "description": "Google Play language parameter used for page labels, dates, and localized review content.",
+            "type": "string",
+            "editor": "textfield",
+            "default": "en",
+            "pattern": "^[a-zA-Z]{2,3}$"
+        },
+        "country": {
+            "title": "Google Play country",
+            "description": "Two-letter Google Play country/market parameter.",
+            "type": "string",
+            "editor": "textfield",
+            "default": "US",
+            "pattern": "^[a-zA-Z]{2}$"
+        },
+        "maxReviewsPerApp": {
+            "title": "Maximum reviews per app",
+            "description": "Hard cap applied after parsing the server-rendered review sample.",
+            "type": "integer",
+            "editor": "number",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 500
+        },
+        "sort": {
+            "title": "Review sort",
+            "description": "Requested public Store ordering. The current HTML path observes the page default; sort is recorded for diagnostics.",
+            "type": "string",
+            "editor": "select",
+            "default": "mostRelevant",
+            "enum": ["mostRelevant", "newest"]
+        },
+        "useBrowserFallback": {
+            "title": "Use browser fallback",
+            "description": "Reserved for the later browser-expansion phase. Phase 8 remains HTTP-only.",
+            "type": "boolean",
+            "editor": "checkbox",
+            "default": false
+        },
+        "requestTimeoutSecs": {
+            "title": "Request timeout seconds",
+            "description": "Timeout for each public Store request.",
+            "type": "integer",
+            "editor": "number",
+            "default": 30,
+            "minimum": 5,
+            "maximum": 120
+        }
+    },
+    "required": ["appIds"]
+}
