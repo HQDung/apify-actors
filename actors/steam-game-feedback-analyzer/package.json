@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Collect public Steam reviews and turn player feedback into structured game insights.",
   "dependencies": {
+    "@project/feedback-analysis-core": "file:vendor/project-feedback-analysis-core-1.0.0.tgz",
     "apify": "^3.7.0"
   },
   "devDependencies": {

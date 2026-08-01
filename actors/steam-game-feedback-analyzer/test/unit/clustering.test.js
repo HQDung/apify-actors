@@ -1,6 +1,6 @@
+import { createClusterId } from "@project/feedback-analysis-core";
 import { describe, expect, it } from "vitest";
 
-import { createClusterId } from "../../src/clustering/cluster-id.js";
 import { clusterReviews } from "../../src/clustering/cluster-reviews.js";
 
 const record = ({ id, appId = 730, type = "bugReport", title, topics, language = "english", createdAt = "2026-07-20T10:00:00.000Z", severity = "high" }) => ({
@@ -60,6 +60,6 @@ describe("duplicate issue clustering", () => {
   });
 
   it("creates stable IDs from game, feedback type, and canonical title", () => {
-    expect(createClusterId({ appId: 730, feedbackType: "bugReport", title: "Crash when opening inventory" })).toBe("issue-730-bugreport-crash-when-opening-inventory");
+    expect(createClusterId({ productId: 730, feedbackType: "bugReport", title: "Crash when opening inventory" })).toBe("issue-730-bugreport-crash-when-opening-inventory");
   });
 });

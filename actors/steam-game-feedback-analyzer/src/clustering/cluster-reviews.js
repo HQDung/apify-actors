@@ -1,4 +1,5 @@
-import { clusterFeedback } from "../../../../packages/feedback-analysis-core/src/index.js";
+import { clusterFeedback } from "@project/feedback-analysis-core";
+
 import { toCoreAnalysisRecord } from "../core/steam-contract-adapter.js";
 
 export const clusterReviews = ({ records, minimumClusterSize = 2 }) => {

@@ -1,4 +1,5 @@
-import { analyzeFeedback } from "../../../../packages/feedback-analysis-core/src/index.js";
+import { analyzeFeedback } from "@project/feedback-analysis-core";
+
 import { STEAM_TAXONOMY } from "../core/steam-contract-adapter.js";
 import { validateAnalysis } from "./analysis-schema.js";
 import { fallbackAnalyzeReview } from "./fallback-analysis.js";

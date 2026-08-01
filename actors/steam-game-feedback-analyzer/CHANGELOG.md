@@ -1,5 +1,14 @@
 # Changelog
 
+## Core v1 migration — 2026-08-01
+
+- Extracted source-neutral contracts, taxonomy configuration, analysis,
+  clustering, aggregation, and date-window comparison into the pinned
+  `@project/feedback-analysis-core` `1.0.0` package artifact.
+- Preserved Steam review, cluster, report, and patch-impact output contracts;
+  regression comparison remains valid.
+- Added a deterministic core packaging step for Actor-local Docker builds.
+
 ## 0.1.0 — 2026-07-31
 
 - Added public Steam app-ID and Store URL collection.

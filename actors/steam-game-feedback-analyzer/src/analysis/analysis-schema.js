@@ -1,7 +1,8 @@
 import {
   ANALYSIS_SCHEMA_VERSION,
   validateAnalysisResult,
-} from "../../../../packages/feedback-analysis-core/src/index.js";
+} from "@project/feedback-analysis-core";
+
 import { STEAM_TAXONOMY } from "../core/steam-contract-adapter.js";
 
 export { ANALYSIS_SCHEMA_VERSION };

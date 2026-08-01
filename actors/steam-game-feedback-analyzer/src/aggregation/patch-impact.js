@@ -1,4 +1,5 @@
-import { compareFeedbackWindows } from "../../../../packages/feedback-analysis-core/src/index.js";
+import { compareFeedbackWindows } from "@project/feedback-analysis-core";
+
 import { toCoreAnalysisRecord } from "../core/steam-contract-adapter.js";
 
 const dayMs = 24 * 60 * 60 * 1000;

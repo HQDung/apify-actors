@@ -1,4 +1,5 @@
-import { aggregateFeedback } from "../../../../packages/feedback-analysis-core/src/index.js";
+import { aggregateFeedback } from "@project/feedback-analysis-core";
+
 import { toCoreAnalysisRecord } from "../core/steam-contract-adapter.js";
 
 export const aggregateGameReport = ({ game, records, clusters = [], dateRange = {}, generatedAt = new Date().toISOString() }) => {

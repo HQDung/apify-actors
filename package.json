@@ -5,6 +5,7 @@
     "scripts": {
         "generate": "node scripts/generate-actor.js",
         "test:core": "node --test packages/feedback-analysis-core/test/*.test.js",
+        "test:core-packaging": "node --test test/core-packaging.test.js",
         "test:factory": "node --test test/factory.test.js",
         "test:steam-regression": "node --test tests/contracts/*.test.js tests/regression/*.test.js",
         "validate:actor": "node scripts/validate-actor-files.js",

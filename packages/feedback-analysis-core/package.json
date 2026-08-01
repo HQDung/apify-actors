@@ -1,9 +1,10 @@
 {
   "name": "@project/feedback-analysis-core",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "Source-neutral contracts and utilities for feedback analysis Actors.",
+  "files": ["src"],
   "exports": {
     ".": "./src/index.js"
   }

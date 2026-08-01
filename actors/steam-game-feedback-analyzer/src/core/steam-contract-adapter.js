@@ -1,7 +1,8 @@
 import {
   createTaxonomyConfig,
   validateNormalizedFeedback,
-} from "../../../../packages/feedback-analysis-core/src/index.js";
+} from "@project/feedback-analysis-core";
+
 import { feedbackTypes, topicIds } from "../config/taxonomy.js";
 
 export const STEAM_TAXONOMY = createTaxonomyConfig({
