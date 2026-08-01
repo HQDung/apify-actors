@@ -1,0 +1,14 @@
+[
+  { "name": "specific crash", "language": "english", "recommended": false, "text": "The game crashes every time I open the inventory after the latest update." },
+  { "name": "generic negative", "language": "english", "recommended": false, "text": "Bad game." },
+  { "name": "positive gameplay", "language": "english", "recommended": true, "text": "The combat feels great and the world design is excellent." },
+  { "name": "feature request", "language": "english", "recommended": true, "text": "Please add manual save slots and a better inventory filter." },
+  { "name": "performance complaint", "language": "english", "recommended": false, "text": "The frame rate stutters badly on Steam Deck after entering a crowded area." },
+  { "name": "controller complaint", "language": "english", "recommended": false, "text": "Controller support is broken: the right trigger stops responding in menus." },
+  { "name": "Steam Deck complaint", "language": "english", "recommended": false, "text": "On Steam Deck the game freezes during loading and the battery drain is severe." },
+  { "name": "localization complaint", "language": "english", "recommended": false, "text": "The Vietnamese subtitles are missing and several menu strings are untranslated." },
+  { "name": "Vietnamese bug report", "language": "vietnamese", "recommended": false, "text": "Trò chơi bị treo khi mở kho đồ và mất kết nối thường xuyên." },
+  { "name": "very short", "language": "english", "recommended": true, "text": "good" },
+  { "name": "joke or meme", "language": "english", "recommended": true, "text": "10/10 would let the tutorial boss destroy me again." },
+  { "name": "multiple issues", "language": "english", "recommended": false, "text": "The save system is unreliable, matchmaking disconnects, and the UI is hard to navigate." }
+]

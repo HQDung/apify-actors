@@ -1,0 +1,135 @@
+{
+  "title": "Steam Game Reviews & Player Feedback Analyzer Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "mode": {
+      "title": "Mode",
+      "type": "string",
+      "description": "Collect raw reviews, attach deterministic analysis, or compare before/after review windows around a patch.",
+      "editor": "select",
+      "default": "feedbackAnalysis",
+      "enum": ["rawReviews", "feedbackAnalysis", "patchImpact"]
+    },
+    "steamAppIds": {
+      "title": "Steam app IDs",
+      "type": "array",
+      "description": "One or more numeric Steam app IDs. Numeric strings are accepted by the runtime so the Console string-list editor can be used.",
+      "editor": "stringList",
+      "items": { "type": "string", "pattern": "^[0-9]+$" }
+    },
+    "startUrls": {
+      "title": "Steam Store URLs",
+      "type": "array",
+      "description": "Steam Store or community app URLs. App IDs are extracted and merged with steamAppIds.",
+      "editor": "requestListSources",
+      "items": {
+        "type": "object",
+        "properties": { "url": { "title": "Steam URL", "description": "Steam Store or community app URL.", "type": "string" } },
+        "required": ["url"]
+      }
+    },
+    "languages": {
+      "title": "Review languages",
+      "type": "array",
+      "description": "Steam language codes. Use all to request all languages.",
+      "editor": "stringList",
+      "default": ["all"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "reviewFilter": {
+      "title": "Review filter",
+      "description": "Return all reviews or only positive/negative recommendations.",
+      "type": "string",
+      "editor": "select",
+      "default": "all",
+      "enum": ["all", "positive", "negative"]
+    },
+    "purchaseType": {
+      "title": "Purchase type",
+      "description": "Filter reviews by whether the reviewer purchased the game on Steam.",
+      "type": "string",
+      "editor": "select",
+      "default": "all",
+      "enum": ["all", "steamPurchasers", "nonSteamPurchasers"]
+    },
+    "dateRange": {
+      "title": "Date range",
+      "description": "Optional inclusive date bounds and recent-days limit for review collection.",
+      "editor": "json",
+      "type": "object",
+      "properties": {
+        "from": { "title": "From", "description": "Inclusive ISO date lower bound. Leave blank to omit.", "type": "string", "default": "" },
+        "to": { "title": "To", "description": "Inclusive ISO date upper bound. Leave blank to omit.", "type": "string", "default": "" },
+        "recentDays": { "title": "Recent days", "description": "Keep reviews from this many recent days. Use 0 to disable the recent-days bound.", "type": "integer", "minimum": 0, "maximum": 3650, "default": 30 }
+      }
+    },
+    "maxReviewsPerGame": {
+      "title": "Maximum reviews per game",
+      "description": "Hard cap on reviews collected for each Steam app.",
+      "type": "integer",
+      "editor": "number",
+      "default": 100,
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "includeReviewText": {
+      "title": "Include review text",
+      "description": "Keep the original public review text in each output record.",
+      "type": "boolean",
+      "editor": "checkbox",
+      "default": true
+    },
+    "analysis": {
+      "title": "Analysis settings",
+      "description": "Settings reserved for the review-level analysis phase.",
+      "editor": "json",
+      "type": "object",
+      "properties": {
+        "enabled": { "title": "Enabled", "description": "Enable review-level analysis.", "type": "boolean", "default": true },
+        "outputLanguage": { "title": "Output language", "description": "Language for normalized analysis summaries.", "type": "string", "enum": ["english", "original"], "default": "english" },
+        "includeSummary": { "title": "Include summary", "description": "Include a short review summary.", "type": "boolean", "default": true },
+        "includeTopics": { "title": "Include topics", "description": "Include stable topic IDs.", "type": "boolean", "default": true },
+        "includeSeverity": { "title": "Include severity", "description": "Include estimated issue severity.", "type": "boolean", "default": true },
+        "includeActionabilityScore": { "title": "Include actionability", "description": "Include the actionability score.", "type": "boolean", "default": true },
+        "includeEnvironmentSignals": { "title": "Include environment", "description": "Include platform and environment signals.", "type": "boolean", "default": true },
+        "clusterSimilarIssues": { "title": "Cluster similar issues", "description": "Enable duplicate issue clustering in later phases.", "type": "boolean", "default": true }
+      }
+    },
+    "aggregation": {
+      "title": "Aggregation settings",
+      "description": "Settings reserved for the per-game aggregation phase.",
+      "editor": "json",
+      "type": "object",
+      "properties": {
+        "enabled": { "title": "Enabled", "description": "Enable per-game aggregation.", "type": "boolean", "default": true },
+        "minimumClusterSize": { "title": "Minimum cluster size", "description": "Minimum mentions for a cluster in later phases.", "type": "integer", "minimum": 1, "maximum": 100, "default": 2 },
+        "includeExampleReviews": { "title": "Include examples", "description": "Include example review IDs in aggregate output.", "type": "boolean", "default": true },
+        "maxExamplesPerTopic": { "title": "Maximum examples per topic", "description": "Maximum example review IDs retained for a topic.", "type": "integer", "minimum": 0, "maximum": 20, "default": 3 }
+      }
+    },
+    "proxyConfiguration": {
+      "title": "Proxy configuration",
+      "description": "Optional Apify proxy settings for the collection layer.",
+      "editor": "json",
+      "type": "object",
+      "properties": { "useApifyProxy": { "title": "Use Apify Proxy", "description": "Route supported collection requests through Apify Proxy.", "type": "boolean", "default": false } }
+    },
+    "debug": { "title": "Debug logging", "description": "Emit additional diagnostic logs.", "type": "boolean", "default": false }
+    ,"patch": {
+      "title": "Patch",
+      "description": "Patch metadata for patchImpact mode.",
+      "editor": "json",
+      "type": "object",
+      "properties": {
+        "releasedAt": { "title": "Released at", "description": "Patch release time as an ISO date-time.", "type": "string" },
+        "version": { "title": "Version", "description": "Optional patch version label.", "type": "string" },
+        "notesUrl": { "title": "Notes URL", "description": "Optional public patch-notes URL.", "type": "string" }
+      }
+    },
+    "daysBefore": { "title": "Days before patch", "description": "Number of days in the before window.", "type": "integer", "minimum": 1, "maximum": 365, "default": 14 },
+    "daysAfter": { "title": "Days after patch", "description": "Number of days in the after window.", "type": "integer", "minimum": 1, "maximum": 365, "default": 14 },
+    "maxReviewsPerPeriod": { "title": "Maximum reviews per period", "description": "Hard cap for each patch comparison window.", "type": "integer", "minimum": 1, "maximum": 5000, "default": 1000 }
+  },
+  "required": []
+}

@@ -1,0 +1,9 @@
+{
+  "mode": "rawReviews",
+  "steamAppIds": ["730"],
+  "languages": ["english"],
+  "maxReviewsPerGame": 20,
+  "includeReviewText": true,
+  "analysis": { "enabled": false },
+  "aggregation": { "enabled": false }
+}

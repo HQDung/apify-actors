@@ -1,0 +1,18 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Steam review analyzer output",
+  "properties": {
+    "dataset": {
+      "type": "string",
+      "title": "Steam review dataset",
+      "description": "Normalized raw Steam review records. Later phases add analysis and feedback cluster records.",
+      "template": "{{datasetUrl}}"
+    },
+    "runStatistics": {
+      "type": "string",
+      "title": "Run statistics",
+      "description": "Machine-readable run counters and runtime summary.",
+      "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
+    }
+  }
+}

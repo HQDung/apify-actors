@@ -1,0 +1,40 @@
+export const feedbackTypes = [
+  "bugReport",
+  "performanceIssue",
+  "stabilityIssue",
+  "featureRequest",
+  "balanceFeedback",
+  "difficultyFeedback",
+  "gameplayFeedback",
+  "contentRequest",
+  "usabilityIssue",
+  "accessibilityFeedback",
+  "localizationIssue",
+  "controllerIssue",
+  "steamDeckIssue",
+  "multiplayerIssue",
+  "serverIssue",
+  "matchmakingIssue",
+  "cheatingReport",
+  "monetizationFeedback",
+  "pricingFeedback",
+  "dlcFeedback",
+  "moddingFeedback",
+  "positiveFeedback",
+  "generalComplaint",
+  "nonActionable",
+  "spamOrIrrelevant",
+];
+
+export const topicIds = [
+  "crashes", "freezes", "stuttering", "frameRate", "memoryUsage", "loadingTime",
+  "networkLatency", "disconnects", "servers", "matchmaking", "saveSystem", "cloudSave",
+  "progression", "combat", "movement", "controls", "controllerSupport", "keyboardMouse",
+  "steamDeck", "difficulty", "balance", "weapons", "characters", "economy", "microtransactions",
+  "dlc", "pricing", "story", "quests", "worldDesign", "graphics", "audio", "voiceActing",
+  "localization", "subtitles", "accessibility", "tutorial", "userInterface", "inventory",
+  "crafting", "achievements", "mods", "antiCheat", "coOp", "pvp", "earlyAccess",
+  "contentAmount", "replayability",
+];
+
+export const severities = ["critical", "high", "medium", "low", "unknown"];

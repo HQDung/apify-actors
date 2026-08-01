@@ -1,0 +1,15 @@
+{
+  "mode": "patchImpact",
+  "steamAppIds": ["730"],
+  "languages": ["english"],
+  "patch": {
+    "releasedAt": "2026-07-31T00:00:00.000Z",
+    "version": "1.4",
+    "notesUrl": "https://example.com/patch-notes"
+  },
+  "daysBefore": 1,
+  "daysAfter": 1,
+  "maxReviewsPerPeriod": 5,
+  "analysis": { "enabled": true },
+  "aggregation": { "enabled": false }
+}

@@ -1,0 +1,12 @@
+{
+  "mode": "feedbackAnalysis",
+  "steamAppIds": ["730"],
+  "languages": ["english", "vietnamese"],
+  "reviewFilter": "all",
+  "purchaseType": "all",
+  "dateRange": { "from": "", "to": "", "recentDays": 30 },
+  "maxReviewsPerGame": 50,
+  "includeReviewText": true,
+  "analysis": { "enabled": true, "outputLanguage": "english", "clusterSimilarIssues": true },
+  "aggregation": { "enabled": true, "minimumClusterSize": 2 }
+}

@@ -1,0 +1,86 @@
+{
+  "success": 1,
+  "query_summary": {
+    "num_reviews": 3,
+    "review_score": 8,
+    "review_score_desc": "Very Positive",
+    "total_positive": 2226625,
+    "total_negative": 355545,
+    "total_reviews": 2582170
+  },
+  "cursor": "AoJ4q/jd258DdI/98wY=",
+  "reviews": [
+    {
+      "recommendationid": "231729753",
+      "author": {
+        "steamid": "public-source-id-1",
+        "num_games_owned": 0,
+        "num_reviews": 1,
+        "playtime_forever": 7,
+        "playtime_last_two_weeks": 7,
+        "playtime_at_review": 6
+      },
+      "language": "english",
+      "review": "Good",
+      "timestamp_created": 1785489964,
+      "timestamp_updated": 1785489964,
+      "voted_up": true,
+      "votes_up": 0,
+      "votes_funny": 0,
+      "weighted_vote_score": 0.5,
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    },
+    {
+      "recommendationid": "231729578",
+      "author": {
+        "steamid": "public-source-id-2",
+        "num_games_owned": 1,
+        "num_reviews": 1,
+        "playtime_forever": 5306,
+        "playtime_last_two_weeks": 234,
+        "playtime_at_review": 5306
+      },
+      "language": "english",
+      "review": "great game",
+      "timestamp_created": 1785489744,
+      "timestamp_updated": 1785489744,
+      "voted_up": true,
+      "votes_up": 0,
+      "votes_funny": 0,
+      "weighted_vote_score": 0.5,
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    },
+    {
+      "recommendationid": "231729396",
+      "author": {
+        "steamid": "public-source-id-3",
+        "num_games_owned": 20,
+        "num_reviews": 3,
+        "playtime_forever": 2735,
+        "playtime_last_two_weeks": 894,
+        "playtime_at_review": 2735
+      },
+      "language": "english",
+      "review": "you will rage a lot but if you hit one good clip you would want to play more",
+      "timestamp_created": 1785489507,
+      "timestamp_updated": 1785489507,
+      "voted_up": true,
+      "votes_up": 0,
+      "votes_funny": 0,
+      "weighted_vote_score": 0.5,
+      "comment_count": 0,
+      "steam_purchase": true,
+      "received_for_free": false,
+      "written_during_early_access": false,
+      "primarily_steam_deck": false
+    }
+  ]
+}

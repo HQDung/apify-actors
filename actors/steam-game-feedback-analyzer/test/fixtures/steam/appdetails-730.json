@@ -1,0 +1,12 @@
+{
+  "730": {
+    "success": true,
+    "data": {
+      "steam_appid": 730,
+      "name": "Counter-Strike 2",
+      "type": "game",
+      "developers": ["Valve"],
+      "publishers": ["Valve"]
+    }
+  }
+}

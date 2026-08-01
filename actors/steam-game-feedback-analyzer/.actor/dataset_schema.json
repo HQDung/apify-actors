@@ -1,0 +1,35 @@
+{
+  "actorSpecification": 1,
+  "title": "Steam game reviews and player feedback",
+  "views": {
+    "overview": {
+      "title": "Reviews",
+      "transformation": {
+        "fields": ["recordType", "game.name", "game.steamAppId", "review.language", "review.recommended", "review.text", "analysisStatus", "analysis.clusterId", "analysis.primaryFeedbackType", "analysis.sentiment", "analysis.severity", "analysis.actionabilityScore", "analysis.topics", "clusterId", "canonicalIssue", "feedbackType", "mentionCount", "source.scrapedAt"]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "recordType": { "label": "Record type", "format": "text" },
+          "game.name": { "label": "Game", "format": "text" },
+          "game.steamAppId": { "label": "Steam app ID", "format": "number" },
+          "review.language": { "label": "Language", "format": "text" },
+          "review.recommended": { "label": "Recommended", "format": "boolean" },
+          "review.text": { "label": "Review", "format": "text" },
+          "analysisStatus": { "label": "Analysis status", "format": "text" },
+          "analysis.clusterId": { "label": "Cluster ID", "format": "text" },
+          "analysis.primaryFeedbackType": { "label": "Feedback type", "format": "text" },
+          "analysis.sentiment": { "label": "Sentiment", "format": "text" },
+          "analysis.severity": { "label": "Severity", "format": "text" },
+          "analysis.actionabilityScore": { "label": "Actionability", "format": "number" },
+          "analysis.topics": { "label": "Topics", "format": "array" },
+          "clusterId": { "label": "Cluster ID", "format": "text" },
+          "canonicalIssue": { "label": "Canonical issue", "format": "text" },
+          "feedbackType": { "label": "Cluster feedback type", "format": "text" },
+          "mentionCount": { "label": "Cluster mentions", "format": "number" },
+          "source.scrapedAt": { "label": "Scraped at", "format": "text" }
+        }
+      }
+    }
+  }
+}

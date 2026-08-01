@@ -1,0 +1,19 @@
+{
+  "recordType": "review",
+  "game": { "steamAppId": 730, "name": "Example Steam Game" },
+  "review": {
+    "reviewId": "public-review-id",
+    "language": "english",
+    "text": "The game crashes when opening the inventory.",
+    "recommended": false
+  },
+  "analysisStatus": "success",
+  "analysis": {
+    "primaryFeedbackType": "bugReport",
+    "feedbackTypes": ["bugReport", "stabilityIssue"],
+    "sentiment": "negative",
+    "severity": "high",
+    "topics": ["crashes", "inventory"],
+    "actionabilityScore": 0.9
+  }
+}
