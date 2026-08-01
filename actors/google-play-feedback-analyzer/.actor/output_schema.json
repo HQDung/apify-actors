@@ -5,13 +5,13 @@
         "dataset": {
             "type": "string",
             "title": "Google Play review dataset",
-            "description": "Raw review records with normalizedFeedback and shared analysis objects plus source-diagnostic records emitted by the Actor.",
+            "description": "Review, source-diagnostic, feedback-cluster, product-report, and observational impact records emitted by the Actor.",
             "template": "{{datasetUrl}}"
         },
         "runStatistics": {
             "type": "string",
             "title": "Run statistics",
-            "description": "Machine-readable collection counters and runtime summary.",
+            "description": "Machine-readable collection, aggregation, report-storage, and runtime summary.",
             "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
         }
     }

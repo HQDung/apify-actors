@@ -40,6 +40,11 @@ test('normalizes Google Play collection input with safe bounds', () => {
             useBrowserFallback: false,
             requestTimeoutSecs: 30,
             analysis: { enabled: true, outputLanguage: 'english', maxAttempts: 2 },
+            aggregation: {
+                enabled: true,
+                minimumClusterSize: 2,
+                comparison: { enabled: false, releasedAt: null, daysBefore: 14, daysAfter: 14 },
+            },
         },
     );
 });
@@ -114,6 +119,24 @@ test('normalizes shared-analysis settings without enabling an external provider'
             enabled: false,
             outputLanguage: 'original',
             maxAttempts: 1,
+        },
+    );
+});
+
+test('normalizes aggregation and observational comparison settings', () => {
+    assert.deepEqual(
+        normalizeInput({
+            appIds: ['com.todoist'],
+            aggregation: {
+                enabled: true,
+                minimumClusterSize: 1,
+                comparison: { enabled: true, releasedAt: '2026-07-01T00:00:00.000Z', daysBefore: 7, daysAfter: 21 },
+            },
+        }).aggregation,
+        {
+            enabled: true,
+            minimumClusterSize: 1,
+            comparison: { enabled: true, releasedAt: '2026-07-01T00:00:00.000Z', daysBefore: 7, daysAfter: 21 },
         },
     );
 });

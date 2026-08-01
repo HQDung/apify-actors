@@ -18,6 +18,7 @@ export const runGooglePlayCollection = async ({
         errors: 0,
         totalRecords: 0,
     };
+    const coreRecords = [];
 
     for (const appId of normalizedInput.appIds) {
         const collection = await collect({ ...normalizedInput, appId });
@@ -29,6 +30,10 @@ export const runGooglePlayCollection = async ({
                 normalizedFeedbackByReviewId[record.reviewId] = normalizedFeedback;
                 if (analyzeRecord)
                     analysisByReviewId[record.reviewId] = await analyzeRecord(normalizedFeedback, record);
+                coreRecords.push({
+                    ...normalizedFeedback,
+                    ...(analysisByReviewId[record.reviewId] ? { analysis: analysisByReviewId[record.reviewId] } : {}),
+                });
             }
         }
         const records = toDatasetRecords({
@@ -46,5 +51,5 @@ export const runGooglePlayCollection = async ({
         stats.totalRecords += records.length;
     }
 
-    return { normalizedInput, stats };
+    return { normalizedInput, stats, coreRecords };
 };

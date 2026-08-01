@@ -55,6 +55,27 @@ export const normalizeInput = (input = {}) => {
     if (!OUTPUT_LANGUAGES.has(analysisOutputLanguage)) {
         throw invalidInput(`analysis.outputLanguage must be one of: ${[...OUTPUT_LANGUAGES].join(', ')}`);
     }
+    const aggregationInput = input.aggregation ?? {};
+    if (typeof aggregationInput !== 'object' || Array.isArray(aggregationInput))
+        throw invalidInput('aggregation must be an object');
+    if (aggregationInput.enabled !== undefined && typeof aggregationInput.enabled !== 'boolean') {
+        throw invalidInput('aggregation.enabled must be a boolean');
+    }
+    const comparisonInput = aggregationInput.comparison ?? {};
+    if (typeof comparisonInput !== 'object' || Array.isArray(comparisonInput)) {
+        throw invalidInput('aggregation.comparison must be an object');
+    }
+    if (comparisonInput.enabled !== undefined && typeof comparisonInput.enabled !== 'boolean') {
+        throw invalidInput('aggregation.comparison.enabled must be a boolean');
+    }
+    const releasedAtValue = comparisonInput.releasedAt;
+    const releasedAt =
+        releasedAtValue === undefined || releasedAtValue === null || !String(releasedAtValue).trim()
+            ? null
+            : String(releasedAtValue).trim();
+    if (releasedAt !== null && (!String(releasedAt).trim() || !Number.isFinite(Date.parse(releasedAt)))) {
+        throw invalidInput('aggregation.comparison.releasedAt must be an ISO date-time');
+    }
 
     return {
         appIds: normalizeAppIds(input),
@@ -68,6 +89,22 @@ export const normalizeInput = (input = {}) => {
             enabled: analysisInput.enabled ?? true,
             outputLanguage: analysisOutputLanguage,
             maxAttempts: boundedInteger(analysisInput.maxAttempts, 2, 1, 3, 'analysis.maxAttempts'),
+        },
+        aggregation: {
+            enabled: aggregationInput.enabled ?? true,
+            minimumClusterSize: boundedInteger(
+                aggregationInput.minimumClusterSize,
+                2,
+                1,
+                100,
+                'aggregation.minimumClusterSize',
+            ),
+            comparison: {
+                enabled: comparisonInput.enabled ?? false,
+                releasedAt,
+                daysBefore: boundedInteger(comparisonInput.daysBefore, 14, 1, 365, 'aggregation.comparison.daysBefore'),
+                daysAfter: boundedInteger(comparisonInput.daysAfter, 14, 1, 365, 'aggregation.comparison.daysAfter'),
+            },
         },
     };
 };

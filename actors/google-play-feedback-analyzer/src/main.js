@@ -1,5 +1,6 @@
 import { Actor, log } from 'apify';
 
+import { buildGooglePlayAggregation, reportKeyForProduct } from './aggregation/google-play-aggregation.js';
 import { analyzeGooglePlayFeedback } from './analysis/google-play-analysis.js';
 import { toNormalizedFeedback } from './core/google-play-contract-adapter.js';
 import { normalizeInput } from './google-play/normalize-input.js';
@@ -25,9 +26,22 @@ try {
             : undefined,
         onRecord: (record) => Actor.pushData(record),
     });
+    const aggregateRecords = buildGooglePlayAggregation({
+        coreRecords: result.coreRecords,
+        aggregation: input.aggregation,
+    });
+    for (const record of aggregateRecords) await Actor.pushData(record);
+    const productReports = aggregateRecords.filter((record) => record.recordType === 'productFeedbackReport');
+    for (const report of productReports) {
+        await Actor.setValue(reportKeyForProduct(report.product.productId), report);
+    }
     const finishedAt = Date.now();
     const runStatistics = {
         ...result.stats,
+        collectionRecords: result.stats.totalRecords,
+        totalRecords: result.stats.totalRecords + aggregateRecords.length,
+        aggregationRecords: aggregateRecords.length,
+        reportsStored: productReports.length,
         startedAt: new Date(startedAt).toISOString(),
         finishedAt: new Date(finishedAt).toISOString(),
         runtimeMs: finishedAt - startedAt,

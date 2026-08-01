@@ -10,5 +10,15 @@
         "enabled": true,
         "outputLanguage": "english",
         "maxAttempts": 2
+    },
+    "aggregation": {
+        "enabled": true,
+        "minimumClusterSize": 2,
+        "comparison": {
+            "enabled": false,
+            "releasedAt": "",
+            "daysBefore": 14,
+            "daysAfter": 14
+        }
     }
 }

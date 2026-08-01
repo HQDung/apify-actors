@@ -89,6 +89,63 @@
                     "default": 2
                 }
             }
+        },
+        "aggregation": {
+            "title": "Clustering and reports",
+            "description": "Group actionable feedback per app, emit dataset summaries, and store one aggregate report per app.",
+            "editor": "json",
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "title": "Enabled",
+                    "description": "Emit cluster and aggregate records and store per-app reports.",
+                    "type": "boolean",
+                    "default": true
+                },
+                "minimumClusterSize": {
+                    "title": "Minimum cluster size",
+                    "description": "Minimum number of similar actionable reviews required for a cluster.",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 2
+                },
+                "comparison": {
+                    "title": "Release comparison",
+                    "description": "Optional observational before/after comparison around a release timestamp.",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "description": "Emit a before/after comparison report when a release timestamp is supplied.",
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "releasedAt": {
+                            "title": "Released at",
+                            "description": "ISO date-time used as the boundary between before and after windows.",
+                            "type": "string",
+                            "default": ""
+                        },
+                        "daysBefore": {
+                            "title": "Days before",
+                            "description": "Number of calendar days included before the release boundary.",
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 365,
+                            "default": 14
+                        },
+                        "daysAfter": {
+                            "title": "Days after",
+                            "description": "Number of calendar days included after the release boundary.",
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 365,
+                            "default": 14
+                        }
+                    }
+                }
+            }
         }
     },
     "required": ["appIds"]

@@ -26,4 +26,11 @@ Phase 10 analysis smoke on 2026-08-01:
 - HTTP 200; 1,290,655 response bytes; 0 errors; 4 total records.
 - All three analyses used `deterministic-fallback` from `feedback-core-v1`; runtime 444 ms.
 
+Phase 11 aggregation smoke on 2026-08-01:
+
+- 1 app requested and processed; 3 reviews, 1 source diagnostic, and 1 `productFeedbackReport` emitted.
+- The default deterministic fallback produced no actionable clusters; `aggregationRecords` was 1 and `reportsStored` was 1.
+- 0 errors; 5 total dataset records (`collectionRecords: 4`, `aggregationRecords: 1`); the per-app report was written to `APP_REPORT_com_todoist`.
+- HTTP 200; 1,291,776 response bytes; runtime 565 ms on the local macOS development environment.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.
