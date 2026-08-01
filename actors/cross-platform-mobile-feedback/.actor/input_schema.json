@@ -1,0 +1,370 @@
+{
+  "title": "Cross-Platform Mobile App Feedback Intelligence Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "mode": {
+      "title": "Run mode",
+      "description": "Choose raw collection, per-platform analysis, cross-platform comparison, or release comparison.",
+      "type": "string",
+      "editor": "select",
+      "enum": [
+        "rawReviews",
+        "feedbackAnalysis",
+        "comparePlatforms",
+        "releaseComparison"
+      ],
+      "default": "comparePlatforms"
+    },
+    "products": {
+      "title": "Explicit product mappings",
+      "description": "Map each canonical product to one or both store app IDs or URLs. Apps are never matched automatically by name.",
+      "type": "array",
+      "editor": "json",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "title": "Product ID",
+            "description": "Stable cross-platform identity.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "name": {
+            "title": "Product name",
+            "description": "Human-readable product name.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "googlePlayAppId": {
+            "title": "Google Play app ID",
+            "description": "Android package ID.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "googlePlayUrl": {
+            "title": "Google Play URL",
+            "description": "Public Google Play URL containing an id query parameter.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "appleAppId": {
+            "title": "Apple App Store app ID",
+            "description": "Numeric Apple app ID.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "appleAppStoreUrl": {
+            "title": "Apple App Store URL",
+            "description": "Public App Store URL containing an id segment.",
+            "type": "string",
+            "editor": "textfield"
+          },
+          "releases": {
+            "title": "Platform releases",
+            "description": "Separate Android and iOS release metadata for releaseComparison mode.",
+            "type": "object",
+            "editor": "json",
+            "properties": {
+              "android": {
+                "title": "Android release",
+                "description": "Android version and release timestamp.",
+                "type": "object",
+                "editor": "json",
+                "properties": {
+                  "version": {
+                    "title": "Version",
+                    "description": "Android version.",
+                    "type": "string",
+                    "editor": "textfield"
+                  },
+                  "releasedAt": {
+                    "title": "Released at",
+                    "description": "Android ISO release timestamp.",
+                    "type": "string",
+                    "editor": "textfield"
+                  }
+                }
+              },
+              "ios": {
+                "title": "iOS release",
+                "description": "iOS version and release timestamp.",
+                "type": "object",
+                "editor": "json",
+                "properties": {
+                  "version": {
+                    "title": "Version",
+                    "description": "iOS version.",
+                    "type": "string",
+                    "editor": "textfield"
+                  },
+                  "releasedAt": {
+                    "title": "Released at",
+                    "description": "iOS ISO release timestamp.",
+                    "type": "string",
+                    "editor": "textfield"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "countries": {
+      "title": "Countries",
+      "description": "Two-letter storefront/country filters.",
+      "type": "array",
+      "editor": "stringList",
+      "items": { "type": "string", "pattern": "^[A-Za-z]{2}$" },
+      "default": ["US"]
+    },
+    "languages": {
+      "title": "Languages",
+      "description": "Two- or three-letter language filters.",
+      "type": "array",
+      "editor": "stringList",
+      "items": { "type": "string", "pattern": "^[A-Za-z]{2,3}$" },
+      "default": ["en"]
+    },
+    "ratings": {
+      "title": "Ratings",
+      "description": "Review star ratings to include.",
+      "type": "array",
+      "editor": "json",
+      "items": { "type": "integer", "minimum": 1, "maximum": 5 },
+      "default": [1, 2, 3, 4, 5]
+    },
+    "dateRange": {
+      "title": "Date range",
+      "description": "Optional bounded collection window.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "from": {
+          "title": "From",
+          "description": "ISO start timestamp.",
+          "type": "string",
+          "editor": "textfield"
+        },
+        "to": {
+          "title": "To",
+          "description": "ISO end timestamp.",
+          "type": "string",
+          "editor": "textfield"
+        },
+        "recentDays": {
+          "title": "Recent days",
+          "description": "Alternative recent-day window.",
+          "type": "integer",
+          "editor": "number",
+          "minimum": 1,
+          "maximum": 365
+        }
+      }
+    },
+    "maxReviewsPerPlatform": {
+      "title": "Maximum reviews per platform",
+      "description": "Bound applied per mapped store platform.",
+      "type": "integer",
+      "editor": "number",
+      "default": 500,
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "includeDeveloperReplies": {
+      "title": "Include developer replies",
+      "description": "Preserve public developer replies where a source exposes them.",
+      "type": "boolean",
+      "editor": "checkbox",
+      "default": true
+    },
+    "includeReviewText": {
+      "title": "Include review text",
+      "description": "Preserve original review text in raw output.",
+      "type": "boolean",
+      "editor": "checkbox",
+      "default": true
+    },
+    "analysis": {
+      "title": "Analysis",
+      "description": "Shared analysis and clustering options.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "description": "Analyze collected reviews.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "outputLanguage": {
+          "title": "Output language",
+          "description": "Analysis summary language.",
+          "type": "string",
+          "editor": "select",
+          "enum": ["english", "original"],
+          "default": "english"
+        },
+        "includeSummary": {
+          "title": "Include summary",
+          "description": "Include analysis summaries.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeTopics": {
+          "title": "Include topics",
+          "description": "Include topic classifications.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeSeverity": {
+          "title": "Include severity",
+          "description": "Include severity classification.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeActionabilityScore": {
+          "title": "Include actionability",
+          "description": "Include actionability score.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeEnvironmentSignals": {
+          "title": "Include environment signals",
+          "description": "Include device, OS, version, and locale signals when present.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "clusterSimilarIssues": {
+          "title": "Cluster similar issues",
+          "description": "Create platform-level clusters after analysis.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        }
+      }
+    },
+    "comparison": {
+      "title": "Comparison",
+      "description": "Cross-platform matching thresholds and report dimensions.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "description": "Enable cross-platform comparison in a later phase.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "minimumSharedClusterConfidence": {
+          "title": "Minimum shared confidence",
+          "description": "Minimum confidence for shared issue matches.",
+          "type": "number",
+          "editor": "number",
+          "default": 0.75,
+          "minimum": 0,
+          "maximum": 1
+        },
+        "minimumPlatformSpecificMentions": {
+          "title": "Minimum platform-specific mentions",
+          "description": "Minimum mentions before a platform-specific finding is ranked.",
+          "type": "integer",
+          "editor": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "includeCountryComparison": {
+          "title": "Include country comparison",
+          "description": "Compare country dimensions when supported.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeLanguageComparison": {
+          "title": "Include language comparison",
+          "description": "Compare language dimensions when supported.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "includeVersionComparison": {
+          "title": "Include version comparison",
+          "description": "Compare app-version dimensions when supported.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        }
+      }
+    },
+    "aggregation": {
+      "title": "Aggregation",
+      "description": "Cluster and report output limits.",
+      "type": "object",
+      "editor": "json",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "description": "Emit clusters and reports.",
+          "type": "boolean",
+          "editor": "checkbox",
+          "default": true
+        },
+        "minimumClusterSize": {
+          "title": "Minimum cluster size",
+          "description": "Minimum cluster mentions.",
+          "type": "integer",
+          "editor": "number",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "maxExampleReviewsPerCluster": {
+          "title": "Maximum examples",
+          "description": "Maximum example reviews retained per cluster.",
+          "type": "integer",
+          "editor": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "daysBefore": {
+      "title": "Days before release",
+      "description": "Release comparison window before each platform release.",
+      "type": "integer",
+      "editor": "number",
+      "default": 14,
+      "minimum": 1,
+      "maximum": 365
+    },
+    "daysAfter": {
+      "title": "Days after release",
+      "description": "Release comparison window after each platform release.",
+      "type": "integer",
+      "editor": "number",
+      "default": 14,
+      "minimum": 1,
+      "maximum": 365
+    },
+    "debug": {
+      "title": "Debug logging",
+      "description": "Enable additional local diagnostic logging.",
+      "type": "boolean",
+      "editor": "checkbox",
+      "default": false
+    }
+  },
+  "required": ["products"]
+}

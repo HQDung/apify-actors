@@ -1,0 +1,49 @@
+{
+  "actorSpecification": 1,
+  "title": "Cross-platform mobile feedback records",
+  "views": {
+    "overview": {
+      "title": "Cross-platform records",
+      "transformation": {
+        "fields": [
+          "recordType",
+          "product.productId",
+          "classification",
+          "canonicalIssue",
+          "androidMentions",
+          "iosMentions",
+          "mentionCount",
+          "sharedConfidence",
+          "comparisonConfidence",
+          "warnings",
+          "generatedAt"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "recordType": { "label": "Record type", "format": "text" },
+          "product.productId": { "label": "Product", "format": "text" },
+          "classification": { "label": "Classification", "format": "text" },
+          "canonicalIssue": { "label": "Issue", "format": "text" },
+          "androidMentions": {
+            "label": "Android mentions",
+            "format": "number"
+          },
+          "iosMentions": { "label": "iOS mentions", "format": "number" },
+          "mentionCount": { "label": "Platform mentions", "format": "number" },
+          "sharedConfidence": {
+            "label": "Shared confidence",
+            "format": "number"
+          },
+          "comparisonConfidence": {
+            "label": "Comparison confidence",
+            "format": "number"
+          },
+          "warnings": { "label": "Warnings", "format": "text" },
+          "generatedAt": { "label": "Generated at", "format": "text" }
+        }
+      }
+    }
+  }
+}

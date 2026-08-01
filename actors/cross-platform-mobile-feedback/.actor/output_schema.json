@@ -1,0 +1,30 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Cross-platform mobile feedback intelligence output",
+  "properties": {
+    "dataset": {
+      "type": "string",
+      "title": "Feedback dataset",
+      "description": "Reviews, clusters, comparisons, reports, and run errors.",
+      "template": "{{datasetUrl}}"
+    },
+    "reports": {
+      "type": "string",
+      "title": "Product reports",
+      "description": "Per-product report records in the default key-value store.",
+      "template": "{{keyValueStoreUrl}}"
+    },
+    "normalizedInput": {
+      "type": "string",
+      "title": "Normalized input",
+      "description": "Validated explicit product mappings and run settings.",
+      "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/NORMALIZED_INPUT"
+    },
+    "runStatistics": {
+      "type": "string",
+      "title": "Run statistics",
+      "description": "Collection, analysis, cluster, comparison, error, and runtime counts.",
+      "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "mode": "comparePlatforms",
+  "products": [
+    {
+      "productId": "example-product",
+      "name": "Example App",
+      "googlePlayAppId": "com.example.app",
+      "appleAppId": "123456789"
+    }
+  ],
+  "countries": ["US", "VN"],
+  "languages": ["en", "vi"],
+  "ratings": [1, 2, 3, 4, 5],
+  "maxReviewsPerPlatform": 500,
+  "analysis": {
+    "enabled": true,
+    "outputLanguage": "english",
+    "clusterSimilarIssues": true
+  },
+  "comparison": {
+    "enabled": true,
+    "minimumSharedClusterConfidence": 0.75,
+    "minimumPlatformSpecificMentions": 2
+  },
+  "aggregation": {
+    "enabled": true,
+    "minimumClusterSize": 2,
+    "maxExampleReviewsPerCluster": 3
+  },
+  "debug": false
+}

@@ -1,0 +1,21 @@
+{
+  "mode": "comparePlatforms",
+  "products": [
+    {
+      "productId": "subscription-app",
+      "googlePlayAppId": "com.example.subscription",
+      "appleAppId": "123456789"
+    },
+    {
+      "productId": "bilingual-app",
+      "googlePlayAppId": "com.example.bilingual",
+      "appleAppId": "987654321"
+    }
+  ],
+  "countries": ["US", "VN"],
+  "languages": ["en", "vi"],
+  "maxReviewsPerPlatform": 1000,
+  "analysis": { "enabled": true },
+  "comparison": { "enabled": true },
+  "aggregation": { "enabled": true }
+}
