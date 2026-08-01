@@ -32,6 +32,10 @@ Source collection is bounded by `maxReviewsPerPlatform`, `requestTimeoutSecs`, `
 
 When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost. Reports are observational summaries and disclose missing-platform or partial-source evidence. Language dimensions represent requested store locale, not guaranteed reviewer-origin language.
 
+## Quality benchmark
+
+The reproducible fixture benchmark uses 100 labeled reviews (50 per platform), 25 known shared review pairs, 10 feature-request pairs, mixed English/Vietnamese metadata, and staggered release dates. The current fixture result is 100% analysis-schema validity, 100% cluster coherence, 100% shared-cluster precision and recall, 0% platform-specific false positives, correct rating/country/language/version dimensions, and correct release windows. The fixture provider reports an estimated $0.02 analysis cost for one product comparison; live provider cost depends on model and review volume.
+
 ## Limitations
 
 Product identity is user-provided. Platform-specific findings will mean observed only in the collected sample. Country, language, version, and release differences can reflect store coverage and review availability rather than true prevalence. Release comparisons are observational, not proof of causation.

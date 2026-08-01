@@ -2,6 +2,7 @@
 
 ## 0.1.0
 
+- Added a reproducible 100-review quality benchmark covering analysis validity, cluster coherence, shared matching precision/recall, platform-specific false positives, dimensions, release windows, runtime, memory, and fixture cost.
 - Added request-expansion limits, runtime output validators, predictable source-error output, and expanded output schema links.
 - Added staggered Android/iOS release-window reports with topic changes, new issues, rollout lag, sample warnings, and non-causal wording.
 - Added configurable country/language/version dimension insights with platform-separated statistics, negative-topic signals, and limited-sample warnings.

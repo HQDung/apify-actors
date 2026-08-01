@@ -20,6 +20,7 @@
   },
   "scripts": {
     "start": "node ./src/main.js",
+    "benchmark:quality": "node benchmark/quality-benchmark.mjs",
     "format:check": "prettier --check .",
     "lint": "eslint src test",
     "test": "node --test test/*.test.mjs"

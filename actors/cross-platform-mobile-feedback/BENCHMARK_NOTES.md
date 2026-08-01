@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 11 — Quality benchmark
+
+`npm run benchmark:quality` runs a deterministic 100-review fixture: 50 Android reviews, 50 iOS reviews, 25 known shared review pairs, 10 feature-request pairs, 50 labeled platform-specific examples, mixed English/Vietnamese country and language metadata, and staggered Android/iOS release dates. Current result: analysis-schema validity 100%, cluster coherence 100%, shared precision 100%, shared recall 100%, platform-specific false-positive rate 0%, rating/country/language/version accuracy 100%, release-window accuracy 100%, no cross-product matches, and an estimated fixture-provider cost of $0.02 per product comparison. This is a quality fixture, not a claim of live store coverage; the local sandbox source smoke recorded fetch failures as structured errors.
+
 ## Phase 10 — Schemas, errors, and runtime safeguards
 
 The local benchmark covers input expansion caps, runtime statistics validation, source diagnostic/run-error validation, dataset/output schema artifacts, predictable report keys, source-error key-value output, and vendored runtime package packaging. No publish or pricing action is performed.
