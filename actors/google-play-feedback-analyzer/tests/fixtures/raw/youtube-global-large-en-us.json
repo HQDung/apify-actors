@@ -1,0 +1,26 @@
+{
+  "fixture": "youtube-global-large-en-us",
+  "capturedAt": "2026-08-01",
+  "request": {
+    "method": "GET",
+    "url": "https://play.google.com/store/apps/details?id=com.google.android.youtube&hl=en&gl=US",
+    "status": 200,
+    "appId": "com.google.android.youtube",
+    "hl": "en",
+    "gl": "US"
+  },
+  "page": {
+    "httpResponseBytes": 1339192,
+    "htmlReviewHeaderMarkers": 6,
+    "reviewCardHeadersObserved": 3,
+    "uniqueReviewCards": 3,
+    "seeAllReviewsEnglish": true,
+    "reviewSort": "Most relevant (observed in English dialog)"
+  },
+  "reviews": [
+    { "reviewId": "529e8d90-5720-4c02-bf45-cd378ec5698d", "rating": 1, "reviewDate": "July 6, 2026", "textLength": 361, "textSha256": "sha256:2a6d935525e3c1cbd9de88d2db67d446a755cbef2d4669623fd5837cd186fcd1", "helpfulCount": 609, "developerReply": null },
+    { "reviewId": "9bf076a3-e2c1-43d1-93fb-e10a1006fe62", "rating": 1, "reviewDate": "April 27, 2026", "textLength": 452, "textSha256": "sha256:0481f115f8a70d1d4b09ff5a502ef31e6cec0da213781f912934b7da7765d386", "helpfulCount": 32, "developerReply": null },
+    { "reviewId": "53ce73d5-859b-447f-ab45-c81d0b965706", "rating": 1, "reviewDate": "April 8, 2026", "textLength": 499, "textSha256": "sha256:80a15098f00f4eceb4500a75772cd8e595e28812240b2d8ed92a897413c90a1a", "helpfulCount": 42, "developerReply": null }
+  ],
+  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+}

@@ -1,0 +1,26 @@
+{
+  "fixture": "todoist-smaller-vi-vn",
+  "capturedAt": "2026-08-01",
+  "request": {
+    "method": "GET",
+    "url": "https://play.google.com/store/apps/details?id=com.todoist&hl=vi&gl=VN",
+    "status": 200,
+    "appId": "com.todoist",
+    "hl": "vi",
+    "gl": "VN"
+  },
+  "page": {
+    "httpResponseBytes": 1281193,
+    "htmlReviewHeaderMarkers": 6,
+    "reviewCardHeadersObserved": 3,
+    "uniqueReviewCards": 3,
+    "seeAllReviewsEnglish": false,
+    "reviewSort": "Most relevant (observed in English dialog)"
+  },
+  "reviews": [
+    { "reviewId": "cc1fcb4a-7e56-45c7-92dc-57dc58fc78a7", "rating": 4, "reviewDate": "23 tháng 6, 2026", "textLength": 80, "textSha256": "sha256:e65422bcf53b54c102cb589ddebab6bfa9fadcdb7c50cd75b91b4f8011dd37c8", "helpfulCount": 5, "developerReply": { "present": true, "textLength": 178 } },
+    { "reviewId": "291a92b2-424c-4b7e-a83e-ae0879279f4d", "rating": 5, "reviewDate": "9 tháng 6, 2026", "textLength": 7, "textSha256": "sha256:0aaae01831cf78a46b28aadff11fa477cc6fdaa535d6a20a93b7d3745b63e93d", "helpfulCount": 8, "developerReply": { "present": true, "textLength": 43 } },
+    { "reviewId": "05f1ee13-1cc2-4b66-844b-87bdf9615874", "rating": 5, "reviewDate": "4 tháng 5, 2026", "textLength": 7, "textSha256": "sha256:fafe97f7def328bbd4f10779b9625a8aa0bfaa143d7ae64e6f5770e47b51cd1d", "helpfulCount": 9, "developerReply": { "present": true, "textLength": 136 } }
+  ],
+  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+}

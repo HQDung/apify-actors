@@ -1,0 +1,26 @@
+{
+  "fixture": "zalo-vietnam-en-us",
+  "capturedAt": "2026-08-01",
+  "request": {
+    "method": "GET",
+    "url": "https://play.google.com/store/apps/details?id=com.zing.zalo&hl=en&gl=US",
+    "status": 200,
+    "appId": "com.zing.zalo",
+    "hl": "en",
+    "gl": "US"
+  },
+  "page": {
+    "httpResponseBytes": 1289366,
+    "htmlReviewHeaderMarkers": 6,
+    "reviewCardHeadersObserved": 3,
+    "uniqueReviewCards": 3,
+    "seeAllReviewsEnglish": true,
+    "reviewSort": "Most relevant (observed in English dialog)"
+  },
+  "reviews": [
+    { "reviewId": "90758dcb-19c6-4481-be49-522b640e787f", "rating": 1, "reviewDate": "May 30, 2024", "textLength": 355, "textSha256": "sha256:bc1ea4e165408eac37ecb5bd417cf058ccbfaab063fdd5c4cd602367814791a8", "helpfulCount": 565, "developerReply": null },
+    { "reviewId": "2165f0f4-f8f2-4c38-b7ae-851f213a8476", "rating": 1, "reviewDate": "September 3, 2025", "textLength": 500, "textSha256": "sha256:b91028ff6e2c1bd3673bd29b54049a27227c8150ee59ff374d0465d5ccdd3d60", "helpfulCount": 291, "developerReply": null },
+    { "reviewId": "92f17d43-d0a9-486b-ae2f-1db6b7b5ce27", "rating": 1, "reviewDate": "July 9, 2026", "textLength": 324, "textSha256": "sha256:2afe748eb2fafde5fe642ff0b02ad3073340624a0dec7bc0a24d4578f5035214", "helpfulCount": 8, "developerReply": null }
+  ],
+  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+}

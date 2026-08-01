@@ -1,0 +1,26 @@
+{
+  "fixture": "youtube-global-large-vi-vn",
+  "capturedAt": "2026-08-01",
+  "request": {
+    "method": "GET",
+    "url": "https://play.google.com/store/apps/details?id=com.google.android.youtube&hl=vi&gl=VN",
+    "status": 200,
+    "appId": "com.google.android.youtube",
+    "hl": "vi",
+    "gl": "VN"
+  },
+  "page": {
+    "httpResponseBytes": 1295675,
+    "htmlReviewHeaderMarkers": 6,
+    "reviewCardHeadersObserved": 3,
+    "uniqueReviewCards": 3,
+    "seeAllReviewsEnglish": false,
+    "reviewSort": "Most relevant (observed in English dialog)"
+  },
+  "reviews": [
+    { "reviewId": "497e61b1-2949-4456-919b-db572f9f4cba", "rating": 1, "reviewDate": "28 tháng 7, 2026", "textLength": 75, "textSha256": "sha256:4c9e4c1a4d6662c5297b8399b772156a9384f776ce61a4907f4a5b576a782a8c", "helpfulCount": 2, "developerReply": null },
+    { "reviewId": "6d9e87d6-a20d-4cdf-a1b5-bf78053aed0e", "rating": 1, "reviewDate": "30 tháng 7, 2026", "textLength": 234, "textSha256": "sha256:d98750ddde3dc9f62a45a4306940146dfb32efeed294f37c7562b63c4abd8bf8", "helpfulCount": 0, "developerReply": null },
+    { "reviewId": "00c54544-eede-4e69-b495-0f621c673606", "rating": 1, "reviewDate": "30 tháng 7, 2026", "textLength": 90, "textSha256": "sha256:4ebde7a5a2343345803b132a5dab330be6798ca750f606f57569406879de9342", "helpfulCount": 1, "developerReply": null }
+  ],
+  "redaction": { "authorNames": "omitted", "reviewText": "omitted; lengths and SHA-256 digests retained", "avatarUrls": "omitted", "rawHtml": "not stored" }
+}
