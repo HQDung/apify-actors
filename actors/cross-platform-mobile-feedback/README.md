@@ -30,7 +30,7 @@ The comparison phase writes normalized `review`, `reviewAnalysis`, `feedbackClus
 
 Source collection is bounded by `maxReviewsPerPlatform`, `requestTimeoutSecs`, and `maxPagesPerPlatform`. Google Play uses its public review HTML surface; Apple uses the public RSS/JSON customer-review feed. Store coverage, pagination, and rate limits are recorded in diagnostics.
 
-When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost.
+When `OPENAI_API_KEY` is present, per-review analysis uses the native-fetch OpenAI-compatible provider and `OPENAI_MODEL` if supplied. Without a key, the shared deterministic fallback keeps the Actor dependency-free; `analysis.maxReviewsToAnalyze`, `analysis.maxAttempts`, and `analysis.cacheMaxEntries` bound analysis cost. Reports are observational summaries and disclose missing-platform or partial-source evidence.
 
 ## Limitations
 

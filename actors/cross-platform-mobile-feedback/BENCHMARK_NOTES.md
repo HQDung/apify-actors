@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 7 — Per-product reports and aggregate summaries
+
+The local benchmark covers validated per-product report generation, platform review/actionability/rating statistics, shared and platform-specific comparison placement, rating/volume differences, country/language/version dimensions, key-value report storage, and missing-source warnings.
+
 ## Phase 6 — Cross-platform cluster matching
 
 The local benchmark covers same-product matching, feedback-type compatibility, topic/title overlap, shared confidence, feature-request/bug separation, unrelated-issue rejection, platform-specific findings, platform dominance, and insufficient-evidence handling when a source is missing. Matching uses explainable signals and never claims absence from an unobserved platform.

@@ -6,6 +6,10 @@ import { clusterPlatformFeedback } from "./clustering/platform-clustering.js";
 import { collectMappedProductReviews } from "./collection/collect-products.js";
 import { comparePlatformClusters } from "./comparison/compare-platform-clusters.js";
 import { normalizeInput } from "./input/normalize-input.js";
+import {
+  buildCrossPlatformReport,
+  reportKeyForProduct,
+} from "./report/build-cross-platform-report.js";
 import { createInitialRunStats } from "./runtime/run-stats.js";
 
 await Actor.init();
@@ -82,6 +86,32 @@ try {
   }
   for (const comparison of comparisons) await Actor.pushData(comparison);
   await Actor.setValue("CROSS_PLATFORM_COMPARISONS", comparisons);
+  const reports = [];
+  if (input.comparison.enabled && input.aggregation.enabled) {
+    for (const product of input.products) {
+      const report = buildCrossPlatformReport({
+        product,
+        reviews: collection.reviews.filter(
+          (review) => review.product.productId === product.productId,
+        ),
+        analysisRecords: analysis.analysisRecords.filter(
+          (entry) => entry.review.product.productId === product.productId,
+        ),
+        comparisons: comparisons.filter(
+          (comparison) => comparison.product.productId === product.productId,
+        ),
+        platformEvidence: collection.stats,
+        dateRange: input.dateRange,
+        sourceErrors: collection.errors.filter(
+          (error) => error.productId === product.productId,
+        ),
+      });
+      reports.push(report);
+      await Actor.pushData(report);
+      await Actor.setValue(reportKeyForProduct(product.productId), report);
+    }
+  }
+  await Actor.setValue("CROSS_PLATFORM_REPORTS", reports);
   const finishedAt = Date.now();
   await Actor.setValue("RUN_STATS", {
     ...createInitialRunStats({ productCount: input.products.length }),
@@ -89,23 +119,27 @@ try {
     reviewsAnalyzed: analysis.analysisRecords.length,
     platformClustersCreated: clustering.clusters.length,
     crossPlatformComparisonsCreated: comparisons.length,
+    reportsStored: reports.length,
     analysisFailures: analysis.analysisRecords.filter(
       (entry) => entry.analysis.analysisStatus === "failed",
     ).length,
     analysisSkipped: collection.reviews.length - reviewsForAnalysis.length,
     analysisProvider: provider ? "openai-compatible" : "deterministic-fallback",
     analysisUsage: analysis.usage,
-    phase: "comparison",
+    phase: "reporting",
     startedAt: new Date(startedAt).toISOString(),
     finishedAt: new Date(finishedAt).toISOString(),
     runtimeMs: finishedAt - startedAt,
-    note: "Raw collection, per-review analysis, platform clustering, and cautious cross-platform comparison completed; reports are a later phase.",
+    note: "Raw collection, analysis, platform clustering, comparison, and per-product reporting completed.",
   });
   await Actor.setValue("NORMALIZED_INPUT", input);
-  log.info("Cross-platform collection, analysis, and clustering completed", {
-    products: input.products.length,
-    mode: input.mode,
-  });
+  log.info(
+    "Cross-platform collection, analysis, clustering, and reporting completed",
+    {
+      products: input.products.length,
+      mode: input.mode,
+    },
+  );
 } catch (error) {
   await Actor.setValue("RUN_ERROR", {
     recordType: "runError",
