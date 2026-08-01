@@ -4,6 +4,7 @@ import { analyzeCollectedReviews } from "./analysis/cross-platform-analysis.js";
 import { createOpenAiProvider } from "./analysis/openai-provider.js";
 import { clusterPlatformFeedback } from "./clustering/platform-clustering.js";
 import { collectMappedProductReviews } from "./collection/collect-products.js";
+import { comparePlatformClusters } from "./comparison/compare-platform-clusters.js";
 import { normalizeInput } from "./input/normalize-input.js";
 import { createInitialRunStats } from "./runtime/run-stats.js";
 
@@ -64,23 +65,41 @@ try {
       : { clusters: [], reviewClusterIds: {} };
   for (const cluster of clustering.clusters) await Actor.pushData(cluster);
   await Actor.setValue("CLUSTER_INDEX", clustering.reviewClusterIds);
+  const comparisons = [];
+  if (input.comparison.enabled) {
+    for (const product of input.products) {
+      const result = comparePlatformClusters({
+        product,
+        clusters: clustering.clusters,
+        minimumSharedClusterConfidence:
+          input.comparison.minimumSharedClusterConfidence,
+        minimumPlatformSpecificMentions:
+          input.comparison.minimumPlatformSpecificMentions,
+        platformEvidence: collection.stats,
+      });
+      comparisons.push(...result.comparisons);
+    }
+  }
+  for (const comparison of comparisons) await Actor.pushData(comparison);
+  await Actor.setValue("CROSS_PLATFORM_COMPARISONS", comparisons);
   const finishedAt = Date.now();
   await Actor.setValue("RUN_STATS", {
     ...createInitialRunStats({ productCount: input.products.length }),
     ...collection.stats,
     reviewsAnalyzed: analysis.analysisRecords.length,
     platformClustersCreated: clustering.clusters.length,
+    crossPlatformComparisonsCreated: comparisons.length,
     analysisFailures: analysis.analysisRecords.filter(
       (entry) => entry.analysis.analysisStatus === "failed",
     ).length,
     analysisSkipped: collection.reviews.length - reviewsForAnalysis.length,
     analysisProvider: provider ? "openai-compatible" : "deterministic-fallback",
     analysisUsage: analysis.usage,
-    phase: "clustering",
+    phase: "comparison",
     startedAt: new Date(startedAt).toISOString(),
     finishedAt: new Date(finishedAt).toISOString(),
     runtimeMs: finishedAt - startedAt,
-    note: "Raw collection, per-review analysis, and platform-level clustering completed; cross-platform comparison is a later phase.",
+    note: "Raw collection, per-review analysis, platform clustering, and cautious cross-platform comparison completed; reports are a later phase.",
   });
   await Actor.setValue("NORMALIZED_INPUT", input);
   log.info("Cross-platform collection, analysis, and clustering completed", {

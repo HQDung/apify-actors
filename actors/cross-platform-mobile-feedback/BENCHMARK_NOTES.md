@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 6 — Cross-platform cluster matching
+
+The local benchmark covers same-product matching, feedback-type compatibility, topic/title overlap, shared confidence, feature-request/bug separation, unrelated-issue rejection, platform-specific findings, platform dominance, and insufficient-evidence handling when a source is missing. Matching uses explainable signals and never claims absence from an unobserved platform.
+
 ## Phase 5 — Platform-level issue clustering
 
 The local benchmark covers platform-partitioned clustering, product isolation, minimum cluster size, successful-analysis filtering, canonical cluster IDs, and source review links with country/language/version dimensions. Cross-platform matching is intentionally deferred to its own phase.

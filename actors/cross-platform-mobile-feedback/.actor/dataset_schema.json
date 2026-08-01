@@ -28,6 +28,16 @@
           "mentionCount",
           "uniqueReviewCount",
           "reviewIds",
+          "comparisonId",
+          "platform",
+          "androidClusterId",
+          "iosClusterId",
+          "severity",
+          "comparisonConfidence",
+          "sharedConfidence",
+          "reasons",
+          "evidenceStatus",
+          "observedOnlyInCollectedSample",
           "classification",
           "canonicalIssue",
           "androidMentions",
@@ -76,6 +86,25 @@
             "format": "number"
           },
           "reviewIds": { "label": "Review IDs", "format": "text" },
+          "comparisonId": { "label": "Comparison ID", "format": "text" },
+          "platform": { "label": "Comparison platform", "format": "text" },
+          "androidClusterId": { "label": "Android cluster", "format": "text" },
+          "iosClusterId": { "label": "iOS cluster", "format": "text" },
+          "severity": { "label": "Severity", "format": "text" },
+          "comparisonConfidence": {
+            "label": "Comparison confidence",
+            "format": "number"
+          },
+          "sharedConfidence": {
+            "label": "Shared confidence",
+            "format": "number"
+          },
+          "reasons": { "label": "Comparison reasons", "format": "text" },
+          "evidenceStatus": { "label": "Evidence status", "format": "text" },
+          "observedOnlyInCollectedSample": {
+            "label": "Observed only in sample",
+            "format": "boolean"
+          },
           "classification": { "label": "Classification", "format": "text" },
           "canonicalIssue": { "label": "Issue", "format": "text" },
           "androidMentions": {

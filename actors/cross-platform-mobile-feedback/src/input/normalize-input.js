@@ -381,9 +381,17 @@ export const normalizeInput = (input = {}) => {
         mode === "comparePlatforms",
         "comparison.enabled",
       ),
-      minimumSharedClusterConfidence: Number(
-        input.comparison?.minimumSharedClusterConfidence ?? 0.75,
-      ),
+      minimumSharedClusterConfidence: (() => {
+        const value = Number(
+          input.comparison?.minimumSharedClusterConfidence ?? 0.75,
+        );
+        if (!Number.isFinite(value) || value < 0 || value > 1)
+          throw invalid(
+            "INVALID_INPUT",
+            "comparison.minimumSharedClusterConfidence must be between 0 and 1",
+          );
+        return value;
+      })(),
       minimumPlatformSpecificMentions: bounded(
         input.comparison?.minimumPlatformSpecificMentions,
         2,
