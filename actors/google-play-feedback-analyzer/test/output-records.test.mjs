@@ -41,3 +41,22 @@ test('emits source errors without manufacturing review records', () => {
         },
     ]);
 });
+
+test('attaches a validated normalized feedback object when an adapter is supplied', () => {
+    const records = toDatasetRecords({
+        appId: 'com.todoist',
+        collection: {
+            records: [{ reviewId: 'review-1', appId: 'com.todoist', rating: 5, text: 'Good' }],
+            diagnostics: { httpStatus: 200, collectionMode: 'html' },
+        },
+        normalizeRecord: (record, diagnostics) => ({
+            source: { sourceRecordId: record.reviewId, sourceUrl: diagnostics.url ?? null },
+            product: { productId: record.appId },
+        }),
+    });
+
+    assert.deepEqual(records[0].normalizedFeedback, {
+        source: { sourceRecordId: 'review-1', sourceUrl: null },
+        product: { productId: 'com.todoist' },
+    });
+});

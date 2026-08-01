@@ -18,9 +18,11 @@
                     "source.country",
                     "diagnostics.httpStatus",
                     "diagnostics.responseBytes",
+                    "diagnostics.collectedAt",
                     "diagnostics.parsedReviewCount",
                     "diagnostics.collectionMode",
-                    "error.code"
+                    "error.code",
+                    "normalizedFeedback"
                 ]
             },
             "display": {
@@ -38,9 +40,11 @@
                     "source.country": { "label": "Country", "format": "text" },
                     "diagnostics.httpStatus": { "label": "HTTP status", "format": "number" },
                     "diagnostics.responseBytes": { "label": "Response bytes", "format": "number" },
+                    "diagnostics.collectedAt": { "label": "Collected at", "format": "text" },
                     "diagnostics.parsedReviewCount": { "label": "Parsed reviews", "format": "number" },
                     "diagnostics.collectionMode": { "label": "Collection mode", "format": "text" },
-                    "error.code": { "label": "Error code", "format": "text" }
+                    "error.code": { "label": "Error code", "format": "text" },
+                    "normalizedFeedback": { "label": "Normalized feedback", "format": "text" }
                 }
             }
         }

@@ -5,6 +5,7 @@ import { toDatasetRecords } from './output-records.js';
 export const runGooglePlayCollection = async ({
     input,
     collect = collectGooglePlayReviews,
+    normalizeRecord,
     onRecord = async () => {},
 }) => {
     const normalizedInput = normalizeInput(input);
@@ -19,7 +20,7 @@ export const runGooglePlayCollection = async ({
 
     for (const appId of normalizedInput.appIds) {
         const collection = await collect({ ...normalizedInput, appId });
-        const records = toDatasetRecords({ appId, collection });
+        const records = toDatasetRecords({ appId, collection, normalizeRecord });
         for (const record of records) await onRecord(record);
         stats.appsProcessed += 1;
         stats.reviewRecords += collection.records.length;

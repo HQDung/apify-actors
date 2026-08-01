@@ -1,5 +1,6 @@
 import { Actor, log } from 'apify';
 
+import { toNormalizedFeedback } from './core/google-play-contract-adapter.js';
 import { runGooglePlayCollection } from './google-play/run-collector.js';
 
 await Actor.init();
@@ -8,6 +9,7 @@ const startedAt = Date.now();
 try {
     const result = await runGooglePlayCollection({
         input: (await Actor.getInput()) ?? {},
+        normalizeRecord: (record, diagnostics) => toNormalizedFeedback({ record, diagnostics }),
         onRecord: (record) => Actor.pushData(record),
     });
     const finishedAt = Date.now();

@@ -2,7 +2,7 @@
 
 ## Phase 8 baseline
 
-The Phase 8 smoke target is `com.todoist` with `maxReviewsPerApp: 5`, HTTP-only collection, and no AI analysis. The expected output is one review record per parsed card plus one `sourceDiagnostic` record.
+The Phase 8 smoke target was `com.todoist` with `maxReviewsPerApp: 5`, HTTP-only collection, and no AI analysis. The Phase 9 smoke target uses `maxReviewsPerApp: 3` and additionally checks `normalizedFeedback` on each review.
 
 Observed local run on 2026-08-01:
 
@@ -11,5 +11,12 @@ Observed local run on 2026-08-01:
 - 1 source diagnostic emitted; HTTP 200 and 1,291,779 response bytes.
 - 0 errors; 4 total dataset records.
 - Runtime: 591 ms on the local macOS development environment.
+
+Phase 9 normalized smoke on 2026-08-01:
+
+- 1 app requested and processed; 3 review records and 1 diagnostic emitted.
+- HTTP 200; 1,290,633 response bytes; 3 parsed cards.
+- Every review record carried a core-validated `normalizedFeedback` object.
+- 0 errors; 4 total dataset records; runtime 568 ms.
 
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

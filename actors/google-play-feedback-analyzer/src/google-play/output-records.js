@@ -1,5 +1,9 @@
-export const toDatasetRecords = ({ appId, collection }) => {
-    const reviewRecords = collection.records.map((record) => ({ recordType: 'review', ...record }));
+export const toDatasetRecords = ({ appId, collection, normalizeRecord }) => {
+    const reviewRecords = collection.records.map((record) => ({
+        recordType: 'review',
+        ...record,
+        ...(normalizeRecord ? { normalizedFeedback: normalizeRecord(record, collection.diagnostics) } : {}),
+    }));
     const diagnostic = {
         recordType: 'sourceDiagnostic',
         appId,

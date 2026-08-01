@@ -5,7 +5,7 @@
         "dataset": {
             "type": "string",
             "title": "Google Play review dataset",
-            "description": "Review and source-diagnostic records emitted by the Actor.",
+            "description": "Raw review records with validated normalizedFeedback objects and source-diagnostic records emitted by the Actor.",
             "template": "{{datasetUrl}}"
         },
         "runStatistics": {

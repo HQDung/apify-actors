@@ -8,6 +8,7 @@ Collect bounded public Google Play review records for one or more Android apps. 
 - Optional developer reply text and date when present in the public card.
 - Language and country used for the request.
 - A machine-readable diagnostic record for every app, including HTTP status, response size, and parsed-card count.
+- A `normalizedFeedback` object on each review, validated by the shared source-neutral feedback contract.
 
 The public page currently exposes a bounded server-rendered sample, not complete review history. The browser expansion path and analysis engine are intentionally deferred to later phases.
 
@@ -52,9 +53,11 @@ Example:
 | `source.country`                | Country request parameter.                                |
 | `diagnostics.httpStatus`        | HTTP status for the Store response.                       |
 | `diagnostics.responseBytes`     | Response size in bytes.                                   |
+| `diagnostics.collectedAt`       | Collection timestamp for the source response.             |
 | `diagnostics.parsedReviewCount` | Number of unique review cards parsed before the cap.      |
 | `diagnostics.collectionMode`    | Current value is `html`.                                  |
 | `error.code`                    | Machine-readable source error code when collection fails. |
+| `normalizedFeedback`            | Source-neutral feedback object validated by shared core.  |
 
 ## Local run
 
@@ -76,4 +79,4 @@ The local dataset and `RUN_STATS` key-value record are written under `storage/`.
 
 ## Roadmap
 
-Phase 9 adds normalized source contracts and browser-fallback diagnostics. Later phases connect the neutral records to the shared feedback-analysis core, clustering, aggregation, reports, and benchmarks.
+Phase 10 connects the normalized records to shared analysis. Later phases add clustering, aggregation, reports, and benchmarks.

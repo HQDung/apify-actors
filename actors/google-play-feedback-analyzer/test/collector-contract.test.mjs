@@ -88,3 +88,17 @@ test('returns a machine-readable error for non-success Store responses', async (
     assert.equal(result.error.code, 'GOOGLE_PLAY_HTTP_ERROR');
     assert.equal(result.error.httpStatus, 404);
 });
+
+test('does not silently ignore the deferred browser fallback flag', async () => {
+    const result = await collectGooglePlayReviews({
+        appId: 'com.todoist',
+        language: 'en',
+        country: 'US',
+        maxReviewsPerApp: 1,
+        useBrowserFallback: true,
+        fetchImpl: async () => new Response('<html></html>', { status: 200 }),
+    });
+
+    assert.deepEqual(result.records, []);
+    assert.equal(result.error.code, 'GOOGLE_PLAY_BROWSER_FALLBACK_DEFERRED');
+});
