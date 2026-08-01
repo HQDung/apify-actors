@@ -38,6 +38,22 @@ test("normalizes explicit product identity and gives IDs precedence over URLs", 
   });
   assert.deepEqual(input.countries, ["US", "VN"]);
   assert.deepEqual(input.languages, ["en", "vi"]);
+  assert.equal(input.requestTimeoutSecs, 30);
+  assert.equal(input.maxPagesPerPlatform, 10);
+});
+
+test("normalizes bounded source collection controls", () => {
+  const input = normalizeInput({
+    products: [pair],
+    requestTimeoutSecs: 45,
+    maxPagesPerPlatform: 4,
+  });
+  assert.equal(input.requestTimeoutSecs, 45);
+  assert.equal(input.maxPagesPerPlatform, 4);
+  assert.throws(
+    () => normalizeInput({ products: [pair], requestTimeoutSecs: 0 }),
+    /INVALID_INPUT/,
+  );
 });
 
 test("allows one-platform raw collection but requires both platforms for comparison", () => {

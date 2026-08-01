@@ -5,7 +5,7 @@
     "dataset": {
       "type": "string",
       "title": "Feedback dataset",
-      "description": "Reviews, clusters, comparisons, reports, and run errors.",
+      "description": "Normalized reviews, source diagnostics, clusters, comparisons, reports, and run errors.",
       "template": "{{datasetUrl}}"
     },
     "reports": {

@@ -1,0 +1,10 @@
+{
+  "name": "@project/mobile-feedback-source-adapters",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Runtime-neutral public Google Play and Apple App Store review clients.",
+  "files": ["src"],
+  "exports": { ".": "./src/index.js" },
+  "dependencies": { "cheerio": "^1.0.0-rc.12" }
+}

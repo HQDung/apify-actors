@@ -1,6 +1,6 @@
 # Cross-Platform Mobile App Feedback Intelligence
 
-This Actor accepts explicit Google Play and Apple App Store product mappings and will combine normalized review data into cross-platform feedback intelligence. The current phase validates product identity and run settings; source collection and comparison records are added in later implementation phases.
+This Actor accepts explicit Google Play and Apple App Store product mappings and incrementally builds cross-platform feedback intelligence. The current phase collects raw normalized reviews from both public store feeds and emits source diagnostics; analysis, clustering, comparison, and report records are added in later phases.
 
 ## Product mapping
 
@@ -26,7 +26,9 @@ IDs take precedence over parsed URL values. The Actor rejects duplicate Google P
 
 ## Current phase output
 
-The validated skeleton writes `NORMALIZED_INPUT` and zero-collection `RUN_STATS`. Later phases will add review, cluster, comparison, report, and source-error dataset records. A mapping error is stored as a scoped `RUN_ERROR` and the Actor fails fast.
+The collection phase writes normalized `review`, `sourceDiagnostic`, and platform-scoped `runError` dataset records, plus `NORMALIZED_INPUT` and `RUN_STATS`. A mapping error is stored as a scoped `RUN_ERROR` and the Actor fails fast; a source request failure preserves successful records from other platforms.
+
+Source collection is bounded by `maxReviewsPerPlatform`, `requestTimeoutSecs`, and `maxPagesPerPlatform`. Google Play uses its public review HTML surface; Apple uses the public RSS/JSON customer-review feed. Store coverage, pagination, and rate limits are recorded in diagnostics.
 
 ## Limitations
 

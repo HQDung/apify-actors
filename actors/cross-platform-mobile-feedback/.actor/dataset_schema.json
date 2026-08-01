@@ -8,6 +8,12 @@
         "fields": [
           "recordType",
           "product.productId",
+          "platform.id",
+          "platform.appId",
+          "review.reviewId",
+          "review.rating",
+          "review.text",
+          "review.createdAt",
           "classification",
           "canonicalIssue",
           "androidMentions",
@@ -24,6 +30,12 @@
         "properties": {
           "recordType": { "label": "Record type", "format": "text" },
           "product.productId": { "label": "Product", "format": "text" },
+          "platform.id": { "label": "Platform", "format": "text" },
+          "platform.appId": { "label": "App ID", "format": "text" },
+          "review.reviewId": { "label": "Review ID", "format": "text" },
+          "review.rating": { "label": "Rating", "format": "number" },
+          "review.text": { "label": "Review", "format": "text" },
+          "review.createdAt": { "label": "Created at", "format": "text" },
           "classification": { "label": "Classification", "format": "text" },
           "canonicalIssue": { "label": "Issue", "format": "text" },
           "androidMentions": {

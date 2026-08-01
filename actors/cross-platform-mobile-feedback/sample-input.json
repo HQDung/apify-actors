@@ -12,6 +12,8 @@
   "languages": ["en", "vi"],
   "ratings": [1, 2, 3, 4, 5],
   "maxReviewsPerPlatform": 500,
+  "requestTimeoutSecs": 30,
+  "maxPagesPerPlatform": 10,
   "analysis": {
     "enabled": true,
     "outputLanguage": "english",

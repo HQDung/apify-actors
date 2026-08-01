@@ -283,6 +283,20 @@ export const normalizeInput = (input = {}) => {
       5000,
       "maxReviewsPerPlatform",
     ),
+    requestTimeoutSecs: bounded(
+      input.requestTimeoutSecs,
+      30,
+      1,
+      120,
+      "requestTimeoutSecs",
+    ),
+    maxPagesPerPlatform: bounded(
+      input.maxPagesPerPlatform,
+      10,
+      1,
+      50,
+      "maxPagesPerPlatform",
+    ),
     includeDeveloperReplies: booleanOrDefault(
       input.includeDeveloperReplies,
       true,

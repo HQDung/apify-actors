@@ -7,7 +7,7 @@
 | Risk | Why it blocks | Exit criterion |
 | --- | --- | --- |
 | Apple public-feed coverage is environment-limited | The source Actor is implemented and fixture-tested, but the current sandbox cannot complete a live Apple feed request | Run an authorized cloud smoke with a real app ID before publishing any Apple coverage claim |
-| No cross-platform source contract | The current Google contract uses `source.platform` and platform IDs as product IDs; the handoff requires explicit product mapping | Approve and test Phase 1 contracts for product identity, platform identity, review envelope, cluster records, comparison records, and warnings |
+| Cross-platform contract drift | The source adapters and comparison Actor now depend on the Phase 1 contract; later analysis fields must not silently change the normalized identity model | Keep contract tests in the phase gate and reject incompatible report records |
 | Apple reviewer-language attribution is unavailable in the public feed | The requested locale is not guaranteed to be the reviewer’s original language | Preserve the requested locale as a collection dimension, use `unknown` when source language is absent, and disclose the limitation |
 
 ## High risks
@@ -28,10 +28,10 @@
 - Product identity must be explicit; package IDs and Apple numeric IDs cannot be compared across products without the user’s mapping.
 - Release impact must remain observational and must account for staggered Android/iOS dates.
 
-## Deferred work after Phase 0
+## Deferred work after Phase 3
 
-1. Define Phase 1 comparison contracts around the actual source capabilities.
-2. Run an authorized cloud Apple smoke with a real app ID before Store claims.
-3. Only then implement the comparison Actor and matching/aggregation layers.
+1. Run an authorized cloud Apple smoke with a real app ID before Store claims.
+2. Implement shared analysis, issue extraction, and platform clustering with fixture-backed quality tests.
+3. Only then implement comparison matching, aggregation, and release-window reporting.
 
 No production comparison code is authorized by this phase report.
