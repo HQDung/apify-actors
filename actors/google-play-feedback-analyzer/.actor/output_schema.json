@@ -11,7 +11,7 @@
         "runStatistics": {
             "type": "string",
             "title": "Run statistics",
-            "description": "Machine-readable collection, aggregation, report-storage, and runtime summary.",
+            "description": "Machine-readable collection, aggregation, report-storage, release-impact, and runtime summary.",
             "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
         }
     }

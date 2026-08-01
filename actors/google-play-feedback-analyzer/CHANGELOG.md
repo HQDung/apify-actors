@@ -8,4 +8,6 @@
 - Added optional shared-core deterministic analysis with Google Play taxonomy settings.
 - Added shared-core per-app clustering, aggregate reports, and observational release-window comparisons.
 - Added per-app aggregate report key-value records and dataset schema fields for cluster/report outputs.
+- Added `releaseImpact` mode with bounded before/after windows, multi-language/country collection, rating and issue deltas, and structured data-sufficiency warnings.
+- Added per-app `APP_RELEASE_IMPACT_<app-id>` key-value reports.
 - Browser expansion and external-provider analysis remain deferred.

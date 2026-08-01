@@ -3,6 +3,14 @@
     "type": "object",
     "schemaVersion": 1,
     "properties": {
+        "mode": {
+            "title": "Run mode",
+            "description": "Collect review records or generate a bounded observational report around an app release.",
+            "type": "string",
+            "editor": "select",
+            "enum": ["reviews", "releaseImpact"],
+            "default": "reviews"
+        },
         "appIds": {
             "title": "Android package IDs",
             "description": "One or more public Google Play Android package IDs.",
@@ -27,6 +35,22 @@
             "editor": "textfield",
             "default": "US",
             "pattern": "^[a-zA-Z]{2}$"
+        },
+        "languages": {
+            "title": "Release-impact languages",
+            "description": "Optional language list used by releaseImpact mode; the public Store page is requested for each language.",
+            "type": "array",
+            "editor": "stringList",
+            "maxItems": 20,
+            "items": { "type": "string", "pattern": "^[a-zA-Z]{2,3}$" }
+        },
+        "countries": {
+            "title": "Release-impact countries",
+            "description": "Optional country list used by releaseImpact mode; the public Store page is requested for each country.",
+            "type": "array",
+            "editor": "stringList",
+            "maxItems": 20,
+            "items": { "type": "string", "pattern": "^[a-zA-Z]{2}$" }
         },
         "maxReviewsPerApp": {
             "title": "Maximum reviews per app",
@@ -60,6 +84,50 @@
             "default": 30,
             "minimum": 5,
             "maximum": 120
+        },
+        "release": {
+            "title": "Release",
+            "description": "Release metadata required by releaseImpact mode.",
+            "editor": "json",
+            "type": "object",
+            "properties": {
+                "version": {
+                    "title": "Version",
+                    "description": "Optional released app version used for report context.",
+                    "type": "string",
+                    "default": ""
+                },
+                "releasedAt": {
+                    "title": "Released at",
+                    "description": "ISO date-time used as the non-overlapping before/after boundary.",
+                    "type": "string",
+                    "default": ""
+                }
+            }
+        },
+        "daysBefore": {
+            "title": "Days before release",
+            "description": "Number of calendar days included before the release boundary in releaseImpact mode.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 365,
+            "default": 14
+        },
+        "daysAfter": {
+            "title": "Days after release",
+            "description": "Number of calendar days included after the release boundary in releaseImpact mode.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 365,
+            "default": 14
+        },
+        "maxReviewsPerPeriod": {
+            "title": "Maximum reviews per release period",
+            "description": "Bound applied to each public Store request in releaseImpact mode.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500,
+            "default": 100
         },
         "analysis": {
             "title": "Shared analysis",

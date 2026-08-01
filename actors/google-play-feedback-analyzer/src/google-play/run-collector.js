@@ -19,9 +19,33 @@ export const runGooglePlayCollection = async ({
         totalRecords: 0,
     };
     const coreRecords = [];
+    const requests =
+        normalizedInput.mode === 'releaseImpact'
+            ? normalizedInput.appIds.flatMap((appId) =>
+                  normalizedInput.languages.flatMap((language) =>
+                      normalizedInput.countries.map((country) => ({
+                          appId,
+                          language,
+                          country,
+                          maxReviewsPerApp: normalizedInput.maxReviewsPerPeriod,
+                      })),
+                  ),
+              )
+            : normalizedInput.appIds.map((appId) => ({
+                  appId,
+                  language: normalizedInput.language,
+                  country: normalizedInput.country,
+                  maxReviewsPerApp: normalizedInput.maxReviewsPerApp,
+              }));
+    if (normalizedInput.mode === 'releaseImpact') {
+        stats.requestsRequested = requests.length;
+        stats.requestsProcessed = 0;
+    }
 
-    for (const appId of normalizedInput.appIds) {
-        const collection = await collect({ ...normalizedInput, appId });
+    const processedApps = new Set();
+    for (const request of requests) {
+        const { appId } = request;
+        const collection = await collect({ ...normalizedInput, ...request });
         const normalizedFeedbackByReviewId = {};
         const analysisByReviewId = {};
         if (normalizeRecord) {
@@ -44,7 +68,9 @@ export const runGooglePlayCollection = async ({
             analysisByReviewId,
         });
         for (const record of records) await onRecord(record);
-        stats.appsProcessed += 1;
+        processedApps.add(appId);
+        stats.appsProcessed = processedApps.size;
+        if (normalizedInput.mode === 'releaseImpact') stats.requestsProcessed += 1;
         stats.reviewRecords += collection.records.length;
         stats.diagnosticRecords += 1;
         stats.errors += collection.error ? 1 : 0;

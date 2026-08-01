@@ -33,4 +33,12 @@ Phase 11 aggregation smoke on 2026-08-01:
 - 0 errors; 5 total dataset records (`collectionRecords: 4`, `aggregationRecords: 1`); the per-app report was written to `APP_REPORT_com_todoist`.
 - HTTP 200; 1,291,776 response bytes; runtime 565 ms on the local macOS development environment.
 
+Phase 12 release-impact smoke on 2026-08-01:
+
+- 1 app, 1 language, and 1 country request; 3 reviews and 1 source diagnostic emitted.
+- The report used a 2026-06-01 release boundary with 14 days before and 30 days after; 0 before reviews and 1 after review were observed in the bounded public sample.
+- 1 `productFeedbackReport` and 1 `feedbackImpactReport` emitted; `totalRecords: 6`, `aggregationRecords: 2`, `reportsStored: 1`, `impactReportsStored: 1`, and 0 errors.
+- HTTP 200; 1,291,510 response bytes; runtime 684 ms on the local macOS development environment.
+- The impact report was written to `APP_RELEASE_IMPACT_com_todoist` and included structured `NO_REVIEWS`/`LIMITED_DATA` warnings.
+
 This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

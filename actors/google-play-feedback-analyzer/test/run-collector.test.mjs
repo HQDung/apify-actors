@@ -52,3 +52,27 @@ test('propagates normalized feedback and shared analysis into review output', as
         analysis: { analysisStatus: 'success', sentiment: 'negative' },
     });
 });
+
+test('expands release-impact collection across app, language, and country requests', async () => {
+    const requests = [];
+    const result = await runGooglePlayCollection({
+        input: {
+            mode: 'releaseImpact',
+            appIds: ['com.one', 'com.two'],
+            languages: ['en', 'vi'],
+            countries: ['US'],
+            release: { releasedAt: '2026-07-20T00:00:00.000Z' },
+        },
+        collect: async ({ appId, language, country, maxReviewsPerApp }) => {
+            requests.push({ appId, language, country, maxReviewsPerApp });
+            return { records: [], diagnostics: { httpStatus: 200, collectionMode: 'html' } };
+        },
+    });
+
+    assert.equal(requests.length, 4);
+    assert.deepEqual(requests[0], { appId: 'com.one', language: 'en', country: 'US', maxReviewsPerApp: 100 });
+    assert.equal(result.stats.appsProcessed, 2);
+    assert.equal(result.stats.requestsRequested, 4);
+    assert.equal(result.stats.requestsProcessed, 4);
+    assert.equal(result.stats.diagnosticRecords, 4);
+});

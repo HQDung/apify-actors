@@ -1,0 +1,28 @@
+{
+    "mode": "releaseImpact",
+    "appIds": ["com.todoist"],
+    "languages": ["en"],
+    "countries": ["US"],
+    "release": {
+        "version": "2026-example",
+        "releasedAt": "2026-06-01T00:00:00.000Z"
+    },
+    "daysBefore": 14,
+    "daysAfter": 30,
+    "maxReviewsPerPeriod": 3,
+    "analysis": {
+        "enabled": true,
+        "outputLanguage": "english",
+        "maxAttempts": 2
+    },
+    "aggregation": {
+        "enabled": true,
+        "minimumClusterSize": 2,
+        "comparison": {
+            "enabled": false,
+            "releasedAt": "",
+            "daysBefore": 14,
+            "daysAfter": 14
+        }
+    }
+}

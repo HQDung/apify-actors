@@ -1,5 +1,7 @@
 import { aggregateFeedback, clusterFeedback, compareFeedbackWindows } from '@project/feedback-analysis-core';
 
+import { compareGooglePlayReleaseImpact } from '../release-impact/google-play-release-impact.js';
+
 const dayMs = 24 * 60 * 60 * 1000;
 
 const buildWindows = ({ releasedAt, daysBefore = 14, daysAfter = 14 }) => {
@@ -40,6 +42,7 @@ const inWindow = (record, window) => {
 export const buildGooglePlayAggregation = ({
     coreRecords,
     aggregation = {},
+    releaseImpact = null,
     generatedAt = new Date().toISOString(),
 }) => {
     if (aggregation.enabled === false) return [];
@@ -56,12 +59,26 @@ export const buildGooglePlayAggregation = ({
             const windows = buildWindows(comparison);
             const beforeRecords = records.filter((record) => inWindow(record, windows.before));
             const afterRecords = records.filter((record) => inWindow(record, windows.after));
-            output.push(compareFeedbackWindows({ product, beforeRecords, afterRecords, windows, generatedAt }));
+            output.push(
+                releaseImpact
+                    ? compareGooglePlayReleaseImpact({
+                          product,
+                          release: releaseImpact,
+                          beforeRecords,
+                          afterRecords,
+                          windows,
+                          generatedAt,
+                      })
+                    : compareFeedbackWindows({ product, beforeRecords, afterRecords, windows, generatedAt }),
+            );
         }
     }
     return output;
 };
 
 export const reportKeyForProduct = (productId) => `APP_REPORT_${String(productId).replace(/[^A-Za-z0-9_-]/g, '_')}`;
+
+export const impactReportKeyForProduct = (productId) =>
+    `APP_RELEASE_IMPACT_${String(productId).replace(/[^A-Za-z0-9_-]/g, '_')}`;
 
 export { buildWindows };

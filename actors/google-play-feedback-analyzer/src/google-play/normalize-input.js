@@ -1,6 +1,7 @@
 const PACKAGE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]+$/;
 const SORTS = new Set(['mostRelevant', 'newest']);
 const OUTPUT_LANGUAGES = new Set(['english', 'original']);
+const MODES = new Set(['reviews', 'releaseImpact']);
 
 const invalidInput = (message) => {
     const error = new Error(message);
@@ -29,6 +30,16 @@ const boundedInteger = (value, fallback, minimum, maximum, name) => {
     return result;
 };
 
+const normalizeCodeList = (value, fallback, pattern, name, transform) => {
+    const values = value === undefined ? fallback : value;
+    if (!Array.isArray(values) || values.length < 1 || values.length > 20) {
+        throw invalidInput(`${name} must contain between 1 and 20 codes`);
+    }
+    const normalized = [...new Set(values.map((entry) => transform(String(entry).trim())))];
+    if (normalized.some((entry) => !pattern.test(entry))) throw invalidInput(`${name} contains an invalid code`);
+    return normalized;
+};
+
 export const normalizeInput = (input = {}) => {
     if (!input || typeof input !== 'object' || Array.isArray(input)) {
         throw invalidInput('Actor input must be a JSON object');
@@ -45,6 +56,8 @@ export const normalizeInput = (input = {}) => {
 
     const sort = input.sort ?? 'mostRelevant';
     if (!SORTS.has(sort)) throw invalidInput(`sort must be one of: ${[...SORTS].join(', ')}`);
+    const mode = input.mode ?? 'reviews';
+    if (!MODES.has(mode)) throw invalidInput(`mode must be one of: ${[...MODES].join(', ')}`);
     const analysisInput = input.analysis ?? {};
     if (typeof analysisInput !== 'object' || Array.isArray(analysisInput))
         throw invalidInput('analysis must be an object');
@@ -77,8 +90,48 @@ export const normalizeInput = (input = {}) => {
         throw invalidInput('aggregation.comparison.releasedAt must be an ISO date-time');
     }
 
+    const languages = normalizeCodeList(input.languages, [language], /^[a-z]{2,3}$/, 'languages', (value) =>
+        value.toLowerCase(),
+    );
+    const countries = normalizeCodeList(input.countries, [country], /^[A-Z]{2}$/, 'countries', (value) =>
+        value.toUpperCase(),
+    );
+    let release = null;
+    let daysBefore = null;
+    let daysAfter = null;
+    let maxReviewsPerPeriod = null;
+    if (mode === 'releaseImpact') {
+        if (analysisInput.enabled === false) throw invalidInput('analysis.enabled must be true for releaseImpact mode');
+        const releaseInput = input.release ?? {};
+        if (!releaseInput || typeof releaseInput !== 'object' || Array.isArray(releaseInput)) {
+            throw invalidInput('release must be an object for releaseImpact mode');
+        }
+        if (
+            releaseInput.releasedAt === undefined ||
+            releaseInput.releasedAt === null ||
+            !String(releaseInput.releasedAt).trim()
+        ) {
+            throw invalidInput('release.releasedAt is required for releaseImpact mode');
+        }
+        const releaseTime = Date.parse(releaseInput.releasedAt);
+        if (!Number.isFinite(releaseTime)) throw invalidInput('release.releasedAt must be an ISO date-time');
+        release = {
+            version:
+                releaseInput.version === undefined || releaseInput.version === null
+                    ? null
+                    : String(releaseInput.version).trim() || null,
+            releasedAt: new Date(releaseTime).toISOString(),
+        };
+        daysBefore = boundedInteger(input.daysBefore, 14, 1, 365, 'daysBefore');
+        daysAfter = boundedInteger(input.daysAfter, 14, 1, 365, 'daysAfter');
+        maxReviewsPerPeriod = boundedInteger(input.maxReviewsPerPeriod, 100, 1, 500, 'maxReviewsPerPeriod');
+    }
+
     return {
         appIds: normalizeAppIds(input),
+        ...(mode === 'releaseImpact'
+            ? { mode, languages, countries, release, daysBefore, daysAfter, maxReviewsPerPeriod }
+            : {}),
         language,
         country,
         maxReviewsPerApp: boundedInteger(input.maxReviewsPerApp, 50, 1, 500, 'maxReviewsPerApp'),
