@@ -11,26 +11,29 @@ export const STEAM_TAXONOMY = createTaxonomyConfig({
 });
 
 export const toNormalizedFeedback = ({ record }) => {
+  const source = record.source ?? {};
+  const game = record.game ?? {};
+  const review = record.review ?? {};
   const normalized = {
     source: {
       platform: "steam",
-      sourceRecordId: String(record.review.reviewId),
-      sourceUrl: record.source.sourceUrl ?? null,
-      collectedAt: record.source.scrapedAt,
+      sourceRecordId: String(review.reviewId),
+      sourceUrl: source.sourceUrl ?? null,
+      collectedAt: source.scrapedAt ?? review.createdAt ?? "1970-01-01T00:00:00.000Z",
     },
     product: {
       productType: "game",
-      productId: String(record.game.steamAppId),
-      name: record.game.name ?? null,
+      productId: String(game.steamAppId),
+      name: game.name ?? null,
       version: null,
     },
     feedback: {
-      text: record.review.text ?? "",
+      text: review.text ?? "",
       title: null,
-      sourceLanguage: record.review.language ?? "unknown",
-      createdAt: record.review.createdAt ?? null,
-      updatedAt: record.review.updatedAt ?? null,
-      isPositive: typeof record.review.recommended === "boolean" ? record.review.recommended : null,
+      sourceLanguage: review.language ?? "unknown",
+      createdAt: review.createdAt ?? null,
+      updatedAt: review.updatedAt ?? null,
+      isPositive: typeof review.recommended === "boolean" ? review.recommended : null,
       rating: null,
     },
     authorContext: {
@@ -43,14 +46,23 @@ export const toNormalizedFeedback = ({ record }) => {
     environmentContext: {
       countryCode: null,
       appVersion: null,
-      device: record.review.primarilySteamDeck ? "Steam Deck" : null,
+      device: review.primarilySteamDeck ? "Steam Deck" : null,
       operatingSystem: null,
     },
     sourceMetadata: {
-      recommended: record.review.recommended ?? null,
-      votesHelpful: record.review.votesHelpful ?? null,
-      votesFunny: record.review.votesFunny ?? null,
+      recommended: review.recommended ?? null,
+      votesHelpful: review.votesHelpful ?? null,
+      votesFunny: review.votesFunny ?? null,
     },
   };
   return validateNormalizedFeedback(normalized);
 };
+
+export const toCoreAnalysisRecord = (record) => ({
+  ...toNormalizedFeedback({ record }),
+  analysis: {
+    ...(record.analysis ?? {}),
+    analysisStatus: record.analysisStatus ?? (record.analysis ? "success" : "failed"),
+    ...(record.analysisError ? { analysisError: record.analysisError } : {}),
+  },
+});

@@ -6,6 +6,11 @@ export { analyzeFeedback } from "./analysis/analyze-feedback.js";
 export { buildAnalysisPrompt } from "./analysis/prompt.js";
 export { normalizeAnalysisConfidence, normalizeConfidence } from "./analysis/normalize-confidence.js";
 export { createUsageStats } from "./analysis/usage.js";
+export { aggregateFeedback } from "./aggregation/aggregate-feedback.js";
+export { calculateTopicStats } from "./aggregation/topic-stats.js";
+export { compareFeedbackWindows } from "./aggregation/compare-windows.js";
+export { clusterFeedback } from "./clustering/cluster-feedback.js";
+export { createClusterId } from "./clustering/cluster-id.js";
 export { validateAggregateReport } from "./contracts/aggregate-report.js";
 export { validateClusterRecord } from "./contracts/cluster-record.js";
 export {
