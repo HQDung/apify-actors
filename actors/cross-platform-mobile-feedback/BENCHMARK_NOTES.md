@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 16 — automation-safe default input
+
+The input schema defaults now mirror the bounded cloud sample: Spotify's public Google Play and Apple App Store mappings, one US/English request per store, five reviews per platform, two total source requests, deterministic analysis capped at three reviews, and report generation enabled. This lets an Apify automation test run without custom input while keeping public-source usage bounded.
+
 ## Phase 15 — runnable cloud sample input
 
 `sample-input.json` now uses the public Spotify mappings (`com.spotify.music` and `324684580`) with one US/English request per store, a five-review platform cap, two total source requests, deterministic analysis, and report generation enabled. It can be run against the published Actor with `apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sample-input.json --output-dataset`. This is a bounded smoke input, not a coverage benchmark; live store availability may return different review counts and explicit evidence warnings.

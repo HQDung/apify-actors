@@ -82,3 +82,13 @@ apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sa
 ```
 
 The run succeeded on build `0.1.1`, emitted 3 Google Play reviews, 3 deterministic analyses, 1 validated cross-platform report, 2 HTTP 200 source diagnostics, and 0 runtime errors. Apple returned an empty public RSS response, which the report retained as an insufficient-evidence warning. Usage was approximately `$0.0013`.
+
+## Follow-up — automation-safe schema defaults
+
+- Store build: `0.1.3` (`Wd0pF7HaQtCbsnsar`)
+- Deployed schema default: Spotify mapping, `comparePlatforms`, 2 planned source requests, 5-review platform cap, 3-review analysis cap, and report generation enabled
+- Cloud verification run: `QAciHsVpoMAorC0l5`
+- Result: `SUCCEEDED`; 3 Google Play reviews, 3 analyses, 1 report, 2 HTTP 200 diagnostics, and 0 runtime errors
+- Usage: approximately `$0.0013`
+
+The Store schema now exposes a valid default product mapping, so an Apify automation test can start without manually supplying product IDs.

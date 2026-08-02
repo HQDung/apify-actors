@@ -43,6 +43,8 @@ apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sa
 
 It makes one request per store, caps each platform at five reviews, enables the deterministic fallback when no provider key is configured, and keeps report generation enabled. [sample-benchmark.json](sample-benchmark.json) shows a multi-product configuration.
 
+The Console's default input uses the same public mapping and bounded limits, so an Apify automation test can run without manually entering product IDs.
+
 ## Input controls
 
 Use `countries`, `languages`, `ratings`, and `dateRange` to bound collection. `maxReviewsPerPlatform`, `maxPagesPerPlatform`, `requestTimeoutSecs`, and `maxRequestsPerRun` bound source work. The request cap is checked after expanding products, platforms, countries, and languages, before network collection begins.
