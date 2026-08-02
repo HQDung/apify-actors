@@ -1,5 +1,9 @@
 # Benchmark notes
 
+## Phase 15 — runnable cloud sample input
+
+`sample-input.json` now uses the public Spotify mappings (`com.spotify.music` and `324684580`) with one US/English request per store, a five-review platform cap, two total source requests, deterministic analysis, and report generation enabled. It can be run against the published Actor with `apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sample-input.json --output-dataset`. This is a bounded smoke input, not a coverage benchmark; live store availability may return different review counts and explicit evidence warnings.
+
 ## Phase 12 — README and Store preparation
 
 Store-facing title, description, README, examples, output links, cost controls, benchmark evidence, limitations, FAQ, and responsible-use language are synchronized. The listing uses conservative selected-dataset coverage claims and does not claim worldwide availability. No pricing or publication action is performed automatically.

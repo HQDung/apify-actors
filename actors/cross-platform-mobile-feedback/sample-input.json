@@ -2,40 +2,42 @@
   "mode": "comparePlatforms",
   "products": [
     {
-      "productId": "example-product",
-      "name": "Example App",
-      "googlePlayAppId": "com.example.app",
-      "appleAppId": "123456789"
+      "productId": "spotify",
+      "name": "Spotify",
+      "googlePlayAppId": "com.spotify.music",
+      "appleAppId": "324684580"
     }
   ],
-  "countries": ["US", "VN"],
-  "languages": ["en", "vi"],
+  "countries": ["US"],
+  "languages": ["en"],
   "ratings": [1, 2, 3, 4, 5],
-  "maxReviewsPerPlatform": 500,
+  "maxReviewsPerPlatform": 5,
   "requestTimeoutSecs": 30,
-  "maxPagesPerPlatform": 10,
-  "maxRequestsPerRun": 1000,
-  "includeDeveloperReplies": true,
+  "maxPagesPerPlatform": 1,
+  "maxRequestsPerRun": 2,
+  "includeDeveloperReplies": false,
   "includeReviewText": true,
   "analysis": {
     "enabled": true,
     "outputLanguage": "english",
-    "maxAttempts": 2,
-    "maxReviewsToAnalyze": 1000,
-    "cacheMaxEntries": 1000,
-    "clusterSimilarIssues": true
+    "maxAttempts": 1,
+    "maxReviewsToAnalyze": 3,
+    "cacheMaxEntries": 10,
+    "clusterSimilarIssues": false
   },
   "comparison": {
     "enabled": true,
     "minimumSharedClusterConfidence": 0.75,
-    "minimumPlatformSpecificMentions": 2,
-    "minimumDimensionReviews": 5
+    "minimumPlatformSpecificMentions": 1,
+    "minimumDimensionReviews": 1,
+    "includeCountryComparison": true,
+    "includeLanguageComparison": true,
+    "includeVersionComparison": true
   },
   "aggregation": {
     "enabled": true,
     "minimumClusterSize": 2,
-    "maxExampleReviewsPerCluster": 3
+    "maxExampleReviewsPerCluster": 2
   },
-  "minimumReleaseReviews": 5,
   "debug": false
 }

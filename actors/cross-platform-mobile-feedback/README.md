@@ -35,7 +35,13 @@ You can use `googlePlayUrl` and `appleAppStoreUrl` instead of IDs. Explicit IDs 
 - `comparePlatforms` — produce same-product shared, platform-specific, dominant, and insufficient-evidence comparisons plus a product report.
 - `releaseComparison` — compare independently dated Android and iOS before/after windows.
 
-The checked-in [sample input](sample-input.json) shows a full comparison run. [sample-benchmark.json](sample-benchmark.json) shows a multi-product configuration.
+The checked-in [sample input](sample-input.json) is a bounded live cloud smoke test using Spotify's public Google Play package ID and Apple App Store app ID. From this Actor directory, run it with:
+
+```bash
+apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sample-input.json --output-dataset
+```
+
+It makes one request per store, caps each platform at five reviews, enables the deterministic fallback when no provider key is configured, and keeps report generation enabled. [sample-benchmark.json](sample-benchmark.json) shows a multi-product configuration.
 
 ## Input controls
 

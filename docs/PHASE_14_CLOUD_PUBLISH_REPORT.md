@@ -70,3 +70,15 @@ Cloud validation is complete and the Actor is ready for the explicitly authorize
 - Pricing: unchanged
 
 Phase 14 is complete. The Actor is cloud-tested, publicly published, and ready for users.
+
+## Follow-up — checked-in sample input validation
+
+Run: `WqF6aybxYi5n9bw9b`
+
+The exact committed `sample-input.json` was executed with:
+
+```bash
+apify call obliging_persimmon_cki/cross-platform-mobile-feedback --input-file sample-input.json --output-dataset
+```
+
+The run succeeded on build `0.1.1`, emitted 3 Google Play reviews, 3 deterministic analyses, 1 validated cross-platform report, 2 HTTP 200 source diagnostics, and 0 runtime errors. Apple returned an empty public RSS response, which the report retained as an insufficient-evidence warning. Usage was approximately `$0.0013`.
