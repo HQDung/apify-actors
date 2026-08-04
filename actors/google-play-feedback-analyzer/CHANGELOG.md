@@ -14,4 +14,6 @@
 - Added Store-ready dataset views for reviews, issue clusters, app reports, and release-impact reports, plus clearer output links and debug input documentation.
 - Updated Store-facing title, README positioning, FAQ, cost controls, SEO terms, and responsible-use limitations.
 - Completed the final local publish-readiness matrix; publishing remains gated by explicit authorization and missing human-labeled accuracy/cloud-cost evidence.
+- Completed authorized cloud build and standard/release-impact smoke tests; published the Actor publicly under the AI and Business categories without changing pricing.
+- Added a bounded `appIds` schema default and default-input regression coverage so Store automation can start the standard review mode without manual package IDs.
 - Browser expansion and external-provider analysis remain deferred.

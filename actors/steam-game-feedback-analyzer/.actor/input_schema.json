@@ -16,6 +16,7 @@
       "type": "array",
       "description": "One or more numeric Steam app IDs. Numeric strings are accepted by the runtime so the Console string-list editor can be used.",
       "editor": "stringList",
+      "default": ["730"],
       "items": { "type": "string", "pattern": "^[0-9]+$" }
     },
     "startUrls": {

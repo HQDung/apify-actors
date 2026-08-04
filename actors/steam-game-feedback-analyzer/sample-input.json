@@ -1,6 +1,7 @@
 {
   "mode": "feedbackAnalysis",
   "steamAppIds": ["730"],
+  "startUrls": [],
   "languages": ["english"],
   "reviewFilter": "all",
   "purchaseType": "all",

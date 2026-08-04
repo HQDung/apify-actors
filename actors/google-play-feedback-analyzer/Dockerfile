@@ -9,6 +9,9 @@ RUN npm ls @crawlee/core apify puppeteer playwright
 # Copy just package.json and package-lock.json
 # to speed up the build using Docker layer cache.
 COPY --chown=myuser:myuser package*.json ./
+# The shared analysis core is a local file dependency and must be present
+# before npm install resolves package.json.
+COPY --chown=myuser:myuser vendor ./vendor
 
 # Install NPM packages, skip optional and development dependencies to
 # keep the image small. Avoid logging too much and print the dependency

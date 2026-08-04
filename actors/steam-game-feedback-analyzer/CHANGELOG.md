@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Use Steam app `730` as the safe default when an automation test omits both `steamAppIds` and `startUrls`.
+- Keep explicit empty game selections invalid so accidental empty production runs remain visible.
+- Copy the vendored analysis-core package before Docker dependency installation and align its lockfile checksum.
+
 ## Core v1 migration — 2026-08-01
 
 - Extracted source-neutral contracts, taxonomy configuration, analysis,

@@ -5,7 +5,7 @@
     "dataset": {
       "type": "string",
       "title": "Steam review dataset",
-      "description": "Normalized raw Steam review records. Later phases add analysis and feedback cluster records.",
+      "description": "Normalized raw Steam review records. When game selection is omitted, input normalization uses app 730; explicit app IDs and URLs remain unchanged. Later phases add analysis and feedback cluster records.",
       "template": "{{datasetUrl}}"
     },
     "runStatistics": {

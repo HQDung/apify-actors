@@ -1,4 +1,5 @@
 {
+    "mode": "reviews",
     "appIds": ["com.todoist"],
     "language": "en",
     "country": "US",

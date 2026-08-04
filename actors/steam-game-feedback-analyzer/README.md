@@ -30,7 +30,7 @@ Detected issues are reported player claims, not confirmed engineering bugs.
 
 ## Supported input
 
-At least one of `steamAppIds` or `startUrls` is required. IDs from both sources are extracted, merged, and de-duplicated. The Console string-list editor represents app IDs as strings; the runtime also accepts numeric IDs.
+If neither `steamAppIds` nor `startUrls` is provided, the Actor uses Steam app 730 (Counter-Strike 2) as a safe smoke-test default. IDs from both sources are extracted, merged, and de-duplicated. The Console string-list editor represents app IDs as strings; the runtime also accepts numeric IDs.
 
 ```json
 {
@@ -193,7 +193,7 @@ The Actor processes public Steam review data only. It avoids reviewer names, ava
 
 ## Benchmark results
 
-See [`BENCHMARK_NOTES.md`](BENCHMARK_NOTES.md) for reproducible local Phase 0–6 results and the Phase 7 cloud smoke. The latest pushed build completed the bounded cloud input in [`samples/input.cloud-smoke.json`](samples/input.cloud-smoke.json) with 10/10 successful analyses, 10 review records, zero errors, and a saved per-game report. The cloud smoke validates deployment and output wiring; it is not a human-labeled accuracy benchmark. Quality targets such as feedback-type accuracy and false bug-report rate require a reviewed sample before a production launch.
+See [`BENCHMARK_NOTES.md`](BENCHMARK_NOTES.md) for reproducible local Phase 0–6 results, the Phase 7 cloud smoke, and the Phase 8 automation-default regression smoke. Build `0.1.7` completed the empty game-selection cloud input with 5/5 successful analyses, 5 review records, zero errors, and a saved per-game report. The cloud smoke validates deployment and output wiring; it is not a human-labeled accuracy benchmark. Quality targets such as feedback-type accuracy and false bug-report rate require a reviewed sample before a production launch.
 
 The Actor is published in Apify Store under the `GAMES` category. Pricing remains pay for usage.
 

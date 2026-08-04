@@ -1,4 +1,5 @@
 export const DEFAULT_INPUT = {
+  steamAppIds: ["730"],
   mode: "feedbackAnalysis",
   languages: ["all"],
   reviewFilter: "all",

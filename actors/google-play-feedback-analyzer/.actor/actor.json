@@ -4,6 +4,7 @@
     "name": "google-play-feedback-analyzer",
     "title": "Google Play Reviews & App Feedback Analyzer",
     "description": "Collect bounded Google Play reviews and turn them into structured app feedback, issue clusters, aggregate reports, and cautious release-impact signals.",
+    "categories": ["AI", "BUSINESS"],
     "version": "0.1",
     "buildTag": "latest",
     "meta": {

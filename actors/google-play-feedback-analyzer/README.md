@@ -34,7 +34,7 @@ Review text, ratings, dates, helpful counts, replies, and source diagnostics are
 | Field                 | Required      | Default        | Description                                                                           |
 | --------------------- | ------------- | -------------- | ------------------------------------------------------------------------------------- |
 | `mode`                | no            | `reviews`      | `reviews` for normal collection or `releaseImpact` for a bounded before/after report. |
-| `appIds`              | yes           | —              | Android package IDs, up to 20.                                                        |
+| `appIds`              | yes           | `["com.todoist"]` | Android package IDs, up to 20.                                                     |
 | `language`            | no            | `en`           | Two- or three-letter Google Play language code.                                       |
 | `country`             | no            | `US`           | Two-letter Google Play market code.                                                   |
 | `languages`           | no            | `[language]`   | Language list used by `releaseImpact`; one public Store request per combination.      |
@@ -55,6 +55,7 @@ Example:
 
 ```json
 {
+    "mode": "reviews",
     "appIds": ["com.todoist", "com.zing.zalo"],
     "language": "vi",
     "country": "VN",

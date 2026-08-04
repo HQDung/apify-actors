@@ -51,9 +51,13 @@ describe("raw Actor input normalization", () => {
     ).toEqual(["730", "570"]);
   });
 
-  it("rejects an input without an app ID or supported Steam URL", () => {
-    expect(() => normalizeInput({})).toThrow(/steamAppIds|startUrls/i);
-    expect(() => normalizeInput({ startUrls: [{ url: "https://example.com" }] })).toThrow(
+  it("uses Counter-Strike 2 as the automation-safe default app", () => {
+    expect(normalizeInput({}).steamAppIds).toEqual(["730"]);
+  });
+
+  it("rejects an explicitly empty app list or unsupported URL", () => {
+    expect(() => normalizeInput({ steamAppIds: [], startUrls: [] })).toThrow(/steamAppIds|startUrls/i);
+    expect(() => normalizeInput({ steamAppIds: [], startUrls: [{ url: "https://example.com" }] })).toThrow(
       /Steam app ID/i,
     );
   });

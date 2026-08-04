@@ -67,4 +67,18 @@ Phase 16 final readiness smoke on 2026-08-01:
 - Google Play tests: 26 passing; shared-core tests: 10 passing; Steam regression tests: 8 passing and 1 intentionally skipped network smoke; core packaging test: 1 passing.
 - Actor-specific input-schema validation and all JSON/schema parsing checks passed. The repository’s generic validator was not applicable because it requires template-only `src/niche-config.js` and generated storage input files.
 
-This Actor is not published automatically. Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.
+Phase 17 cloud publication validation on 2026-08-01:
+
+- The first cloud build exposed a Docker packaging defect: `npm install` ran before the vendored shared-core tarball was copied into the image. The Dockerfile now copies `vendor/` before installation, protected by `test/dockerfile-packaging.test.mjs`.
+- Corrected build `0.1.4` (`qDDyrL6aqpJSb60wt`) succeeded and applied the `latest` tag.
+- Standard cloud run `u3DE4YOavfTTeFn8B` succeeded with 3 reviews, 1 diagnostic, 3 analyses, 1 aggregate report, 5 dataset records, 0 errors, and 1 stored report.
+- Release-impact cloud run `QfXj9MrzKEp1NwEAe` succeeded with 3 reviews, 1 diagnostic, 3 analyses, 1 aggregate report, 1 impact report, 6 dataset records, 0 errors, and 1 stored impact report.
+- After both runs passed, the Actor was published publicly under `AI` and `BUSINESS`. No pricing fields were changed.
+
+Store default-input validation on 2026-08-02:
+
+- Root cause: `appIds` was required but had no schema default, so the Store automation’s empty/default input was rejected before Actor startup.
+- Added the bounded schema default `appIds: ["com.todoist"]`; the standard sample now explicitly includes `mode: "reviews"` and the same valid package ID.
+- The default-only input is covered by `test/default-input.test.mjs` and is expected to run through the normal review path without manual input.
+
+Public Store response size and review ordering are time-sensitive; benchmark results are evidence for the collector contract, not a pricing commitment.

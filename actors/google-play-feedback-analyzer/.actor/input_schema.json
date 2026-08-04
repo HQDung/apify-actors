@@ -16,6 +16,7 @@
             "description": "One or more public Google Play Android package IDs.",
             "type": "array",
             "editor": "stringList",
+            "default": ["com.todoist"],
             "minItems": 1,
             "maxItems": 20,
             "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$" }

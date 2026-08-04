@@ -37,7 +37,7 @@ export const normalizeInput = (input = {}) => {
   }
 
   const startUrls = Array.isArray(input.startUrls) ? input.startUrls : [];
-  const steamAppIds = mergeSteamAppIds(input.steamAppIds ?? [], startUrls);
+  const steamAppIds = mergeSteamAppIds(input.steamAppIds ?? DEFAULT_INPUT.steamAppIds, startUrls);
   if (steamAppIds.length === 0) {
     throw new Error("At least one valid Steam app ID or Steam Store URL is required in steamAppIds/startUrls.");
   }

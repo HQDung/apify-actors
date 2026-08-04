@@ -1,10 +1,10 @@
-# Phase 17 plan — Publish only with explicit authorization
+# Phase 17 plan — Authorized cloud publication
 
-Publication is intentionally pending. If explicitly authorized later:
+Status: complete.
 
-1. Confirm final title, description, category, pricing, sample inputs, sample dataset, and report links in the Apify Console.
-2. Run an authorized cloud build and public example using the current committed Actor.
-3. Verify dataset views, key-value reports, `RUN_STATS`, logs, and public access.
-4. Record the cloud run and post-publication checks without changing pricing automatically.
+1. Confirmed the final Actor metadata and relevant Store categories (`AI`, `BUSINESS`); no pricing fields were changed.
+2. Fixed the Docker packaging defect, pushed the correction, and built version `0.1.4` with the `latest` tag.
+3. Ran and verified standard and release-impact cloud examples with successful datasets, logs, aggregate reports, and release-impact output.
+4. Published the Actor publicly and recorded the cloud evidence in `BENCHMARK_NOTES.md` and `PHASE_17_REPORT.md`.
 
-Until that authorization exists, do not run `apify push`, alter pricing, or claim publication success.
+There is no next implementation phase. Future work is maintenance or an explicitly scoped feature phase; browser expansion, external-provider analysis, and new source adapters remain deferred.

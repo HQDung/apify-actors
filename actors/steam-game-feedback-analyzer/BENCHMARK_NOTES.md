@@ -112,3 +112,17 @@ Observed Apify Cloud result:
 | Observed usage cost                           | approximately $0.00085 |
 
 The cloud dataset and key-value store contained schema-shaped records, `RUN_STATS`, and `GAME_730_REPORT`. This live sample did not produce a duplicate cluster; the earlier bounded cloud run and synthetic fixtures cover positive clustering. The post-push run validates the latest build's runtime and output wiring; it is not a human-labeled accuracy benchmark. The run was performed before publication; the Actor was subsequently published under the `GAMES` category without changing pricing.
+
+## Phase 8 automation-default regression smoke
+
+Date: 2026-08-04
+
+The failed Apify automation test submitted the schema defaults without `steamAppIds` or `startUrls`, which previously caused input normalization to fail before Steam was contacted. The release candidate now defaults that empty selection to app `730` (Counter-Strike 2) and preserves the existing validation for explicitly empty selections.
+
+Validation evidence:
+
+- Unit normalization tests: 14 passed, including the empty automation-input regression.
+- Local bounded smoke input omitted both game-selection fields and used `maxReviewsPerGame: 5`: 1 game processed, 5 reviews collected/pushed, 5 analyses succeeded, 0 errors, 0.789 seconds.
+- The post-deployment cloud smoke will use the same empty game-selection input to verify the Console automation path.
+
+Cloud result: build `0.1.7` / `latest`, run `ZpAyG6Q3dTcSTg0Rn`, status `SUCCEEDED`. The Actor processed 1/1 game, collected and pushed 5/5 reviews, completed 5/5 analyses, recorded 0 errors, and reported 0.822 seconds Actor runtime. Apify reported 3.091 seconds run duration and approximately `$0.000868` usage cost. Dataset and `RUN_STATS` were created successfully.
