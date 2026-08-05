@@ -1,0 +1,70 @@
+{
+    "actorSpecification": 1,
+    "title": "Manga intelligence snapshots",
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": [
+                    "canonicalTitle",
+                    "marketCode",
+                    "licenseStatus",
+                    "localPublisher",
+                    "latestLocalizedVolume",
+                    "volumeGap",
+                    "officiallyAvailable",
+                    "offersCollected",
+                    "lowestPrice",
+                    "currency",
+                    "inStock",
+                    "scrapedAt"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "canonicalTitle": { "label": "Title", "format": "text" },
+                    "marketCode": { "label": "Market", "format": "text" },
+                    "licenseStatus": { "label": "License", "format": "text" },
+                    "localPublisher": { "label": "Publisher", "format": "text" },
+                    "latestLocalizedVolume": { "label": "Latest localized volume", "format": "number" },
+                    "volumeGap": { "label": "Release gap", "format": "number" },
+                    "officiallyAvailable": { "label": "Officially available", "format": "boolean" },
+                    "offersCollected": { "label": "Offers", "format": "number" },
+                    "lowestPrice": { "label": "Lowest price", "format": "number" },
+                    "currency": { "label": "Currency", "format": "text" },
+                    "inStock": { "label": "In stock", "format": "boolean" },
+                    "scrapedAt": { "label": "Observed", "format": "date" }
+                }
+            }
+        },
+        "licensing": {
+            "title": "Licensing",
+            "transformation": { "fields": ["canonicalTitle", "marketCode", "license", "sources"] },
+            "display": { "component": "table", "properties": { "canonicalTitle": { "label": "Title", "format": "text" }, "marketCode": { "label": "Market", "format": "text" }, "license": { "label": "License", "format": "object" }, "sources": { "label": "Sources", "format": "array" } } }
+        },
+        "availability": {
+            "title": "Availability",
+            "transformation": { "fields": ["canonicalTitle", "marketCode", "officialAvailability", "retailSummary"] },
+            "display": { "component": "table", "properties": { "canonicalTitle": { "label": "Title", "format": "text" }, "marketCode": { "label": "Market", "format": "text" }, "officialAvailability": { "label": "Official availability", "format": "object" }, "retailSummary": { "label": "Retail summary", "format": "object" } } }
+        },
+        "provenance": {
+            "title": "Provenance",
+            "transformation": { "fields": ["canonicalTitle", "marketCode", "match", "warnings", "sources", "scrapedAt"] },
+            "display": { "component": "table", "properties": { "canonicalTitle": { "label": "Title", "format": "text" }, "marketCode": { "label": "Market", "format": "text" }, "match": { "label": "Match", "format": "object" }, "warnings": { "label": "Warnings", "format": "array" }, "sources": { "label": "Sources", "format": "array" }, "scrapedAt": { "label": "Observed", "format": "date" } } }
+        },
+        "changes": {
+            "title": "Detected changes",
+            "transformation": { "fields": ["canonicalTitle", "marketCode", "changeDetection", "scrapedAt"] },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "canonicalTitle": { "label": "Title", "format": "text" },
+                    "marketCode": { "label": "Market", "format": "text" },
+                    "changeDetection": { "label": "Changes", "format": "object" },
+                    "scrapedAt": { "label": "Observed", "format": "date" }
+                }
+            }
+        }
+    }
+}

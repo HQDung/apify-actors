@@ -1,0 +1,58 @@
+const durationSecsFor = (startedAt, finishedAt) =>
+    Math.max(0, Math.round((new Date(finishedAt).getTime() - new Date(startedAt).getTime()) / 1000));
+
+export const buildRunSummary = ({
+    actorVersion,
+    mode,
+    startedAt,
+    finishedAt,
+    titlesRequested,
+    marketsRequested,
+    snapshotsExpected,
+    snapshotsProduced,
+    matchedTitles,
+    ambiguousTitles,
+    notFoundTitles,
+    metadataSuccesses,
+    licensingSuccesses,
+    officialAvailabilitySuccesses,
+    retailOfferSuccesses,
+    sourceFailures = [],
+    warnings = [],
+    defaultDatasetId = null,
+}) => ({
+    actorVersion,
+    mode,
+    startedAt,
+    finishedAt,
+    durationSecs: durationSecsFor(startedAt, finishedAt),
+    titlesRequested,
+    marketsRequested,
+    snapshotsExpected,
+    snapshotsProduced,
+    matchedTitles,
+    ambiguousTitles,
+    notFoundTitles,
+    metadataSuccesses,
+    licensingSuccesses,
+    officialAvailabilitySuccesses,
+    retailOfferSuccesses,
+    sourceFailures,
+    warnings,
+    defaultDatasetId,
+});
+
+export const buildChangeReport = ({
+    enabled = false,
+    previousDatasetId = null,
+    titlesCompared = 0,
+    changes = [],
+    generatedAt = new Date().toISOString(),
+}) => ({
+    enabled,
+    previousDatasetId: previousDatasetId || null,
+    titlesCompared,
+    changesFound: changes.length,
+    changes,
+    generatedAt,
+});

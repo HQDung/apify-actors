@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "actorOutputSchemaVersion": 1,
+    "title": "Manga Release, Licensing & Availability Intelligence output",
+    "description": "Structured manga market snapshots, run statistics, and detected changes.",
+    "properties": {
+        "results": {
+            "type": "string",
+            "title": "Manga intelligence results",
+            "description": "Market-level manga licensing, release, availability, pricing, and stock records in the default dataset.",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        },
+        "runSummary": {
+            "type": "string",
+            "title": "Run summary",
+            "description": "Run counts, source status, warnings, and performance information.",
+            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/RUN_SUMMARY"
+        },
+        "changeReport": {
+            "type": "string",
+            "title": "Change report",
+            "description": "New releases, price changes, stock changes, publisher changes, and new availability signals.",
+            "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/CHANGE_REPORT"
+        }
+    }
+}

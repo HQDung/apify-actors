@@ -7,6 +7,7 @@
         "test:core": "node --test packages/feedback-analysis-core/test/*.test.js",
         "test:comparison-core": "node --test packages/cross-platform-comparison-core/test/*.test.js",
         "test:source-adapters": "node --test packages/mobile-feedback-source-adapters/test/*.test.js",
+        "test:source-spike": "node --test test/manga-source-spike.test.mjs",
         "test:core-packaging": "node --test test/core-packaging.test.js",
         "test:factory": "node --test test/factory.test.js",
         "test:steam-regression": "node --test tests/contracts/*.test.js tests/regression/*.test.js",

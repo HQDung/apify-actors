@@ -1,0 +1,271 @@
+{
+  "fixtureVersion": 1,
+  "capturedOn": "2026-08-05",
+  "scope": "Phase 0 public metadata and availability feasibility evidence",
+  "collectionPolicy": {
+    "authenticated": false,
+    "proxyRequired": false,
+    "downloadedMangaContent": false,
+    "followedImageUrls": false,
+    "storedRawHtml": false,
+    "storedRawSynopsis": false,
+    "storedChapterData": false,
+    "userAgent": "MangaSourceFeasibility/0.1 (public metadata only)"
+  },
+  "titleMatrix": {
+    "caseCount": 29,
+    "cases": [
+      { "id": "one-piece", "query": "One Piece", "category": "popular-ongoing" },
+      { "id": "dandadan", "query": "Dandadan", "category": "popular-ongoing" },
+      { "id": "spy-family", "query": "Spy x Family", "category": "popular-ongoing" },
+      { "id": "jujutsu-kaisen", "query": "Jujutsu Kaisen", "category": "completed" },
+      { "id": "demon-slayer", "query": "Demon Slayer Kimetsu no Yaiba", "category": "completed" },
+      { "id": "naruto", "query": "Naruto", "category": "completed" },
+      { "id": "attack-on-titan", "query": "Attack on Titan", "category": "completed" },
+      { "id": "fullmetal-alchemist", "query": "Fullmetal Alchemist", "category": "completed" },
+      { "id": "death-note", "query": "Death Note", "category": "completed" },
+      { "id": "chainsaw-man", "query": "Chainsaw Man", "category": "ongoing" },
+      { "id": "my-hero-academia", "query": "My Hero Academia", "category": "completed" },
+      { "id": "hunter-x-hunter", "query": "Hunter x Hunter", "category": "hiatus" },
+      { "id": "dragon-ball", "query": "Dragon Ball", "category": "completed" },
+      { "id": "slam-dunk", "query": "Slam Dunk", "category": "completed" },
+      { "id": "one-punch-man", "query": "One-Punch Man", "category": "ongoing" },
+      { "id": "sakamoto-days", "query": "Sakamoto Days", "category": "ongoing" },
+      { "id": "oshi-no-ko", "query": "Oshi no Ko", "category": "completed" },
+      { "id": "kaguya-sama", "query": "Kaguya-sama: Love Is War", "category": "completed" },
+      { "id": "blue-lock", "query": "Blue Lock", "category": "ongoing" },
+      { "id": "kaiju-no-8", "query": "Kaiju No. 8", "category": "completed" },
+      { "id": "frieren", "query": "Frieren: Beyond Journey's End", "category": "ongoing" },
+      { "id": "vinland-saga", "query": "Vinland Saga", "category": "completed" },
+      { "id": "berserk", "query": "Berserk", "category": "ongoing" },
+      { "id": "jojos", "query": "JoJo's Bizarre Adventure", "category": "multi-part" },
+      { "id": "doraemon", "query": "Doraemon", "category": "localized-edition" },
+      { "id": "detective-conan-vi", "query": "Thám Tử Lừng Danh Conan", "category": "localized-alias" },
+      { "id": "one-piece-vi", "query": "Đảo Hải Tặc", "category": "localized-alias" },
+      { "id": "dragon-ball-vi", "query": "Bảy Viên Ngọc Rồng", "category": "localized-alias" },
+      { "id": "doraemon-vi", "query": "Đôrêmon", "category": "localized-alias" }
+    ],
+    "providerObservations": {
+      "kitsu": {
+        "requests": 29,
+        "http200": 29,
+        "contentType": "application/vnd.api+json",
+        "stableWorkId": "numeric manga resource id",
+        "onePieceWorkId": "38",
+        "localizedAliasHits": {
+          "one-piece-vi": "38",
+          "doraemon-vi": "2247"
+        },
+        "knownFalsePositiveQueries": {
+          "detective-conan-vi": "Kindaichi Shounen no Jikenbo ranked first",
+          "dragon-ball-vi": "The Seven Beauties Are My Martial Sisters ranked first"
+        },
+        "fieldsObserved": [
+          "canonicalTitle",
+          "titles",
+          "status",
+          "startDate",
+          "endDate",
+          "volumeCount",
+          "chapterCount",
+          "serialization"
+        ],
+        "paginationObserved": true,
+        "isbnObserved": false,
+        "priceObserved": false,
+        "stockObserved": false,
+        "risk": "Current API-specific commercial terms and data-reuse scope were not located during the spike; permission is required before production use."
+      },
+      "openLibrary": {
+        "requests": 29,
+        "http200": 29,
+        "contentType": "application/json",
+        "stableWorkKeysObserved": true,
+        "onePieceTopWorkKey": "/works/OL8215661W",
+        "editionIdentifiersObserved": true,
+        "isbnObserved": true,
+        "releaseYearObserved": true,
+        "localizedAliasBehavior": "noisy; Vietnamese aliases returned no result or unrelated works in the sampled queries",
+        "knownFalsePositiveQueries": [
+          "Demon Slayer Kimetsu no Yaiba",
+          "Kaguya-sama: Love Is War",
+          "Vinland Saga",
+          "Berserk"
+        ],
+        "paginationObserved": true,
+        "ratePolicyObserved": "1 request/second by default; 3 requests/second with identifying User-Agent and contact per provider docs",
+        "risk": "Provider docs state the API is not intended as a backend for high-traffic commercial infrastructure; use must remain low-volume, cache-aware, and permission-gated."
+      },
+      "wikidata": {
+        "requestsAttempted": 29,
+        "http200": 16,
+        "http429": 13,
+        "first429AtRequest": 11,
+        "stableEntityIdsObserved": true,
+        "mangaVersusAnimeDisambiguationObserved": true,
+        "localizedAliasHits": {
+          "detective-conan-vi": "Q185143 franchise result",
+          "one-piece-vi": "Q673 franchise result",
+          "dragon-ball-vi": "Q2020 franchise result"
+        },
+        "fieldsObserved": ["entityId", "label", "description", "matchedAlias"],
+        "isbnObserved": false,
+        "priceObserved": false,
+        "stockObserved": false,
+        "risk": "The public search endpoint returned 429 after a short burst despite a compliant User-Agent; it is suitable only as a sparse disambiguation fallback or via a batch/dump strategy."
+      }
+    }
+  },
+  "defaultPath": {
+    "query": "One Piece",
+    "marketCode": "US-en",
+    "authenticated": false,
+    "proxyRequired": false,
+    "collectionPolicy": {
+      "downloadedMangaContent": false,
+      "followedImageUrls": false
+    },
+    "metadata": {
+      "provider": "kitsu",
+      "status": 200,
+      "workId": "38",
+      "canonicalTitle": "One Piece",
+      "sourceUrl": "https://kitsu.io/api/edge/manga?filter%5Btext%5D=One%20Piece&page%5Blimit%5D=5"
+    },
+    "usPublisher": {
+      "provider": "viz",
+      "status": 200,
+      "sourceUrl": "https://www.viz.com/manga-books/manga/one-piece/all",
+      "serverRendered": true,
+      "volumeLabelsObserved": 113,
+      "stableProductRoutesObserved": true
+    },
+    "resultCanBeProduced": true,
+    "productionPermission": "pending"
+  },
+  "sourceProbes": {
+    "viz": {
+      "series": {
+        "status": 200,
+        "bytes": 139796,
+        "serverTextLength": 6847,
+        "volumeLabels": 113,
+        "productRoutes": 230,
+        "jsRequired": false
+      },
+      "standardProduct": {
+        "status": 200,
+        "isbn13": "9781569319017",
+        "price": "$11.99",
+        "productId": "139"
+      },
+      "omnibusProduct": {
+        "status": 200,
+        "isbn13": "9781974763979",
+        "releaseDateObserved": "June 16, 2026",
+        "price": "$16.99",
+        "productId": "8881"
+      },
+      "boxSetProduct": {
+        "status": 200,
+        "isbn13": "9781421560748",
+        "price": "$244.99",
+        "productId": "3479"
+      },
+      "robots": {
+        "status": 200,
+        "disallows": ["/search", "/comments", "/votes", "/load_dynamic_info", "/products"]
+      },
+      "risk": "Use allowlisted manga-books and product routes only; do not crawl disallowed paths or preview/chapter assets."
+    },
+    "mangaPlus": {
+      "titlePageStatus": 200,
+      "titlePageBytes": 2350,
+      "jsRequired": true,
+      "robotsStatus": 200,
+      "robotsDisallowsAll": true,
+      "selected": false,
+      "risk": "Official service, but the public robots policy disallows crawling; no adapter is recommended without explicit permission."
+    },
+    "kimDong": {
+      "categoryStatus": 200,
+      "categoryUrl": "https://nxbkimdong.com.vn/one-piece",
+      "categoryPagination": "8 pages observed",
+      "productStatus": 200,
+      "productUrl": "https://nxbkimdong.com.vn/one-piece-tap-110-ban-dac-biet",
+      "productCodeObserved": "5262203332110",
+      "volumeLabelObserved": "Tập 110",
+      "priceObserved": "180.000₫ sale / 200.000₫ regular",
+      "stockObserved": "Còn hàng",
+      "isbnObservedOnSample": true,
+      "robotsDisallows": ["/admin", "/cart", "/search", "/checkout", "/account"],
+      "risk": "Use category/product routes and preserve Vietnamese labels; release-date fields were not reliable enough for a hard claim in the sampled pages."
+    },
+    "fahasa": {
+      "categoryStatus": 200,
+      "productStatus": 200,
+      "productUrl": "https://www.fahasa.com/one-piece-tap-1-romance-dawn-binh-minh-cua-cuoc-phieu-luu-tai-ban-2025.html",
+      "jsonLdProduct": true,
+      "titleObserved": "One Piece - Tập 1 - Romance Dawn - Bình Minh Của Cuộc Phiêu Lưu - Bản Bìa Áo (Tái Bản 2025)",
+      "publisherObserved": "Kim Đồng",
+      "price": 28500,
+      "currency": "VND",
+      "availability": "InStock",
+      "robotsDisallowsPrivatePathsOnly": true,
+      "risk": "Stock is location-sensitive; use only public product fields and do not infer publisher rights from retailer presence."
+    },
+    "barnesNoble": {
+      "productStatus": 200,
+      "productUrl": "https://www.barnesandnoble.com/w/one-piece-vol-1-eiichiro-oda/1129763095",
+      "jsonLdProduct": true,
+      "stableProductGroupId": "1129763095",
+      "variants": [
+        { "isbn13": "9781569319017", "format": "paperback", "price": 11.99, "currency": "USD", "availability": "InStock" },
+        { "isbn13": "9781421545257", "format": "ebook", "price": 6.99, "currency": "USD", "availability": "InStock" }
+      ],
+      "robotsDisallowsPrivatePathsOnly": true,
+      "risk": "Variant selection is required; the page may include mixed availability text for multiple formats."
+    },
+    "googleBooks": {
+      "status": 429,
+      "quotaMessage": "Queries per day quota is zero for the unauthenticated consumer used in this probe",
+      "selected": false,
+      "risk": "Not suitable for the no-secret default; revisit only with an explicitly configured key/quota and a separate source contract."
+    },
+    "jikan": {
+      "status": "timeout/fetch-failed",
+      "timeoutSeconds": 15,
+      "selected": false,
+      "risk": "Endpoint did not complete during two bounded probes."
+    },
+    "anilist": {
+      "status": 200,
+      "rateLimitObserved": 30,
+      "remainingAfterOneRequest": 29,
+      "selected": false,
+      "risk": "Provider terms require commercial licensing above a revenue threshold and restrict competing manga-list/tracker services; written permission is required."
+    }
+  },
+  "sourceLimitations": [
+    "kitsu-commercial-terms-unconfirmed",
+    "open-library-commercial-backend-restricted",
+    "manga-plus-robots-disallow",
+    "wikidata-rate-limit-observed",
+    "google-books-no-secret-quota-unavailable",
+    "jikan-endpoint-unreachable",
+    "publisher-pages-do-not-prove-current-license-rights",
+    "retailer-presence-does-not-prove-current-license-rights",
+    "absence-of-license-signal-is-not-proof-of-unlicensed-status"
+  ],
+  "recommendedAdapters": {
+    "metadataPrimary": "kitsu-after-written-permission",
+    "metadataEditionFallback": "openLibrary-low-volume-after-usage-approval",
+    "metadataDisambiguation": "wikidata-sparse-fallback-only",
+    "usPublisher": "viz-manga-books-allowlisted-routes",
+    "usOfficialReading": "viz-official-reading-link-signals-only",
+    "vietnamPublisher": "kimDong-category-and-product-routes",
+    "usRetailer": "barnesNoble-product-jsonLd",
+    "vietnamRetailer": "fahasa-product-jsonLd"
+  },
+  "productionGate": "blocked_pending_source_permission"
+}

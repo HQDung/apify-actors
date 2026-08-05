@@ -1,0 +1,212 @@
+{
+    "title": "Manga Release, Licensing & Availability Intelligence",
+    "type": "object",
+    "schemaVersion": 1,
+    "additionalProperties": false,
+    "properties": {
+        "mode": {
+            "title": "Mode",
+            "type": "string",
+            "description": "Choose a mode. The current runnable path is titleLookup; publisherCalendar and availabilityMonitor are reserved for later phases.",
+            "editor": "select",
+            "enum": ["titleLookup", "publisherCalendar", "availabilityMonitor"],
+            "enumTitles": ["Title lookup", "Publisher calendar", "Availability monitor"],
+            "default": "titleLookup",
+            "prefill": "titleLookup"
+        },
+        "titles": {
+            "title": "Manga titles",
+            "type": "array",
+            "description": "Titles to resolve. Vietnamese and English aliases are accepted.",
+            "editor": "stringList",
+            "default": ["One Piece"],
+            "prefill": ["One Piece"],
+            "items": { "type": "string" }
+        },
+        "markets": {
+            "title": "Markets",
+            "type": "array",
+            "description": "Initial supported market-language pairs: US/en and VN/vi.",
+            "editor": "json",
+            "default": [{ "countryCode": "US", "languageCode": "en" }],
+            "prefill": [{ "countryCode": "US", "languageCode": "en" }],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "countryCode": { "title": "Country code", "type": "string", "description": "ISO 3166-1 alpha-2 country code." },
+                    "languageCode": { "title": "Language code", "type": "string", "description": "BCP-47 or ISO language code." }
+                },
+                "required": ["countryCode", "languageCode"],
+                "additionalProperties": false
+            }
+        },
+        "publisherUrls": {
+            "title": "Publisher URLs",
+            "type": "array",
+            "description": "Optional public publisher pages reserved for publisherCalendar mode.",
+            "editor": "stringList",
+            "default": [],
+            "items": { "type": "string" }
+        },
+        "editionUrls": {
+            "title": "Edition URLs",
+            "type": "array",
+            "description": "Known public edition URLs used by optional retailer collection; availabilityMonitor is reserved for a later phase.",
+            "editor": "stringList",
+            "default": [],
+            "items": { "type": "string" }
+        },
+        "dateFrom": {
+            "title": "Date from",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Optional ISO date for publisher calendar mode.",
+            "default": ""
+        },
+        "dateTo": {
+            "title": "Date to",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Optional ISO date for publisher calendar mode.",
+            "default": ""
+        },
+        "maxTitles": {
+            "title": "Maximum titles",
+            "type": "integer",
+            "editor": "number",
+            "description": "Maximum unique title queries.",
+            "default": 1,
+            "prefill": 1,
+            "minimum": 1,
+            "maximum": 100
+        },
+        "maxEditionsPerTitle": {
+            "title": "Maximum editions per title",
+            "type": "integer",
+            "editor": "number",
+            "description": "Maximum normalized editions retained for each work.",
+            "default": 3,
+            "minimum": 1,
+            "maximum": 50
+        },
+        "maxOffersPerEdition": {
+            "title": "Maximum offers per edition",
+            "type": "integer",
+            "editor": "number",
+            "description": "Maximum retailer offers retained for each edition.",
+            "default": 2,
+            "minimum": 0,
+            "maximum": 20
+        },
+        "includeMetadata": {
+            "title": "Include metadata",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Include canonical manga work metadata.",
+            "default": true,
+            "prefill": true
+        },
+        "includeLicensing": {
+            "title": "Include licensing signals",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Include public market-specific licensing signals when supported.",
+            "default": true,
+            "prefill": true
+        },
+        "includeOfficialAvailability": {
+            "title": "Include official availability",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Include public official publisher or reader availability signals.",
+            "default": true,
+            "prefill": true
+        },
+        "includeRetailOffers": {
+            "title": "Include retailer offers",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Collect supported public retailer price and stock data. Disabled for the Store auto-test.",
+            "default": false,
+            "prefill": false
+        },
+        "includeReleaseGap": {
+            "title": "Calculate release gap",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Calculate a release gap only when comparable original and localized volumes are available.",
+            "default": false,
+            "prefill": false
+        },
+        "detectChanges": {
+            "title": "Detect changes",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Compare snapshots with a previous dataset.",
+            "default": false,
+            "prefill": false
+        },
+        "previousDatasetId": {
+            "title": "Previous dataset ID",
+            "type": "string",
+            "editor": "textfield",
+            "description": "Required when change detection is enabled.",
+            "default": ""
+        },
+        "normalizedOutputLanguage": {
+            "title": "Normalized output language",
+            "type": "string",
+            "description": "Use English labels or preserve original-language labels where supported.",
+            "editor": "select",
+            "enum": ["en", "original"],
+            "default": "en",
+            "prefill": "en"
+        },
+        "preserveOriginalText": {
+            "title": "Preserve original text",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Preserve source-language titles and product labels.",
+            "default": true,
+            "prefill": true
+        },
+        "requestTimeoutSecs": {
+            "title": "Request timeout seconds",
+            "type": "integer",
+            "editor": "number",
+            "description": "Per-source request timeout.",
+            "default": 25,
+            "prefill": 25,
+            "minimum": 10,
+            "maximum": 90
+        },
+        "maxConcurrency": {
+            "title": "Maximum concurrency",
+            "type": "integer",
+            "editor": "number",
+            "description": "Maximum concurrent source operations in later enrichment phases.",
+            "default": 2,
+            "prefill": 2,
+            "minimum": 1,
+            "maximum": 10
+        },
+        "proxyConfiguration": {
+            "title": "Proxy configuration",
+            "type": "object",
+            "description": "Optional Apify Proxy settings. The default path does not require a proxy.",
+            "editor": "json",
+            "default": { "useApifyProxy": false },
+            "prefill": { "useApifyProxy": false },
+            "properties": { "useApifyProxy": { "title": "Use Apify Proxy", "description": "Route supported requests through Apify Proxy when explicitly enabled.", "type": "boolean", "editor": "checkbox", "default": false } },
+            "additionalProperties": false
+        },
+        "debug": {
+            "title": "Debug logging",
+            "type": "boolean",
+            "editor": "checkbox",
+            "description": "Enable bounded diagnostic logging without raw source content.",
+            "default": false,
+            "prefill": false
+        }
+    }
+}

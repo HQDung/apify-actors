@@ -1,0 +1,75 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "recordType": "titleMarketSnapshot",
+    "queryTitle": "One Piece",
+    "match": { "status": "matched", "confidence": 0.98, "matchedBy": ["canonicalTitle"] },
+    "work": {
+        "workId": "kitsu:38",
+        "canonicalTitle": "One Piece",
+        "nativeTitle": "ONE PIECE",
+        "aliases": [{ "languageCode": "ja_jp", "title": "ONE PIECE" }],
+        "authors": [],
+        "originalCountryCode": null,
+        "originalLanguageCode": null,
+        "publicationStatus": "releasing",
+        "originalPublisher": null,
+        "latestOriginalVolume": null,
+        "originalVolumeCount": null,
+        "metadataSourceIds": { "kitsu": "38" }
+    },
+    "market": { "countryCode": "US", "languageCode": "en" },
+    "license": { "status": "licenseSignalFound", "localPublisher": "VIZ Media", "imprint": null, "confidence": "official", "sourceUrl": "https://www.viz.com/manga-books/manga/one-piece/all" },
+    "localizedRelease": { "latestVolumeNumber": 3, "latestVolumeLabel": "One Piece , Vol. 3", "latestReleaseDate": "2004-06-08", "nextVolumeNumber": null, "nextReleaseDate": null },
+    "releaseGap": { "calculated": false, "originalLatestVolume": null, "localizedLatestVolume": null, "volumeGap": null, "confidence": "low", "sources": [] },
+    "officialAvailability": {
+        "isAvailable": true,
+        "printAvailable": true,
+        "digitalAvailable": null,
+        "subscriptionAvailable": true,
+        "freeOfficialReadingAvailable": null,
+        "links": [
+            { "url": "https://www.viz.com/shonenjump", "providerName": "VIZ", "availabilityType": "subscription" },
+            { "url": "https://www.viz.com/vizmanga", "providerName": "VIZ", "availabilityType": "subscription" }
+        ]
+    },
+    "retailSummary": { "offersCollected": 0, "lowestPrice": null, "highestPrice": null, "currency": null, "anyInStock": null, "anyPreorder": null },
+    "editions": [
+        {
+            "editionId": "edition:4fa611fdc24129326ceabd05",
+            "workId": "kitsu:38",
+            "countryCode": "US",
+            "languageCode": "en",
+            "publisher": "VIZ Media",
+            "imprint": "SHONEN JUMP",
+            "volumeNumber": 1,
+            "volumeLabel": "One Piece , Vol. 1",
+            "editionType": "standard",
+            "format": "paperback",
+            "isbn10": "1569319014",
+            "isbn13": "9781569319017",
+            "releaseDate": "2003-09-02",
+            "volumeRange": null,
+            "sourceTitle": "One Piece , Vol. 1",
+            "sourceUrl": "https://www.viz.com/manga-books/manga/one-piece-volume-1-0/product/139"
+        }
+    ],
+    "offers": [],
+    "changeDetection": { "enabled": false, "hasChanges": false, "changeTypes": [] },
+    "warnings": [],
+    "sources": [
+        { "sourceType": "metadata", "sourceName": "kitsu", "sourceUrl": "https://kitsu.io/api/edge/manga?filter%5Btext%5D=One+Piece", "confidence": "high" },
+        { "sourceType": "publisher", "sourceName": "viz", "sourceUrl": "https://www.viz.com/manga-books/manga/one-piece/all", "confidence": "official" }
+    ],
+    "scrapedAt": "2026-08-05T02:39:22.033Z",
+    "canonicalTitle": "One Piece",
+    "marketCode": "US-en",
+    "licenseStatus": "licenseSignalFound",
+    "localPublisher": "VIZ Media",
+    "latestLocalizedVolume": 3,
+    "volumeGap": null,
+    "officiallyAvailable": true,
+    "offersCollected": 0,
+    "lowestPrice": null,
+    "currency": null,
+    "inStock": null
+}

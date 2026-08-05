@@ -1,0 +1,18 @@
+{
+    "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+    "actorSpecification": 1,
+    "name": "manga-release-licensing-intelligence",
+    "title": "Manga Release, Licensing & Availability Intelligence",
+    "description": "Track public manga licensing signals, localized editions, official availability, releases, prices, and stock across supported markets.",
+    "categories": ["E-COMMERCE", "OTHER"],
+    "version": "0.1",
+    "buildTag": "latest",
+    "input": "./input_schema.json",
+    "output": "./output_schema.json",
+    "dockerfile": "../Dockerfile",
+    "storages": { "dataset": "./dataset_schema.json" },
+    "meta": {
+        "templateId": "js-empty",
+        "generatedBy": "Codex with GPT-5"
+    }
+}

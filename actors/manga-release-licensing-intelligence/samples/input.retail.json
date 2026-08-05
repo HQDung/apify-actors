@@ -1,0 +1,28 @@
+{
+    "mode": "titleLookup",
+    "titles": ["One Piece"],
+    "markets": [
+        { "countryCode": "US", "languageCode": "en" },
+        { "countryCode": "VN", "languageCode": "vi" }
+    ],
+    "editionUrls": [
+        "https://www.barnesandnoble.com/w/one-piece-vol-1-eiichiro-oda/1129763095",
+        "https://www.fahasa.com/one-piece-tap-1-romance-dawn-binh-minh-cua-cuoc-phieu-luu-tai-ban-2025.html"
+    ],
+    "maxTitles": 1,
+    "maxEditionsPerTitle": 3,
+    "maxOffersPerEdition": 2,
+    "includeMetadata": true,
+    "includeLicensing": true,
+    "includeOfficialAvailability": true,
+    "includeRetailOffers": true,
+    "includeReleaseGap": false,
+    "detectChanges": false,
+    "previousDatasetId": "",
+    "normalizedOutputLanguage": "en",
+    "preserveOriginalText": true,
+    "requestTimeoutSecs": 25,
+    "maxConcurrency": 2,
+    "proxyConfiguration": { "useApifyProxy": false },
+    "debug": false
+}

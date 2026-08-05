@@ -1,0 +1,23 @@
+{
+    "name": "manga-release-licensing-intelligence",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Track public manga licensing, localized editions, releases, availability, prices, and stock signals.",
+    "engines": {
+        "node": ">=18"
+    },
+    "dependencies": {
+        "apify": "^3.7.0"
+    },
+    "scripts": {
+        "start": "node src/main.js",
+        "test": "node --test test/*.test.mjs tests/**/*.test.mjs",
+        "build": "node scripts/check-syntax.mjs",
+        "lint": "node scripts/check-syntax.mjs",
+        "typecheck": "node scripts/check-syntax.mjs",
+        "validate:schema": "apify validate-schema",
+        "format:check": "npx prettier --check ."
+    },
+    "license": "ISC"
+}
