@@ -15,3 +15,7 @@ Phase 2 onward will record test commands, review pages, scan/analyze counts, cov
 ### Phase 2 patch detection and fallback
 
 The Phase 2 report is [`docs/phase-2-report.md`](docs/phase-2-report.md). A live Dota 2 smoke fetched 20 news items, accepted the `Gameplay Patch 7.41e and Summer Scrub` announcement at confidence `1.00`, scanned 14 review pages, sampled 20 before and 20 after reviews, reached full/full coverage, and completed in 7.194 seconds. Fixture tests cover fallback when news is promotional, event-oriented, external, empty, or unavailable.
+
+### Phase 3 shared-core analysis
+
+The Phase 3 report is [`docs/phase-3-report.md`](docs/phase-3-report.md). The Actor test suite passed 12 files and 37 tests; repository shared-core tests passed 10 tests; lint, build, formatting, and schema validation passed. Deterministic fixture analysis confirmed positive-rate, gaming-theme, feature-request, language, negative-share, and capped-evidence aggregation. No network benchmark was repeated because this phase only adds local analysis over the already bounded collection.
