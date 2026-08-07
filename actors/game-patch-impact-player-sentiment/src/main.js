@@ -1,6 +1,7 @@
 import { Actor, log } from 'apify';
 
 import { createGameMetadataAdapter } from './adapters/game-metadata.js';
+import { createSteamNewsAdapter } from './adapters/steam-news.js';
 import { createSteamReviewsAdapter } from './adapters/steam-reviews.js';
 import { normalizeInput } from './input/normalize-input.js';
 import { runGame } from './runtime/run-game.js';
@@ -23,6 +24,7 @@ let statusMessage;
 try {
     const input = normalizeInput((await Actor.getInput()) ?? {});
     const metadataAdapter = createGameMetadataAdapter();
+    const newsAdapter = createSteamNewsAdapter();
     const reviewsAdapter = createSteamReviewsAdapter();
     stats.gamesRequested = input.steamAppIds.length;
     for (const appId of input.steamAppIds) {
@@ -32,6 +34,7 @@ try {
                 appId,
                 input,
                 metadataAdapter,
+                newsAdapter,
                 reviewsAdapter,
                 pushData: (value) => Actor.pushData(value),
                 setValue: (key, value) => Actor.setValue(key, value),

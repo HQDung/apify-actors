@@ -1,0 +1,25 @@
+{
+    "appnews": {
+        "appid": 570,
+        "newsitems": [
+            {
+                "gid": "patch-1",
+                "title": "Gameplay Patch 7.41e and Summer Scrub",
+                "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/patch-1",
+                "is_external_url": true,
+                "feedlabel": "Community Announcements",
+                "date": 1785455895,
+                "contents": "This patch fixes crashes, balance issues, and several gameplay bugs."
+            },
+            {
+                "gid": "event-1",
+                "title": "The International: Predictions, Fantasy, and Supporter Bundles",
+                "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/event-1",
+                "is_external_url": false,
+                "feedlabel": "Community Announcements",
+                "date": 1785455868,
+                "contents": "Make predictions and unlock supporter rewards during the event."
+            }
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "appnews": {
+        "appid": 646570,
+        "newsitems": [
+            {
+                "gid": "sale-1",
+                "title": "Summer Sale — 75% off",
+                "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/sale-1",
+                "is_external_url": false,
+                "feedlabel": "Community Announcements",
+                "date": 1785455895,
+                "contents": "Save on the game and soundtrack during the summer sale."
+            },
+            {
+                "gid": "article-1",
+                "title": "The Neowsletter - July 2026",
+                "url": "https://steamstore-a.akamaihd.net/news/externalpost/steam_community_announcements/article-1",
+                "is_external_url": false,
+                "feedlabel": "Community Announcements",
+                "date": 1784318096,
+                "contents": "Read the latest community news and stories."
+            }
+        ]
+    }
+}
