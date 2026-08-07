@@ -21,7 +21,34 @@ See `sample-input.json` for the safe Store-test input. The Actor accepts one to 
 
 ## Output
 
-The default dataset contains one report per Steam App ID with `comparison`, `impact`, `coverage`, `warnings`, and bounded `stats` fields. The dataset overview prioritizes status, sentiment delta, impact direction, confidence, sample counts, and coverage.
+The default dataset contains one final report per Steam App ID with `comparison`, `impact`, `patch`, `newIssues`, `regressions`, `improvements`, `featureRequests`, `topNegativeThemes`, `topPositiveThemes`, `coverage`, `languageDistribution`, `warnings`, and bounded `stats` fields. Raw review collections are not published as the primary output.
+
+## Output fields
+
+| Field                               | Meaning                                                 |
+| ----------------------------------- | ------------------------------------------------------- |
+| `status`                            | `ok`, `partial`, or `failed` report status.             |
+| `steamAppId`                        | Requested numeric Steam App ID.                         |
+| `gameName`                          | Best-effort Steam game name.                            |
+| `requestedComparisonMode`           | Mode supplied in the input.                             |
+| `effectiveComparisonMode`           | Mode actually used after patch fallback.                |
+| `comparison.before.positiveRate`    | Steam recommendation rate before the boundary.          |
+| `comparison.after.positiveRate`     | Steam recommendation rate after the boundary.           |
+| `comparison.sentimentDelta`         | After minus before positive recommendation rate.        |
+| `impact.direction`                  | Thresholded sentiment direction or `insufficient_data`. |
+| `impact.confidence`                 | Bounded 0–1 confidence score.                           |
+| `impact.confidenceLabel`            | `high`, `medium`, or `low`.                             |
+| `comparison.before.reviewsAnalyzed` | Before-period analyzed sample count.                    |
+| `comparison.after.reviewsAnalyzed`  | After-period analyzed sample count.                     |
+| `coverage.before.coverageStatus`    | Before-period `full`, `partial`, or `insufficient`.     |
+| `coverage.after.coverageStatus`     | After-period `full`, `partial`, or `insufficient`.      |
+| `newIssues`                         | Complaint themes meeting the new-issue safeguards.      |
+| `regressions`                       | Themes meeting the regression safeguards.               |
+| `improvements`                      | Themes with a material negative-mention decrease.       |
+| `featureRequests`                   | Bounded normalized requests and counts.                 |
+| `warnings`                          | Coverage, fallback, or enrichment warnings.             |
+| `stats.durationMs`                  | Bounded per-game runtime in milliseconds.               |
+| `generatedAt`                       | Report generation timestamp.                            |
 
 ## Limitations
 
@@ -31,7 +58,7 @@ This V1 uses public Steam data and deterministic local analysis. It does not cla
 
 ## Cost considerations
 
-The recommended pricing principle is pay per successfully generated game report, not per raw review. A starting target is approximately `$0.03` per `game_report`, subject to measured Apify usage economics. Pricing is not changed automatically by this repository.
+The recommended pricing principle is pay per successfully generated game report, not per raw review. A starting target is approximately `$0.03` per `game_report`, subject to measured Apify usage economics. This repository does not change pricing automatically.
 
 ## Compliance and responsible use
 
@@ -50,6 +77,18 @@ The report marks coverage as partial or insufficient, lowers confidence, and inc
 ## API usage
 
 Run the Actor with a JSON object matching `sample-input.json` using Apify's API or Console. The default input requires no API key, proxy, browser, or external model.
+
+```json
+{
+    "steamAppIds": ["646570"],
+    "comparisonMode": "recent_vs_previous",
+    "windowDays": 7,
+    "maxReviewsPerPeriod": 40,
+    "language": "english",
+    "includeOffTopicReviews": false,
+    "includeEvidence": true
+}
+```
 
 ## Benchmark results
 

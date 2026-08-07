@@ -23,3 +23,7 @@ The Phase 3 report is [`docs/phase-3-report.md`](docs/phase-3-report.md). The Ac
 ### Phase 4 comparison and final report
 
 The Phase 4 report is [`docs/phase-4-report.md`](docs/phase-4-report.md). The final default smoke produced one `ok` report for App `646570` in 1.496 seconds with 3 review pages, 300 scanned reviews, 40 before/40 after analyzed samples, full/full coverage, and no warnings. The local matrix also verified latest-patch fallback, custom-date comparison, two-game output, evidence suppression, and safe invalid-style input handling. The final runtime no longer publishes a collection snapshot.
+
+### Phase 5 packaging and QA
+
+The Phase 5 reports are [`docs/phase-5-report.md`](docs/phase-5-report.md) and [`docs/phase-5-quality-report.md`](docs/phase-5-quality-report.md). The packaged Actor passed 18 files/55 tests, 10 shared-core tests, lint, build, formatting, schema validation, the repository release validator, and vendored-core packaging checks. The final default elevated smoke completed in 1.494 seconds with 3 pages, 300 scanned reviews, 80 analyzed reviews, full/full coverage, and no warnings. Memory is configured at 256 MB; local run statistics do not provide a reliable high-water memory measurement. Cloud validation and publication remain Phase 6 actions.

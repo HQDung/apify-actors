@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 const requiredFiles = [
     'README.md',
     'src/main.js',
-    'src/niche-config.js',
     'storage/key_value_stores/default/INPUT.json',
 ];
 const schemaFiles = ['.actor/actor.json', '.actor/input_schema.json', '.actor/output_schema.json', '.actor/dataset_schema.json'];
@@ -52,6 +51,11 @@ export async function validateActorFiles(actorDir) {
     for (const relativePath of [...requiredFiles, ...schemaFiles]) {
         const content = await readFileOrError(absoluteActorDir, relativePath, errors);
         if (content !== null) fileContents.set(relativePath, content);
+    }
+
+    if (fileContents.get('src/main.js')?.includes('niche-config.js')) {
+        const nicheConfig = await readFileOrError(absoluteActorDir, 'src/niche-config.js', errors);
+        if (nicheConfig !== null) fileContents.set('src/niche-config.js', nicheConfig);
     }
 
     const parsedJson = new Map();
