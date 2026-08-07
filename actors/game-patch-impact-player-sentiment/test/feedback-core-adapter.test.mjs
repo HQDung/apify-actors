@@ -65,4 +65,12 @@ describe('feedback-analysis core adapter', () => {
         });
         expect(analysis.topics).toEqual(expect.arrayContaining(['controls_input']));
     });
+
+    it('does not force unmatched prose into a theme or feature request', async () => {
+        const analysis = await analyzeGameFeedback(
+            feedback({ text: 'This is a card based game where you fight battles over and over.', positive: true }),
+        );
+        expect(analysis.topics).toEqual([]);
+        expect(analysis.featureRequest).toBeNull();
+    });
 });

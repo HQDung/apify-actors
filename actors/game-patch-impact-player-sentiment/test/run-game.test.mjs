@@ -2,9 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { runGame } from '../src/runtime/run-game.js';
 
-describe('Phase 1 game runtime', () => {
-    it('stores the bounded collection snapshot and pushes a coverage summary', async () => {
-        const stored = [];
+describe('game runtime', () => {
+    it('analyzes the bounded collection and pushes one final report without a raw snapshot', async () => {
         const pushed = [];
         const collected = {
             status: 'ok',
@@ -27,18 +26,17 @@ describe('Phase 1 game runtime', () => {
         };
         const result = await runGame({
             appId: '646570',
-            input: { windowDays: 7 },
+            input: { comparisonMode: 'recent_vs_previous', windowDays: 7, includeEvidence: false },
             collect: async () => collected,
             pushData: async (value) => pushed.push(value),
-            setValue: async (key, value) => stored.push([key, value]),
         });
-        expect(result).toBe(collected);
-        expect(stored).toEqual([['GAME_646570_COLLECTION', collected]]);
+        expect(result).not.toBe(collected);
         expect(pushed[0]).toMatchObject({
-            status: 'collection_only',
+            status: 'partial',
             steamAppId: '646570',
-            coverage: collected.periods,
+            coverage: { before: { coverageStatus: 'insufficient' }, after: { coverageStatus: 'insufficient' } },
         });
+        expect(pushed[0]).not.toHaveProperty('periods');
     });
 
     it('passes an accepted latest patch boundary into collection', async () => {
@@ -75,7 +73,6 @@ describe('Phase 1 game runtime', () => {
                 return collected;
             },
             pushData: async (value) => pushed.push(value),
-            setValue: async () => {},
         });
         expect(received.patchBoundary).toBe('2026-07-30T23:58:15.000Z');
         expect(result.effectiveComparisonMode).toBe('latest_patch');
@@ -112,7 +109,6 @@ describe('Phase 1 game runtime', () => {
             },
             collect: async () => collected,
             pushData: async () => {},
-            setValue: async () => {},
         });
         expect(result.warnings).toEqual(
             expect.arrayContaining(['NEWS_ENDPOINT_UNAVAILABLE', 'PATCH_DETECTION_FALLBACK']),

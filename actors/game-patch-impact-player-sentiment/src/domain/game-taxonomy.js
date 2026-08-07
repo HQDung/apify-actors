@@ -55,11 +55,14 @@ const TOPIC_RULES = Object.freeze({
 
 const REQUEST_PATTERNS = [
     /\bplease add\s+(.+)/i,
-    /\badd\s+(.+)/i,
     /\b(?:wish|希望)\s+(?:there was|we had|for)\s+(.+)/i,
     /\bwould like\s+(.+)/i,
+    /\bwould be nice\s+(?:to have|to add|if there were)\s+(.+)/i,
+    /\bcan we get\s+(.+)/i,
     /\bshould add\s+(.+)/i,
     /\b(?:need|needs)\s+(?:a|an|more)\s+(.+)/i,
+    /\boption to\s+(.+)/i,
+    /\bsupport for\s+(.+)/i,
 ];
 
 const cleanSnippet = (value, limit = 240) =>
@@ -119,7 +122,7 @@ export const fallbackAnalyzeGameFeedback = ({ feedback, options = {} }) => {
         feedbackTypes: [primaryFeedbackType],
         sentiment,
         severity,
-        topics: topics.length > 0 ? topics : ['other'],
+        topics,
         summary,
         issue,
         featureRequest,

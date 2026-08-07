@@ -1,4 +1,5 @@
 import { resolveComparisonBoundary } from '../domain/patch-detector.js';
+import { analyzeGameImpact } from '../services/analyze-game-impact.js';
 import { collectGameFeedback } from '../services/collect-game-feedback.js';
 
 export const runGame = async ({
@@ -7,11 +8,11 @@ export const runGame = async ({
     now,
     collect = collectGameFeedback,
     pushData,
-    setValue,
     metadataAdapter,
     reviewsAdapter,
     newsAdapter,
 }) => {
+    const startedAt = Date.now();
     let comparison = resolveComparisonBoundary({ input, newsItems: [] });
     let newsItemsFetched = 0;
     if (input.comparisonMode === 'latest_patch') {
@@ -37,24 +38,14 @@ export const runGame = async ({
     result.patch = comparison.patch;
     result.warnings = [...new Set([...comparison.warnings, ...result.warnings])];
     result.stats = { ...result.stats, newsItemsFetched };
-    await setValue(`GAME_${appId}_COLLECTION`, result);
-    await pushData({
-        status: result.status === 'failed' ? 'failed' : 'collection_only',
-        steamAppId: result.game.steamAppId,
-        gameName: result.game.gameName,
-        storeUrl: result.game.storeUrl,
-        requestedComparisonMode: result.requestedComparisonMode,
-        effectiveComparisonMode: result.effectiveComparisonMode,
-        patch: result.patch,
-        comparison: {
-            boundaryAt: result.windows.boundaryAt,
-            windowDays: input.windowDays,
-            before: { reviewsAnalyzed: result.periods.before.reviews.length },
-            after: { reviewsAnalyzed: result.periods.after.reviews.length },
-        },
-        coverage: result.periods,
-        warnings: result.warnings,
-        stats: result.stats,
+    const report = await analyzeGameImpact({
+        collection: result,
+        input,
+        effectiveComparisonMode: comparison.effectiveComparisonMode,
+        patch: comparison.patch,
+        generatedAt: now ?? new Date().toISOString(),
     });
-    return result;
+    report.stats = { ...report.stats, newsItemsFetched, durationMs: Date.now() - startedAt };
+    await pushData(report);
+    return report;
 };

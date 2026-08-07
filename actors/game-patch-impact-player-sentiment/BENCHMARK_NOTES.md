@@ -19,3 +19,7 @@ The Phase 2 report is [`docs/phase-2-report.md`](docs/phase-2-report.md). A live
 ### Phase 3 shared-core analysis
 
 The Phase 3 report is [`docs/phase-3-report.md`](docs/phase-3-report.md). The Actor test suite passed 12 files and 37 tests; repository shared-core tests passed 10 tests; lint, build, formatting, and schema validation passed. Deterministic fixture analysis confirmed positive-rate, gaming-theme, feature-request, language, negative-share, and capped-evidence aggregation. No network benchmark was repeated because this phase only adds local analysis over the already bounded collection.
+
+### Phase 4 comparison and final report
+
+The Phase 4 report is [`docs/phase-4-report.md`](docs/phase-4-report.md). The final default smoke produced one `ok` report for App `646570` in 1.496 seconds with 3 review pages, 300 scanned reviews, 40 before/40 after analyzed samples, full/full coverage, and no warnings. The local matrix also verified latest-patch fallback, custom-date comparison, two-game output, evidence suppression, and safe invalid-style input handling. The final runtime no longer publishes a collection snapshot.
