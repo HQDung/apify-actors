@@ -4,7 +4,7 @@ Date: 2026-08-07
 
 ## Decision
 
-**READY TO PUBLISH**
+**PUBLISHED AND VERIFIED**
 
 The cloud default run succeeded on build `0.1.1` at the intended 256 MB allocation. The dataset contained one final report, both periods had 40 analyzed reviews with full/full coverage, no warnings were emitted, and `RUN_STATS` reported 300 scanned and 80 analyzed reviews. The Actor produced no raw collection snapshot.
 
