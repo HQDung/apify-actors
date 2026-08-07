@@ -1,0 +1,9 @@
+{
+    "steamAppIds": ["646570"],
+    "comparisonMode": "recent_vs_previous",
+    "windowDays": 7,
+    "maxReviewsPerPeriod": 40,
+    "language": "english",
+    "includeOffTopicReviews": false,
+    "includeEvidence": true
+}

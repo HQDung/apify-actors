@@ -1,0 +1,30 @@
+{
+    "success": 1,
+    "cursor": "",
+    "reviews": [
+        {
+            "recommendationid": "review-before-2",
+            "author": { "playtime_forever": 180, "playtime_at_review": 160 },
+            "language": "english",
+            "review": "The game needs more content.",
+            "timestamp_created": 1784937600,
+            "timestamp_updated": 1784937600,
+            "voted_up": false,
+            "votes_up": 3,
+            "votes_funny": 0,
+            "comment_count": 0,
+            "steam_purchase": true,
+            "received_for_free": false,
+            "written_during_early_access": false
+        },
+        {
+            "recommendationid": "review-too-old",
+            "author": { "playtime_forever": 60, "playtime_at_review": 45 },
+            "language": "english",
+            "review": "Outside the requested window.",
+            "timestamp_created": 1784764800,
+            "timestamp_updated": 1784764800,
+            "voted_up": true
+        }
+    ]
+}

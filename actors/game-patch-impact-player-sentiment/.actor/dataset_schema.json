@@ -1,0 +1,42 @@
+{
+    "actorSpecification": 1,
+    "title": "Game Patch Impact reports",
+    "views": {
+        "overview": {
+            "title": "Patch impact reports",
+            "transformation": {
+                "fields": [
+                    "status",
+                    "steamAppId",
+                    "gameName",
+                    "effectiveComparisonMode",
+                    "comparison.sentimentDelta",
+                    "impact.direction",
+                    "impact.confidenceLabel",
+                    "comparison.before.reviewsAnalyzed",
+                    "comparison.after.reviewsAnalyzed",
+                    "coverage.before.coverageStatus",
+                    "coverage.after.coverageStatus",
+                    "generatedAt"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "status": { "label": "Status", "format": "text" },
+                    "steamAppId": { "label": "Steam App ID", "format": "text" },
+                    "gameName": { "label": "Game", "format": "text" },
+                    "effectiveComparisonMode": { "label": "Comparison", "format": "text" },
+                    "comparison.sentimentDelta": { "label": "Sentiment delta", "format": "number" },
+                    "impact.direction": { "label": "Impact direction", "format": "text" },
+                    "impact.confidenceLabel": { "label": "Confidence", "format": "text" },
+                    "comparison.before.reviewsAnalyzed": { "label": "Before reviews", "format": "number" },
+                    "comparison.after.reviewsAnalyzed": { "label": "After reviews", "format": "number" },
+                    "coverage.before.coverageStatus": { "label": "Before coverage", "format": "text" },
+                    "coverage.after.coverageStatus": { "label": "After coverage", "format": "text" },
+                    "generatedAt": { "label": "Generated at", "format": "text" }
+                }
+            }
+        }
+    }
+}

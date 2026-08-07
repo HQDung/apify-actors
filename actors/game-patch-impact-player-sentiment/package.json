@@ -1,0 +1,26 @@
+{
+    "name": "game-patch-impact-player-sentiment",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Compare Steam player feedback before and after an update or patch.",
+    "dependencies": {
+        "@project/feedback-analysis-core": "file:vendor/project-feedback-analysis-core-1.0.0.tgz",
+        "apify": "^3.7.0"
+    },
+    "devDependencies": {
+        "@apify/eslint-config": "^2.0.0",
+        "eslint": "^9.29.0",
+        "eslint-config-prettier": "^10.1.5",
+        "prettier": "^3.5.3",
+        "vitest": "^4.1.0"
+    },
+    "scripts": {
+        "start": "node src/main.js",
+        "build": "node --check src/main.js",
+        "lint": "eslint src test",
+        "test": "vitest run",
+        "format:check": "prettier --check .",
+        "validate:schema": "apify validate-schema"
+    }
+}

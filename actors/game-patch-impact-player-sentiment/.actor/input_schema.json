@@ -1,0 +1,95 @@
+{
+    "title": "Game Patch Impact & Player Sentiment Intelligence Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "steamAppIds": {
+            "title": "Steam App IDs",
+            "type": "array",
+            "description": "Steam App IDs to analyze. Example: 646570.",
+            "editor": "stringList",
+            "default": ["646570"],
+            "minItems": 1,
+            "maxItems": 10,
+            "items": { "type": "string", "pattern": "^[0-9]+$" }
+        },
+        "comparisonMode": {
+            "title": "Comparison mode",
+            "type": "string",
+            "description": "Compare recent periods, detect the latest likely patch, or use a custom patch date.",
+            "editor": "select",
+            "default": "recent_vs_previous",
+            "enum": ["recent_vs_previous", "latest_patch", "custom_patch_date"],
+            "enumTitles": ["Recent period vs previous period", "Latest detected patch", "Custom patch date"]
+        },
+        "patchDate": {
+            "title": "Patch date",
+            "type": "string",
+            "description": "Required only for custom patch date mode. Use YYYY-MM-DD.",
+            "editor": "datepicker",
+            "dateType": "absolute"
+        },
+        "windowDays": {
+            "title": "Days per period",
+            "type": "integer",
+            "description": "Number of days in each before and after period.",
+            "editor": "number",
+            "default": 7,
+            "minimum": 1,
+            "maximum": 30
+        },
+        "maxReviewsPerPeriod": {
+            "title": "Reviews per period",
+            "type": "integer",
+            "description": "Maximum number of deterministically sampled reviews analyzed in each period.",
+            "editor": "number",
+            "default": 40,
+            "minimum": 10,
+            "maximum": 250
+        },
+        "language": {
+            "title": "Review language",
+            "type": "string",
+            "description": "Steam review language. Use all for all available languages.",
+            "editor": "select",
+            "default": "english",
+            "enum": [
+                "english",
+                "all",
+                "schinese",
+                "tchinese",
+                "german",
+                "french",
+                "spanish",
+                "brazilian",
+                "russian",
+                "japanese",
+                "koreana",
+                "vietnamese"
+            ]
+        },
+        "includeOffTopicReviews": {
+            "title": "Include off-topic reviews",
+            "type": "boolean",
+            "description": "Include reviews Steam marks as off-topic activity.",
+            "editor": "checkbox",
+            "default": false
+        },
+        "includeEvidence": {
+            "title": "Include evidence",
+            "type": "boolean",
+            "description": "Include up to two short review snippets per major theme.",
+            "editor": "checkbox",
+            "default": true
+        }
+    },
+    "required": [
+        "steamAppIds",
+        "comparisonMode",
+        "windowDays",
+        "maxReviewsPerPeriod",
+        "language",
+        "includeOffTopicReviews",
+        "includeEvidence"
+    ]
+}

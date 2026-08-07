@@ -1,0 +1,52 @@
+{
+    "success": 1,
+    "cursor": "next/cursor=",
+    "reviews": [
+        {
+            "recommendationid": "review-after",
+            "author": { "playtime_forever": 1200, "playtime_at_review": 900 },
+            "language": "english",
+            "review": "The game is fun after the update.",
+            "timestamp_created": 1785974400,
+            "timestamp_updated": 1785974400,
+            "voted_up": true,
+            "votes_up": 4,
+            "votes_funny": 1,
+            "comment_count": 2,
+            "steam_purchase": true,
+            "received_for_free": false,
+            "written_during_early_access": false,
+            "developer_response": "Thanks for the report."
+        },
+        {
+            "recommendationid": "review-boundary",
+            "author": { "playtime_forever": 600, "playtime_at_review": 500 },
+            "language": "english",
+            "review": "The patch feels fair.",
+            "timestamp_created": 1785456000,
+            "timestamp_updated": 1785456000,
+            "voted_up": true,
+            "votes_up": 2,
+            "votes_funny": 0,
+            "comment_count": 0,
+            "steam_purchase": true,
+            "received_for_free": false,
+            "written_during_early_access": false
+        },
+        {
+            "recommendationid": "review-before-1",
+            "author": { "playtime_forever": 300, "playtime_at_review": 250 },
+            "language": "english",
+            "review": "The old build was stable.",
+            "timestamp_created": 1785369600,
+            "timestamp_updated": 1785369600,
+            "voted_up": false,
+            "votes_up": 1,
+            "votes_funny": 0,
+            "comment_count": 1,
+            "steam_purchase": false,
+            "received_for_free": true,
+            "written_during_early_access": true
+        }
+    ]
+}

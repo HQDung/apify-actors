@@ -1,0 +1,18 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Game Patch Impact & Player Sentiment output",
+    "properties": {
+        "dataset": {
+            "type": "string",
+            "title": "Patch impact reports",
+            "description": "One structured intelligence report per requested Steam App ID.",
+            "template": "{{datasetUrl}}"
+        },
+        "runStatistics": {
+            "type": "string",
+            "title": "Run statistics",
+            "description": "Machine-readable bounded collection and runtime counters.",
+            "template": "{{keyValueStoreUrl}}/v2/key-value-stores/{{defaultKeyValueStoreId}}/records/RUN_STATS"
+        }
+    }
+}
